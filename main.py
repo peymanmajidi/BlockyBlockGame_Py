@@ -34,7 +34,7 @@ dir = Direction().FRONT
 
 WIDTH = 1200
 HEIGHT = 600
-CHARCTER = 50
+CHARCTER = 100
 MOVE = 1
 
 COLOR = (255,0,0)
@@ -43,7 +43,7 @@ WHITE = (255,255,255)
 LASER = (255, 102, 0)
 LASER2 = (255, 80, 80)
 
-JUMP = 100
+JUMP = int(CHARCTER * 1.5)
 jumping = False
 rising = False
 falling = False
@@ -134,40 +134,40 @@ def render_character(emo = Emotion.HAPPY):
 
     pygame.draw.rect(window, COLOR, [ x ,y  , CHARCTER , CHARCTER ], 0 ) # [ ]
 
-    eyex=x+int(CHARCTER/2)-10
-    eyey = y+int(CHARCTER/2)-10
+    eyex = x+int(CHARCTER/2)- int(CHARCTER / 5)
+    eyey = y+int(CHARCTER/2)-int(CHARCTER / 5)
 
-    eyexx = x+int(CHARCTER/2)+10
-    eyeyy= y+int(CHARCTER/2)-10
+    eyexx = x+int(CHARCTER/2)+int(CHARCTER / 5)
+    eyeyy= y+int(CHARCTER/2)-int(CHARCTER / 5)
     
 
     if dir == Direction.RIGHT:
-        eyex+=5
-        eyexx+=5
+        eyex+=int(CHARCTER / 10)
+        eyexx+=int(CHARCTER / 10)
         eyey+=1
     elif dir == Direction.LEFT:
-        eyex-=5
-        eyexx-=5
+        eyex-=int(CHARCTER / 10)
+        eyexx-=int(CHARCTER / 10)
         eyeyy+=1
 
 
 
     if  keep > 5:
-        pygame.draw.circle(window, BLACK,[eyex,eyey],3,0) #[.]
-        pygame.draw.circle(window, BLACK,[eyexx,eyey],3,0) # [..]
+        pygame.draw.circle(window, BLACK,[eyex,eyey],int(CHARCTER / 15),0) #[.]
+        pygame.draw.circle(window, BLACK,[eyexx,eyey],int(CHARCTER / 15),0) # [..]
         target = random.randrange(100,1000)
     else:       
-        pygame.draw.circle(window, BLACK,[eyex,eyey],5,0) #[.]
-        pygame.draw.circle(window, BLACK,[eyexx,eyeyy],5,0) # [..]
+        pygame.draw.circle(window, BLACK,[eyex,eyey],int(CHARCTER / 10),0) #[.]
+        pygame.draw.circle(window, BLACK,[eyexx,eyeyy],int(CHARCTER / 10),0) # [..]
     
   
     if emo == Emotion.SAD:
-        pygame.draw.arc(window, BLACK,  (x+5,y+30 , CHARCTER-10, CHARCTER-10), math.pi/4,3* math.pi / 4 , 5) # :(
+        pygame.draw.arc(window, BLACK,  (x+5,y+30 , CHARCTER-int(CHARCTER / 5), CHARCTER-int(CHARCTER / 5)), math.pi/4,3* math.pi / 4 , int(CHARCTER / 10)) # :(
 
     elif not falling:
-        pygame.draw.arc(window, BLACK,  (x+5,y , CHARCTER-10, CHARCTER-10), 5*math.pi/4,7* math.pi / 4 , 5) # :)
+        pygame.draw.arc(window, BLACK,  (x+int(CHARCTER / 10),y , CHARCTER-int(CHARCTER / 5), CHARCTER-int(CHARCTER / 5)), 5*math.pi/4,7* math.pi / 4 , int(CHARCTER / 10)) # :)
     else:
-        pygame.draw.arc(window, BLACK,  (x+18,y+27 , 15, 15), 0,2* math.pi  , 7) # :O
+        pygame.draw.arc(window, BLACK,  (x+int(CHARCTER / 2.5),y+int(CHARCTER / 1.8) , int(CHARCTER / 3.5),  int(CHARCTER / 3.5)), 0,2* math.pi  , int(CHARCTER / 7)) # :O
 
 
 
@@ -322,6 +322,19 @@ while not game_over:
 
             if event.key == pygame.K_RSHIFT:
                 OBJECT = (random.randrange(1,255),random.randrange(1,255),random.randrange(1,255))
+    
+            if event.key == pygame.K_b:
+                OBJECT = (0,0,0)
+                
+            if event.key == pygame.K_r:
+                OBJECT = (255,0,0)
+                
+            if event.key == pygame.K_g:
+                OBJECT = (0,255,0)
+                
+            if event.key == pygame.K_y:
+                OBJECT = (255,255,0)
+                
     
 
 
