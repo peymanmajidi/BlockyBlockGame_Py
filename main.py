@@ -205,9 +205,6 @@ def shot():
     else:
         pygame.draw.line(window, BLACK, (tempx,tempy-10), (0,tempy-10),30)
 
-
-
-
     pygame.display.update()
 
 
@@ -274,7 +271,6 @@ while not game_over:
 
 
 
-
     if jumping:
         pygame.draw.rect(window, BLACK, [ x ,y  , CHARCTER , CHARCTER ], 0 )
         if rising:
@@ -304,8 +300,6 @@ while not game_over:
 
         except:
             pass         
-
-
 
 
 
