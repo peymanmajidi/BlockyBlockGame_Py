@@ -208,22 +208,22 @@ def shot():
     pygame.display.update()
 
 
+def print_current_color():
+    pygame.draw.rect(window, OBJECT, [0,0,30,10],0)
 
 
+print("Welcome to Blocky Blocky")
+print("space: jump")
+print("click: draw object on screen")
+print("c: clear")
+print("R-SHIFT: change mouse clicker color")
 
 while not game_over:    
     pg.draw_object(window, WIDTH, HEIGHT)
+    print_current_color()
     surface = pygame.Surface((WIDTH,HEIGHT))
-    
 
     render_character()
-    # pygame.draw.rect(window, BLACK, [ x + int(CHARCTER/3) ,y+ CHARCTER - int(CHARCTER/3)-5, 
-    #         int(CHARCTER/2)-5 , int(CHARCTER/2)-20 ], 0 )
-    
-
-
-# -----------------------------------
-
 
     pygame.display.update()
     me= window.get_at((0,0))
@@ -237,8 +237,6 @@ while not game_over:
     if wink:
         keep -=1
 
-
-    # print(me)
     if falling:
         pygame.time.delay(2)
     else:
@@ -317,6 +315,13 @@ while not game_over:
             
             if event.key == pygame.K_RETURN:
                 shot()
+            if event.key == pygame.K_c:
+                pygame.draw.rect(window, BLACK, [0,0,WIDTH, HEIGHT],0)
+
+            
+
+            if event.key == pygame.K_RSHIFT:
+                OBJECT = (random.randrange(1,255),random.randrange(1,255),random.randrange(1,255))
     
 
 
