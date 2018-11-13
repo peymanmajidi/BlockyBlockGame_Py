@@ -34,7 +34,7 @@ dir = Direction().FRONT
 
 WIDTH = 1200
 HEIGHT = 600
-CHARCTER = 100
+CHARCTER = 50
 MOVE = 1
 
 COLOR = (255,0,0)
@@ -43,7 +43,7 @@ WHITE = (255,255,255)
 LASER = (255, 102, 0)
 LASER2 = (255, 80, 80)
 
-JUMP = int(CHARCTER * 1.5)
+JUMP = int(CHARCTER * 1.8)
 jumping = False
 rising = False
 falling = False
@@ -162,7 +162,7 @@ def render_character(emo = Emotion.HAPPY):
     
   
     if emo == Emotion.SAD:
-        pygame.draw.arc(window, BLACK,  (x+5,y+30 , CHARCTER-int(CHARCTER / 5), CHARCTER-int(CHARCTER / 5)), math.pi/4,3* math.pi / 4 , int(CHARCTER / 10)) # :(
+        pygame.draw.arc(window, BLACK,  (x+(x+int(CHARCTER / 10)),y+(x+int(CHARCTER / 2)) , CHARCTER-int(CHARCTER / 5), CHARCTER-int(CHARCTER / 5)), math.pi/4,3* math.pi / 4 , int(CHARCTER / 10)) # :(
 
     elif not falling:
         pygame.draw.arc(window, BLACK,  (x+int(CHARCTER / 10),y , CHARCTER-int(CHARCTER / 5), CHARCTER-int(CHARCTER / 5)), 5*math.pi/4,7* math.pi / 4 , int(CHARCTER / 10)) # :)
@@ -189,11 +189,11 @@ def shot():
     tempyy = eyeyy
     
     if dir == Direction.RIGHT or  dir == Direction.FRONT:
-        pygame.draw.line(window, LASER, ( tempx,tempy), (WIDTH,tempy),5)
-        pygame.draw.line(window, LASER2, ( tempxx,tempyy), (WIDTH,tempy),5)
+        pygame.draw.line(window, LASER, ( tempx,tempy), (WIDTH,tempy),int(CHARCTER/10))
+        pygame.draw.line(window, LASER2, ( tempxx,tempyy), (WIDTH,tempy),int(CHARCTER/10))
     else:
-        pygame.draw.line(window, LASER, ( tempx,tempy), (0,tempy),5)
-        pygame.draw.line(window, LASER2, ( tempxx,tempyy), (0,tempy),5)
+        pygame.draw.line(window, LASER, ( tempx,tempy), (0,tempy),int(CHARCTER/10))
+        pygame.draw.line(window, LASER2, ( tempxx,tempy), (0,tempy),int(CHARCTER/10))
 
     playsound("laser.wav")
 
@@ -201,9 +201,9 @@ def shot():
     pygame.time.delay(50)
     render_character(Emotion.SAD)
     if dir == Direction.RIGHT or  dir == Direction.FRONT:
-        pygame.draw.line(window, BLACK, (tempx,tempy-10), (WIDTH,tempy-10),30)
+        pygame.draw.line(window, BLACK, (tempx+1,tempy-int(CHARCTER/5)), (WIDTH,tempy-int(CHARCTER/5)),int(CHARCTER/2))
     else:
-        pygame.draw.line(window, BLACK, (tempx,tempy-10), (0,tempy-10),30)
+        pygame.draw.line(window, BLACK, (tempx+1,tempy-int(CHARCTER/5)), (0,tempy-int(CHARCTER/5)),int(CHARCTER/2))
 
     pygame.display.update()
 
@@ -217,6 +217,8 @@ print("space: jump")
 print("click: draw object on screen")
 print("c: clear")
 print("R-SHIFT: change mouse clicker color")
+print("+: MAKE CHARCTER BIGGER")
+print("-: MAKE CHARCTER SMALLER")
 
 while not game_over:    
     pg.draw_object(window, WIDTH, HEIGHT)
@@ -304,7 +306,7 @@ while not game_over:
         if event.type == pygame.KEYDOWN:
             pygame.draw.rect(window, BLACK, [ x ,y  , CHARCTER , CHARCTER ], 0 )
             pygame.display.update()
-            if event.key == pygame.K_SPACE:
+            if event.key == pygame.K_SPACE or event.key == pygame.K_UP:
                 if jumping or falling:
                     break
                 pygame.draw.rect(window, BLACK, [ x ,y  , CHARCTER , CHARCTER ], 0 )
@@ -334,6 +336,18 @@ while not game_over:
                 
             if event.key == pygame.K_y:
                 OBJECT = (255,255,0)
+                
+            if event.key == pygame.K_KP_PLUS or  event.key ==pygame.K_PLUS:
+                if CHARCTER <400:
+                    y-=10
+                    CHARCTER+=10
+                    JUMP = int(CHARCTER * 1.8)
+                    
+            if event.key == pygame.K_MINUS or  event.key ==pygame.K_KP_MINUS:
+                if CHARCTER > 10:
+                    y+=10
+                    CHARCTER-=10
+                    JUMP = int(CHARCTER * 1.8)
                 
     
 
