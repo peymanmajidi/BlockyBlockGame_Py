@@ -1,8 +1,12 @@
 # BlockyBlockGame
 This is a wonderful game just for learning and developing Python
+
 I just wanted to learn Python and I found out Python is cool and easy :)
+
 you can draw on screen by mouse and move the 'blocky charcter' via keyboard arrow keys.
-download the EXE file and enjoy or download the source code and make fantastic forks.
+
+download the source code and make fantastic forks.
+
 by pygame
 
 ![Shot](https://raw.githubusercontent.com/peymanmajidi/BlockyBlockGame/master/screenshot.png)
