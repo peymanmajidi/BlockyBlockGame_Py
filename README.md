@@ -20,13 +20,15 @@ Pygame, the library is cross-platform and designed to make it easy to write mult
 
 print("Welcome to Blocky Blocky")
 
-print("space: jump")
+print("Space: jump")
+
+print("Enter: Laser Shot ")
 
 print("click: draw object on screen")
 
-print("c: clear")
+print("c: clear playground")
 
-print("R-SHIFT: change mouse clicker color")
+print("Right-SHIFT: change mouse clicker color")
 
 print("+: MAKE CHARCTER BIGGER")
 
