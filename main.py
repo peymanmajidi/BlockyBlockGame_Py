@@ -43,7 +43,7 @@ WHITE = (255,255,255)
 LASER = (255, 102, 0)
 LASER2 = (255, 80, 80)
 
-JUMP = int(CHARCTER * 1.8)
+JUMP = int(CHARCTER * 2.1)
 jumping = False
 rising = False
 falling = False
