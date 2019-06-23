@@ -14,3 +14,20 @@ by pygame
 
 Pygame, the library is cross-platform and designed to make it easy to write multimedia software, such as games, in Python. Pygame requires the Python language and SDL multimedia library. It can also make use of several other popular libraries.
 
+
+
+## How to Play
+
+print("Welcome to Blocky Blocky")
+
+print("space: jump")
+
+print("click: draw object on screen")
+
+print("c: clear")
+
+print("R-SHIFT: change mouse clicker color")
+
+print("+: MAKE CHARCTER BIGGER")
+
+print("-: MAKE CHARCTER SMALLER")
