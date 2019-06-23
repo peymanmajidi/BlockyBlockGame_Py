@@ -3,11 +3,7 @@ import random
 import pygame
 import math
 import playground as pg
-
-OBJECT = (0,255,0)
-
-# Initiate pygame
-pygame.init()
+import howToPlay
 
 class Direction:
     LEFT = 99,
@@ -18,31 +14,29 @@ class Emotion:
     HAPPY = 2,
     O = 3
 
-
 def playsound(soundname):
-
     pygame.mixer.music.load("sounds/"+soundname)
     pygame.mixer.music.play(0)
-
 
 
 dir = Direction().FRONT
 
 
 # Game window
-
-
 WIDTH = 1200
 HEIGHT = 600
 CHARCTER = 50
 MOVE = 1
 
+# Setup Colors
 COLOR = (255,0,0)
 BLACK = (0,0,0)
 WHITE = (255,255,255)
 LASER = (255, 102, 0)
 LASER2 = (255, 80, 80)
+OBJECT_COLOR = (0,255,0)
 
+# Set up Parameters
 JUMP = int(CHARCTER * 2.1)
 jumping = False
 rising = False
@@ -60,15 +54,17 @@ eyexx=0
 eyey=0
 eyeyy=0
 fall_played = True
-
+game_over = False
 
 x=int(CHARCTER)*5
-y= CHARCTER 
-# Game title
+y= CHARCTER
+
+
+
+# Initiate pygame
+pygame.init()
 pygame.display.set_caption("Blocki Block")
-# pygame.draw.rect(window, COLOR, [ x ,HEIGHT  , CHARCTER , CHARCTER ], 0 )
 pygame.display.update()
-game_over = False
 
 
 def is_colored_left(x,y):
@@ -123,6 +119,7 @@ def render_character(emo = Emotion.HAPPY):
     global eyex
     global eyexx
     global eyey
+
     global eyeyy
     global dir
     global keep
@@ -209,16 +206,9 @@ def shot():
 
 
 def print_current_color():
-    pygame.draw.rect(window, OBJECT, [0,0,30,10],0)
+    pygame.draw.rect(window, OBJECT_COLOR, [0,0,30,10],0)
 
 
-print("Welcome to Blocky Blocky")
-print("space: jump")
-print("click: draw object on screen")
-print("c: clear")
-print("R-SHIFT: change mouse clicker color")
-print("+: MAKE CHARCTER BIGGER")
-print("-: MAKE CHARCTER SMALLER")
 
 while not game_over:    
     pg.draw_object(window, WIDTH, HEIGHT)
@@ -295,7 +285,7 @@ while not game_over:
         try:
             if clicked:
                 x2,y2 = event.pos
-                pygame.draw.rect(window, OBJECT, [x2,y2,20,20],0)
+                pygame.draw.rect(window, OBJECT_COLOR, [x2,y2,20,20],0)
                 pygame.display.update()
 
         except:
@@ -323,19 +313,19 @@ while not game_over:
             
 
             if event.key == pygame.K_RSHIFT:
-                OBJECT = (random.randrange(1,255),random.randrange(1,255),random.randrange(1,255))
+                OBJECT_COLOR = (random.randrange(1,255),random.randrange(1,255),random.randrange(1,255))
     
             if event.key == pygame.K_b:
-                OBJECT = (0,0,0)
+                OBJECT_COLOR = (0,0,0)
                 
             if event.key == pygame.K_r:
-                OBJECT = (255,0,0)
+                OBJECT_COLOR = (255,0,0)
                 
             if event.key == pygame.K_g:
-                OBJECT = (0,255,0)
+                OBJECT_COLOR = (0,255,0)
                 
             if event.key == pygame.K_y:
-                OBJECT = (255,255,0)
+                OBJECT_COLOR = (255,255,0)
                 
             if event.key == pygame.K_KP_PLUS or  event.key ==pygame.K_PLUS:
                 if CHARCTER <400:
