@@ -3,7 +3,7 @@ import random
 import pygame
 import math
 import playground as pg
-import howToPlay
+from howToPlay import *
 
 class Direction:
     LEFT = 99,
@@ -19,6 +19,7 @@ def playsound(soundname):
     pygame.mixer.music.play(0)
 
 
+# Default Direction
 dir = Direction().FRONT
 
 
@@ -102,7 +103,7 @@ def is_colored_top(x,y):
 
 def is_colored_bottom(x,y):
     try:
-        for i in range(CHARCTER): # BOTTOM
+        for i in range(CHARCTER): # DOWN
             dot = window.get_at((x+i,y+CHARCTER+MOVE))
             if dot[0] > 0:
                 return True
@@ -126,8 +127,7 @@ def render_character(emo = Emotion.HAPPY):
     global target
     global falling
 
-    
-# draw charcter
+    # draw charcter
 
     pygame.draw.rect(window, COLOR, [ x ,y  , CHARCTER , CHARCTER ], 0 ) # [ ]
 
@@ -136,7 +136,6 @@ def render_character(emo = Emotion.HAPPY):
 
     eyexx = x+int(CHARCTER/2)+int(CHARCTER / 5)
     eyeyy= y+int(CHARCTER/2)-int(CHARCTER / 5)
-    
 
     if dir == Direction.RIGHT:
         eyex+=int(CHARCTER / 10)
@@ -146,8 +145,6 @@ def render_character(emo = Emotion.HAPPY):
         eyex-=int(CHARCTER / 10)
         eyexx-=int(CHARCTER / 10)
         eyeyy+=1
-
-
 
     if  keep > 5:
         pygame.draw.circle(window, BLACK,[eyex,eyey],int(CHARCTER / 15),0) #[.]
@@ -209,6 +206,9 @@ def print_current_color():
     pygame.draw.rect(window, OBJECT_COLOR, [0,0,30,10],0)
 
 
+PrintHelpOnConsole()
+
+# Main Game Loop
 
 while not game_over:    
     pg.draw_object(window, WIDTH, HEIGHT)
@@ -353,15 +353,3 @@ while not game_over:
         if fall_played:
             playsound("fall.wav")
             fall_played = False
-
-    
-    
-
-
-
-
-                
-
-        
-
-
