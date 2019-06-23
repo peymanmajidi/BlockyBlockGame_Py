@@ -1,7 +1,7 @@
 # Library imports
-import random
 import pygame
 import math
+import random
 import playground as pg
 from howToPlay import *
 
