@@ -282,8 +282,6 @@ while not game_over:
         except:
             pass         
 
-
-
         if event.type == pygame.KEYDOWN:
             pygame.draw.rect(window, BLACK, [ x ,y  , CHARCTER , CHARCTER ], 0 )
             pygame.display.update()
