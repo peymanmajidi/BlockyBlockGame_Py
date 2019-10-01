@@ -2,34 +2,33 @@
 import pygame
 import math
 import random
+from enum import Enum
 import playground as pg
 from howToPlay import *
 
-class Direction:
+
+class Direction(Enum):
     LEFT = 99,
     RIGHT = -99,
     FRONT = 88
-class Emotion:
-    SAD = 1,
-    HAPPY = 2,
-    O = 3
+class Emotion(Enum):
+    SAD = 1, # when shoting :(
+    HAPPY = 2, # normal :)
+    WOW = 3 # when falling :O
 
 def playsound(soundname):
     pygame.mixer.music.load("sounds/"+soundname)
     pygame.mixer.music.play(0)
 
 
-# Default Direction
-dir = Direction().FRONT
-
-
-# Game window
+# Game's Constant
 WIDTH = 1200
 HEIGHT = 600
 CHARCTER = 50
 MOVE = 1
 
-# Setup Colors
+
+# Game's Colors Constant
 COLOR = (255,0,0)
 BLACK = (0,0,0)
 WHITE = (255,255,255)
@@ -37,30 +36,31 @@ LASER = (255, 102, 0)
 LASER2 = (255, 80, 80)
 OBJECT_COLOR = (0,255,0)
 
-# Set up Parameters
+# Setup Parameters
 JUMP = int(CHARCTER * 2.1)
+dir = Direction.FRONT
+
+
+# Initilize Variables
 jumping = False
 rising = False
 falling = False
 fall = 0
 rise= 0
-window = pygame.display.set_mode((WIDTH, HEIGHT))
-clicked = False
-wink = False
-winking =0
+clicked = False # mouse button down to starting to draw
+wink = False # last wink status
+winking = 0 # eye winking when blocky is idle
 target = 20
 keep = 0
-eyex=0
-eyexx=0
-eyey=0
-eyeyy=0
+eye_x=0
+eye_x2=0
+eye_y=0
+eye_y2=0
 fall_played = True
 game_over = False
-
+window = pygame.display.set_mode((WIDTH, HEIGHT))
 x=int(CHARCTER)*5
 y= CHARCTER
-
-
 
 # Initiate pygame
 pygame.init()
@@ -68,7 +68,7 @@ pygame.display.set_caption("Blocki Block")
 pygame.display.update()
 
 
-def is_colored_left(x,y):
+def is_colored_left(x,y): # if the left side is not colored, the character can move left
     for i in range(CHARCTER): # LEFT
         dot = window.get_at((x-MOVE,y+i))
         if dot[0] > 0:
@@ -116,43 +116,41 @@ def is_colored_bottom(x,y):
 
     return False
 
-def render_character(emo = Emotion.HAPPY):
-    global eyex
-    global eyexx
-    global eyey
+def render_character(emo = Emotion.HAPPY): # default face is happy :)
+    global eye_x
+    global eye_x2
+    global eye_y
 
-    global eyeyy
+    global eye_y2
     global dir
     global keep
     global target
     global falling
-
     # draw charcter
-
     pygame.draw.rect(window, COLOR, [ x ,y  , CHARCTER , CHARCTER ], 0 ) # [ ]
 
-    eyex = x+int(CHARCTER/2)- int(CHARCTER / 5)
-    eyey = y+int(CHARCTER/2)-int(CHARCTER / 5)
+    eye_x = x+int(CHARCTER/2)- int(CHARCTER / 5)
+    eye_y = y+int(CHARCTER/2)-int(CHARCTER / 5)
 
-    eyexx = x+int(CHARCTER/2)+int(CHARCTER / 5)
-    eyeyy= y+int(CHARCTER/2)-int(CHARCTER / 5)
+    eye_x2 = x+int(CHARCTER/2)+int(CHARCTER / 5)
+    eye_y2= y+int(CHARCTER/2)-int(CHARCTER / 5)
 
     if dir == Direction.RIGHT:
-        eyex+=int(CHARCTER / 10)
-        eyexx+=int(CHARCTER / 10)
-        eyey+=1
+        eye_x+=int(CHARCTER / 10)
+        eye_x2+=int(CHARCTER / 10)
+        eye_y+=1
     elif dir == Direction.LEFT:
-        eyex-=int(CHARCTER / 10)
-        eyexx-=int(CHARCTER / 10)
-        eyeyy+=1
+        eye_x-=int(CHARCTER / 10)
+        eye_x2-=int(CHARCTER / 10)
+        eye_y2+=1
 
     if  keep > 5:
-        pygame.draw.circle(window, BLACK,[eyex,eyey],int(CHARCTER / 15),0) #[.]
-        pygame.draw.circle(window, BLACK,[eyexx,eyey],int(CHARCTER / 15),0) # [..]
+        pygame.draw.circle(window, BLACK,[eye_x,eye_y],int(CHARCTER / 15),0) #[.]
+        pygame.draw.circle(window, BLACK,[eye_x2,eye_y],int(CHARCTER / 15),0) # [..]
         target = random.randrange(100,1000)
     else:       
-        pygame.draw.circle(window, BLACK,[eyex,eyey],int(CHARCTER / 10),0) #[.]
-        pygame.draw.circle(window, BLACK,[eyexx,eyeyy],int(CHARCTER / 10),0) # [..]
+        pygame.draw.circle(window, BLACK,[eye_x,eye_y],int(CHARCTER / 10),0) #[.]
+        pygame.draw.circle(window, BLACK,[eye_x2,eye_y2],int(CHARCTER / 10),0) # [..]
     
   
     if emo == Emotion.SAD:
@@ -164,23 +162,19 @@ def render_character(emo = Emotion.HAPPY):
         pygame.draw.arc(window, BLACK,  (x+int(CHARCTER / 2.5),y+int(CHARCTER / 1.8) , int(CHARCTER / 3.5),  int(CHARCTER / 3.5)), 0,2* math.pi  , int(CHARCTER / 7)) # :O
 
 
-
-
-
-
-def shot():
-    global eyex
-    global eyey
-    global eyexx
-    global eyeyy
+def shot(): # when player hit enter, blocky shots laser via his eyes
+    global eye_x
+    global eye_y
+    global eye_x2
+    global eye_y2
     global dir
     global WIDTH
     render_character(Emotion.SAD)
 
-    tempx= eyex
-    tempy = eyey
-    tempxx= eyexx
-    tempyy = eyeyy
+    tempx= eye_x
+    tempy = eye_y
+    tempxx= eye_x2
+    tempyy = eye_y2
     
     if dir == Direction.RIGHT or  dir == Direction.FRONT:
         pygame.draw.line(window, LASER, ( tempx,tempy), (WIDTH,tempy),int(CHARCTER/10))
@@ -202,14 +196,12 @@ def shot():
     pygame.display.update()
 
 
-def print_current_color():
+def print_current_color(): 
     pygame.draw.rect(window, OBJECT_COLOR, [0,0,30,10],0)
-
 
 PrintHelpOnConsole()
 
 # Main Game Loop
-
 while not game_over:    
     pg.draw_object(window, WIDTH, HEIGHT)
     print_current_color()
@@ -353,3 +345,4 @@ while not game_over:
         if fall_played:
             playsound("fall.wav")
             fall_played = False
+
