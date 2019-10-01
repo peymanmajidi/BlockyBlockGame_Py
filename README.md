@@ -32,4 +32,4 @@ Pygame, the library is cross-platform and designed to make it easy to write mult
     R: Red brush
 
 
-![Shot](GamePreview.gif)
+![Gif Preview](GamePreview.gif)
