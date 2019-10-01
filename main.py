@@ -6,7 +6,6 @@ from enum import Enum
 import playground as pg
 from howToPlay import *
 
-
 class Direction(Enum):
     LEFT = 99,
     RIGHT = -99,
@@ -337,7 +336,6 @@ while not game_over:
     if not is_colored_bottom(x,y) and not jumping:
         pygame.draw.rect(window, BLACK, [ x ,y  , CHARCTER , CHARCTER ], 0 )
         y+=1
-        # dir = Direction.FRONT
         falling = True
         fall_played = True
     else:
