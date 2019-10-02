@@ -1,11 +1,11 @@
 # BlockyBlockGame
-This is a wonderful game just for learning and developing Python
+Hello every one, I hope you doing good
+Because I want to be more familiar with Python, I decided to make a game 
+and the result is Blocky block.
+I found out Python is cool and easy :)
+In this game you can draw on screen by mouse and move the 'blocky' via keyboard'a [arrow keys] all over the screen.
 
-I just wanted to learn Python and I found out Python is cool and easy :)
-
-you can draw on screen by mouse and move the 'blocky charcter' via keyboard arrow keys.
-
-download the source code and make fantastic forks.
+Please download the source code and make fantastic forks 🍴
 
 by pygame
 
@@ -33,3 +33,7 @@ Pygame, the library is cross-platform and designed to make it easy to write mult
 
 
 ![Gif Preview](GamePreview.gif)
+
+<span style="color:red">Happy Codding 🍓</span>
+
+> Peyman Majidi 
