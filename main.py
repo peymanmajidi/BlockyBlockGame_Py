@@ -316,7 +316,7 @@ while not game_over:
             if event.key == pygame.K_y:
                 OBJECT_COLOR = (255,255,0)
                 
-            if event.key == pygame.K_KP_PLUS or  event.key ==pygame.K_PLUS:
+            if event.key == pygame.K_KP_PLUS or  event.key ==pygame.K_PLUS or event.key == pygame.K_l:
                 if CHARCTER <400:
                     y-=10
                     CHARCTER+=10
