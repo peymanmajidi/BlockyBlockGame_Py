@@ -163,7 +163,8 @@ class BlockyBlock:
         self.eye1_y = eye1_y
         self.eye2_x = eye2_x
         self.eye2_y = eye2_y
-
+    def clear_shadow(self):
+        blocky.clear_shadow()
 
     def shot(self):
         global dir
@@ -194,17 +195,11 @@ class BlockyBlock:
 
         pygame.display.update()
 
-                
-
-
 
 # Initiate pygame
 pygame.init()
 pygame.display.set_caption(BlockyBlock.title)
 pygame.display.update()
-
-
-
 
 def print_current_color(): 
     pygame.draw.rect(window, OBJECT_COLOR, [0,0,30,10],0)
@@ -239,7 +234,7 @@ while not game_over:
     keys = pygame.key.get_pressed()  #checking pressed keys
 
     if keys[pygame.K_LEFT]:
-        pygame.draw.rect(window, BLACK, [ x ,y  , CHARCTER , CHARCTER ], 0 )
+        blocky.clear_shadow()
         dir =Direction.LEFT
         if x - MOVE >= 0:
              me= window.get_at((x-1,y+ CHARCTER))
@@ -251,7 +246,7 @@ while not game_over:
 
     
     if keys[pygame.K_RIGHT]:
-        pygame.draw.rect(window, BLACK, [ x ,y  , CHARCTER , CHARCTER ], 0 )
+        blocky.clear_shadow()
         dir =Direction.RIGHT
         if x + CHARCTER + MOVE <= WIDTH:
              me= window.get_at((x+1+ CHARCTER,y+CHARCTER))
@@ -264,7 +259,7 @@ while not game_over:
 
 
     if jumping:
-        pygame.draw.rect(window, BLACK, [ x ,y  , CHARCTER , CHARCTER ], 0 )
+        blocky.clear_shadow()
         if rising:
             rise+=1
             if not blocky.Can_Move.top(x,y-1):
@@ -294,12 +289,13 @@ while not game_over:
             pass         
 
         if event.type == pygame.KEYDOWN:
-            pygame.draw.rect(window, BLACK, [ x ,y  , CHARCTER , CHARCTER ], 0 )
+            blocky.clear_shadow()
+            blocky.clear_shadow()
             pygame.display.update()
             if event.key == pygame.K_SPACE or event.key == pygame.K_UP:
                 if jumping or falling:
                     break
-                pygame.draw.rect(window, BLACK, [ x ,y  , CHARCTER , CHARCTER ], 0 )
+                blocky.clear_shadow()
                 jumping = True
                 rising = True
                 play_audio("jump.wav")
@@ -343,7 +339,7 @@ while not game_over:
 
 
     if not blocky.Can_Move.bottom(x,y) and not jumping:
-        pygame.draw.rect(window, BLACK, [ x ,y  , CHARCTER , CHARCTER ], 0 )
+        blocky.clear_shadow()
         y+=1
         falling = True
         fall_played = True
