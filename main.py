@@ -164,7 +164,7 @@ class BlockyBlock:
         self.eye2_x = eye2_x
         self.eye2_y = eye2_y
     def clear_shadow(self):
-        blocky.clear_shadow()
+        pygame.draw.rect(window, BLACK, [ x ,y  , CHARCTER , CHARCTER ], 0 )
 
     def shot(self):
         global dir
