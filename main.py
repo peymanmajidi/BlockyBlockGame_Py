@@ -20,10 +20,6 @@ def play_audio(soundname):
     pygame.mixer.music.load("sounds/"+soundname)
     pygame.mixer.music.play(0)
 
-
-dir = Direction.FRONT
-
-
 # Initilize Variables
 game_over = False
 window = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -63,7 +59,7 @@ class Eyes:
             self.keep -=1
 
 
-class is_filled_pixel:
+class Is_filled_pixel:
     def left(x,y):
         for i in range(CHARCTER):
             dot = window.get_at((x-MOVE,y+i))
@@ -123,13 +119,10 @@ class BlockyBlock:
     fall_played = True
     fall = 0
     rise= 0
-
-
+    direction = Direction.FRONT
 
     # render charcter
     def render_character(self, emo = Emotion.HAPPY): # default face is happy :)
-        global dir
-        global falling
         x = self.x
         y = self.y
         pygame.draw.rect(window, COLOR, [ x ,y  , CHARCTER , CHARCTER ], 0 ) # [ ]
@@ -139,11 +132,11 @@ class BlockyBlock:
         self.eyes.right.x = x+int(CHARCTER/2)+int(CHARCTER / 5)
         self.eyes.right.y = y+int(CHARCTER/2)-int(CHARCTER / 5)
 
-        if dir == Direction.RIGHT:
+        if self.direction == Direction.RIGHT:
             self.eyes.move(int(CHARCTER / 10))
             self.eyes.left.y +=1
 
-        elif dir == Direction.LEFT:
+        elif self.direction == Direction.LEFT:
             self.eyes.move(-int(CHARCTER / 10))
             self.eyes.right.y +=1
 
@@ -178,7 +171,7 @@ class BlockyBlock:
         eyes2.right = self.eyes.right
         
         # draw laser
-        if dir == Direction.RIGHT or  dir == Direction.FRONT:
+        if self.direction == Direction.RIGHT or  self.direction == Direction.FRONT:
             pygame.draw.line(window, LASER, eyes2.left.get2(), (WIDTH,eyes2.left.y),int(CHARCTER/10))
             pygame.draw.line(window, LASER2, eyes2.right.get2(), (WIDTH,eyes2.left.y),int(CHARCTER/10))
         else:
@@ -192,7 +185,7 @@ class BlockyBlock:
         self.render_character(Emotion.SAD)
 
         # clean laser
-        if dir == Direction.RIGHT or  dir == Direction.FRONT:
+        if self.direction == Direction.RIGHT or  self.direction == Direction.FRONT:
             pygame.draw.line(window, BLACK, (eyes2.left.x +1,eyes2.left.y-int(CHARCTER/5)), (WIDTH,eyes2.left.y-int(CHARCTER/5)),int(CHARCTER/2))
         else:
             pygame.draw.line(window, BLACK, (eyes2.right.x+1,eyes2.right.y-int(CHARCTER/5)), (0,eyes2.right.y-int(CHARCTER/5)),int(CHARCTER/2))
@@ -215,7 +208,7 @@ PrintHelpOnConsole()
 blocky = BlockyBlock() # make a blocky character
 # Main Game Loop
 while not game_over:    
-    pg.draw_object(window, WIDTH, HEIGHT)
+    draw_object(pygame, window, WIDTH, HEIGHT)
     print_current_color()
     surface = pygame.Surface((WIDTH,HEIGHT))
     
@@ -223,11 +216,7 @@ while not game_over:
 
     pygame.display.update()
     me= window.get_at((0,0))
-
-
     blocky.eyes.winking()
-
-
     if blocky.falling:
         pygame.time.delay(2)
     else:
@@ -240,9 +229,9 @@ while not game_over:
         dir =Direction.LEFT
         if blocky.x - MOVE >= 0:
              me= window.get_at((blocky.x-1, blocky.y+ CHARCTER))
-             if not is_filled_pixel.left(blocky.x, blocky.y):
+             if not Is_filled_pixel.left(blocky.x, blocky.y):
                 blocky.x-= MOVE
-             elif not is_filled_pixel.left(blocky.x-MOVE+1, blocky.y-(MOVE*5)):
+             elif not Is_filled_pixel.left(blocky.x-MOVE+1, blocky.y-(MOVE*5)):
                blocky.x-= MOVE
                blocky.y-= MOVE
 
@@ -252,19 +241,17 @@ while not game_over:
         dir = Direction.RIGHT
         if blocky.x + CHARCTER + MOVE <= WIDTH:
              me= window.get_at((blocky.x+1+ CHARCTER,blocky.y+CHARCTER))
-             if not is_filled_pixel.right(blocky.x, blocky.y):
+             if not Is_filled_pixel.right(blocky.x, blocky.y):
                 blocky.x+= MOVE
-             elif not is_filled_pixel.right(blocky.x + MOVE+1, blocky.y - (MOVE*5)):
+             elif not Is_filled_pixel.right(blocky.x + MOVE+1, blocky.y - (MOVE*5)):
                blocky.x+= MOVE
                blocky.y-= MOVE
-
-
 
     if blocky.jumping:
         blocky.clear_shadow()
         if blocky.rising:
             blocky.rise+=1
-            if not is_filled_pixel.top(blocky.x, blocky.y-1):
+            if not Is_filled_pixel.top(blocky.x, blocky.y-1):
                 blocky.y-=1
             else:
                 blocky.jumping = False
@@ -340,7 +327,7 @@ while not game_over:
     
 
 
-    if not is_filled_pixel.bottom(blocky.x, blocky.y) and not blocky.jumping:
+    if not Is_filled_pixel.bottom(blocky.x, blocky.y) and not blocky.jumping:
         blocky.clear_shadow()
         blocky.y+=1
         blocky.falling = True
