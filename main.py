@@ -48,10 +48,7 @@ falling = False
 fall = 0
 rise= 0
 clicked = False # mouse button down to starting to draw
-wink = False # last wink status
-winking = 0 # eye winking when blocky is idle
-target = 20
-keep = 0
+
 
 fall_played = True
 game_over = False
@@ -117,12 +114,25 @@ class BlockyBlock:
 
             return False
 
-    # render charcter
+    # winking eyes        
+    wink = False # last wink status
+    winking = 0 # eye winking when blocky is idle
+    target = 20
+    keep = 0
+    def wink_eyes(self):
+        self.winking +=1 
+        if self.winking % self.target == 0:
+            self.winking = 0
+            self.wink = True
+            self.keep = 30
+    
+        if self.wink:
+            self.keep -=1
 
+
+    # render charcter
     def render_character(self, emo = Emotion.HAPPY): # default face is happy :)
         global dir
-        global keep
-        global target
         global falling
 
         pygame.draw.rect(window, COLOR, [ x ,y  , CHARCTER , CHARCTER ], 0 ) # [ ]
@@ -142,10 +152,10 @@ class BlockyBlock:
             eye2_x-=int(CHARCTER / 10)
             eye2_y+=1
 
-        if  keep > 5:
+        if  self.keep > 5:
             pygame.draw.circle(window, BLACK,[eye1_x,eye1_y],int(CHARCTER / 15),0) #[.]
             pygame.draw.circle(window, BLACK,[eye2_x,eye1_y],int(CHARCTER / 15),0) # [..]
-            target = random.randrange(100,1000)
+            self.target = random.randrange(100,1000)
         else:       
             pygame.draw.circle(window, BLACK,[eye1_x,eye1_y],int(CHARCTER / 10),0) #[.]
             pygame.draw.circle(window, BLACK,[eye2_x,eye2_y],int(CHARCTER / 10),0) # [..]
@@ -163,6 +173,7 @@ class BlockyBlock:
         self.eye1_y = eye1_y
         self.eye2_x = eye2_x
         self.eye2_y = eye2_y
+
     def clear_shadow(self):
         pygame.draw.rect(window, BLACK, [ x ,y  , CHARCTER , CHARCTER ], 0 )
 
@@ -171,9 +182,9 @@ class BlockyBlock:
         global WIDTH
         self.render_character(Emotion.SAD)
 
-        tempx= self.eye1_x
+        tempx = self.eye1_x
         tempy = self.eye1_y
-        tempxx= self.eye2_x
+        tempxx = self.eye2_x
         tempyy = self.eye2_y
         
         if dir == Direction.RIGHT or  dir == Direction.FRONT:
@@ -217,14 +228,9 @@ while not game_over:
     pygame.display.update()
     me= window.get_at((0,0))
 
-    winking +=1
-    if winking % target == 0:
-        winking = 0
-        wink = True
-        keep=30
-    
-    if wink:
-        keep -=1
+
+    blocky.wink_eyes()
+
 
     if falling:
         pygame.time.delay(2)
