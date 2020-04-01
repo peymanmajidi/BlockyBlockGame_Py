@@ -56,8 +56,6 @@ window = pygame.display.set_mode((WIDTH, HEIGHT))
 x=int(CHARCTER)*5
 y= CHARCTER
 
-
-
 class BlockyBlock:
     title = "Blocky Block"
     # eyes
@@ -65,7 +63,7 @@ class BlockyBlock:
     eye1_y=0
     eye2_x=0
     eye2_y=0
-    class Can_Move:
+    class is_filled_pixel:
         def left(x,y):
             for i in range(CHARCTER):
                 dot = window.get_at((x-MOVE,y+i))
@@ -244,9 +242,9 @@ while not game_over:
         dir =Direction.LEFT
         if x - MOVE >= 0:
              me= window.get_at((x-1,y+ CHARCTER))
-             if not blocky.Can_Move.left(x,y):
+             if not blocky.is_filled_pixel.left(x,y):
                 x-= MOVE
-             elif not blocky.Can_Move.left(x-MOVE+1,y-(MOVE*5)):
+             elif not blocky.is_filled_pixel.left(x-MOVE+1,y-(MOVE*5)):
                x-= MOVE
                y-=MOVE
 
@@ -256,9 +254,9 @@ while not game_over:
         dir =Direction.RIGHT
         if x + CHARCTER + MOVE <= WIDTH:
              me= window.get_at((x+1+ CHARCTER,y+CHARCTER))
-             if not blocky.Can_Move.right(x,y):
+             if not blocky.is_filled_pixel.right(x,y):
                 x+= MOVE
-             elif not blocky.Can_Move.right(x+ MOVE+1,y-(MOVE*5)):
+             elif not blocky.is_filled_pixel.right(x+ MOVE+1,y-(MOVE*5)):
                x+= MOVE
                y-= MOVE
 
@@ -268,7 +266,7 @@ while not game_over:
         blocky.clear_shadow()
         if rising:
             rise+=1
-            if not blocky.Can_Move.top(x,y-1):
+            if not blocky.is_filled_pixel.top(x,y-1):
                 y-=1
             else:
                 jumping = False
@@ -344,7 +342,7 @@ while not game_over:
     
 
 
-    if not blocky.Can_Move.bottom(x,y) and not jumping:
+    if not blocky.is_filled_pixel.bottom(x,y) and not jumping:
         blocky.clear_shadow()
         y+=1
         falling = True
