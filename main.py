@@ -124,7 +124,16 @@ class BlockyBlock:
         self.fall = 0
         self.rise= 0
         self.direction = Direction.FRONT
+        self.assign_keystrock(pygame.K_LEFT, pygame.K_RIGHT, pygame.K_RETURN, pygame.K_SPACE)
         self.render_character()
+    
+    def assign_keystrock(self, left, right, shot, jump):
+        self.key_left = left
+        self.key_right = right
+        self.key_shot = shot
+        self.key_jump = jump
+
+
 
     def render_character(self, emo = Emotion.HAPPY):
         x = self.x
@@ -166,41 +175,60 @@ class BlockyBlock:
         pygame.draw.rect(window, BLACK, [ self.x, self.y, CHARCTER , CHARCTER ], 0)
 
     def turn_left(self):
-        blocky.clear_shadow()
-        blocky.direction = Direction.LEFT
-        if blocky.x - MOVE >= 0:
-             if not Is_filled_pixel.left(blocky.x, blocky.y):
-                blocky.x-= MOVE
-             elif not Is_filled_pixel.left(blocky.x-MOVE+1, blocky.y-(MOVE*5)):
-               blocky.x-= MOVE
-               blocky.y-= MOVE
+        self.clear_shadow()
+        self.direction = Direction.LEFT
+        if self.x - MOVE >= 0:
+             if not Is_filled_pixel.left(self.x, self.y):
+                self.x-= MOVE
+             elif not Is_filled_pixel.left(self.x-MOVE+1, self.y-(MOVE*5)):
+               self.x-= MOVE
+               self.y-= MOVE
         self.render_character()
 
     def turn_right(self):
-        blocky.clear_shadow()
-        blocky.direction = Direction.RIGHT
-        if blocky.x + CHARCTER + MOVE <= WIDTH:
-             if not Is_filled_pixel.right(blocky.x, blocky.y):
-                blocky.x+= MOVE
-             elif not Is_filled_pixel.right(blocky.x + MOVE+1, blocky.y - (MOVE*5)):
-               blocky.x+= MOVE
-               blocky.y-= MOVE
+        self.clear_shadow()
+        self.direction = Direction.RIGHT
+        if self.x + CHARCTER + MOVE <= WIDTH:
+             if not Is_filled_pixel.right(self.x, self.y):
+                self.x+= MOVE
+             elif not Is_filled_pixel.right(self.x + MOVE+1, self.y - (MOVE*5)):
+               self.x+= MOVE
+               self.y-= MOVE
         self.render_character()
 
-    def jump(self):
-        blocky.clear_shadow()
-        if blocky.rising:
-            blocky.rise+=1
-            if not Is_filled_pixel.top(blocky.x, blocky.y-1):
-                blocky.y-=1
-            else:
-                blocky.jumping = False
-            if blocky.rise > JUMP:
-                blocky.rising = False
-                blocky.jumping= False
-        self.render_character()
+    def zoom_in(self):
+        global CHARCTER
+        global JUMP
+        if CHARCTER <400:
+                    self.y-=10
+                    CHARCTER+=10
+                    JUMP = int(CHARCTER * 1.8)
+    
+    def zoom_out(self):
+        global CHARCTER
+        global JUMP
+        if CHARCTER > 10:
+            self.y+=10
+            CHARCTER-=10
+            JUMP = int(CHARCTER * 1.8)
 
-    def alive(self):
+    def do_jump(self):
+        if self.jumping or self.falling:
+            return
+        self.clear_shadow()
+        self.jumping = True
+        self.rising = True
+        play_audio("jump.wav")
+        self.rise=0
+
+    def event(self, key):
+        if key == self.key_jump:
+            self.do_jump()
+        elif key == self.key_shot:
+            self.shot()
+
+
+    def alive(self, key):
         self.eyes.winking()
         if not Is_filled_pixel.bottom(self.x, self.y) and not self.jumping:
             self.clear_shadow()
@@ -212,6 +240,23 @@ class BlockyBlock:
             if self.fall_played:
                 play_audio("fall.wav")
                 self.fall_played = False
+
+        if(keys[self.key_left]):
+            self.turn_left()
+        elif(keys[self.key_right]):
+            self.turn_right()
+
+        if self.jumping:
+            self.clear_shadow()
+            if self.rising:
+                self.rise+=1
+                if not Is_filled_pixel.top(self.x, self.y-1):
+                    self.y-=1
+                else:
+                    self.jumping = False
+            if self.rise > JUMP:
+                self.rising = False
+                self.jumping= False
         self.render_character()
 
     def shot(self):
@@ -267,21 +312,10 @@ while not game_over:
     print_current_color()
     surface = pygame.Surface((WIDTH,HEIGHT))
     
-    blocky.alive()
-    peyman.alive()
-
     keys = pygame.key.get_pressed()  #checking pressed keys
-
-    if keys[pygame.K_LEFT]:
-        blocky.turn_left()
-
     
-    if keys[pygame.K_RIGHT]:
-        blocky.turn_right()
-
-    if blocky.jumping:
-        blocky.jump()
-
+    blocky.alive(keys)
+    peyman.alive(keys)
 
     for event in pygame.event.get():
         
@@ -302,25 +336,16 @@ while not game_over:
             pass         
 
         if event.type == pygame.KEYDOWN:
-            blocky.clear_shadow()
             pygame.display.update()
-            if event.key == pygame.K_SPACE or event.key == pygame.K_UP:
-                if blocky.jumping or blocky.falling:
-                    break
-                blocky.clear_shadow()
-                blocky.jumping = True
-                blocky.rising = True
-                play_audio("jump.wav")
-                blocky.rise=0
-            
-            if event.key == pygame.K_RETURN:
-                blocky.shot()
+
+            blocky.event(event.key)
+            peyman.event(event.key)
+
             if event.key == pygame.K_c:
                 pygame.draw.rect(window, BLACK, [0,0,WIDTH, HEIGHT],0)
 
             if event.key == pygame.K_RSHIFT:
                 paint_color = (random.randrange(1,255),random.randrange(1,255),random.randrange(1,255))
-                blocky.color = paint_color
     
             if event.key == pygame.K_b:
                 paint_color = (0,0,0)
@@ -335,16 +360,10 @@ while not game_over:
                 paint_color = (255,255,0)
                 
             if event.key == pygame.K_KP_PLUS or  event.key ==pygame.K_PLUS or event.key == pygame.K_l:
-                if CHARCTER <400:
-                    blocky.y-=10
-                    CHARCTER+=10
-                    JUMP = int(CHARCTER * 1.8)
+                blocky.zoom_in()
                     
             if event.key == pygame.K_MINUS or  event.key ==pygame.K_KP_MINUS:
-                if CHARCTER > 10:
-                    blocky.y+=10
-                    CHARCTER-=10
-                    JUMP = int(CHARCTER * 1.8)
+                blocky.zoom_out()
     
     pygame.display.update()
     pygame.time.delay(2)
