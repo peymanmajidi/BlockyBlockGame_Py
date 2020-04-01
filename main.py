@@ -202,16 +202,16 @@ class BlockyBlock:
 
     def alive(self):
         self.eyes.winking()
-        if not Is_filled_pixel.bottom(blocky.x, blocky.y) and not blocky.jumping:
-            blocky.clear_shadow()
-            blocky.y+=1
-            blocky.falling = True
-            blocky.fall_played = True
+        if not Is_filled_pixel.bottom(self.x, self.y) and not self.jumping:
+            self.clear_shadow()
+            self.y+=1
+            self.falling = True
+            self.fall_played = True
         else:
-            blocky.falling = False
-            if blocky.fall_played:
+            self.falling = False
+            if self.fall_played:
                 play_audio("fall.wav")
-                blocky.fall_played = False
+                self.fall_played = False
         self.render_character()
 
     def shot(self):
@@ -268,6 +268,7 @@ while not game_over:
     surface = pygame.Surface((WIDTH,HEIGHT))
     
     blocky.alive()
+    peyman.alive()
 
     keys = pygame.key.get_pressed()  #checking pressed keys
 
@@ -283,6 +284,7 @@ while not game_over:
 
 
     for event in pygame.event.get():
+        
         if event.type == pygame.QUIT:
             game_over= True
         
@@ -343,6 +345,7 @@ while not game_over:
                     blocky.y+=10
                     CHARCTER-=10
                     JUMP = int(CHARCTER * 1.8)
+    
     pygame.display.update()
     pygame.time.delay(2)
     # end of main loop
