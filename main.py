@@ -42,20 +42,10 @@ dir = Direction.FRONT
 
 
 # Initilize Variables
-jumping = False
-rising = False
-falling = False
-fall = 0
-rise= 0
-clicked = False # mouse button down to starting to draw
 
-
-fall_played = True
 game_over = False
 window = pygame.display.set_mode((WIDTH, HEIGHT))
-x=int(CHARCTER)*5
-y= CHARCTER
-
+clicked = False # mouse button down to starting to draw
 
 class Point:
     def __init__(self, x=0,y=0):
@@ -90,64 +80,76 @@ class Eyes:
         if self.wink:
             self.keep -=1
 
+
+class is_filled_pixel:
+    def left(x,y):
+        for i in range(CHARCTER):
+            dot = window.get_at((x-MOVE,y+i))
+            if dot[0] > 0:
+                return True
+            if dot[1] > 0:
+                return True
+            if dot[2] > 0:
+                return True
+        return False
+
+    def right(x,y):        
+        for i in range(CHARCTER):
+            dot = window.get_at((x+MOVE + CHARCTER,y+i))
+            if dot[0] > 0:
+                return True
+            if dot[1] > 0:
+                return True
+            if dot[2] > 0:
+                return True
+        return False
+
+    def top(x,y):     
+        for i in range(CHARCTER):
+            dot = window.get_at((x+i,y-MOVE))
+            if dot[0] > 0:
+                return True
+            if dot[1] > 0:
+                return True
+            if dot[2] > 0:
+                return True
+        return False
+
+    def bottom(x,y):
+        try:
+            for i in range(CHARCTER):
+                dot = window.get_at((x+i,y+CHARCTER+MOVE))
+                if dot[0] > 0:
+                    return True
+                if dot[1] > 0:
+                    return True
+                if dot[2] > 0:
+                    return True
+        except:
+            pass  
+
+        return False
+
 class BlockyBlock:
     title = "Blocky Block"
     eyes = Eyes()
+    x= int(CHARCTER)*5
+    y= CHARCTER
+    jumping = False
+    rising = False
+    falling = False
+    fall_played = True
+    fall = 0
+    rise= 0
 
-    class is_filled_pixel:
-        def left(x,y):
-            for i in range(CHARCTER):
-                dot = window.get_at((x-MOVE,y+i))
-                if dot[0] > 0:
-                    return True
-                if dot[1] > 0:
-                    return True
-                if dot[2] > 0:
-                    return True
-            return False
-    
-        def right(x,y):        
-            for i in range(CHARCTER):
-                dot = window.get_at((x+MOVE + CHARCTER,y+i))
-                if dot[0] > 0:
-                    return True
-                if dot[1] > 0:
-                    return True
-                if dot[2] > 0:
-                    return True
-            return False
 
-        def top(x,y):     
-            for i in range(CHARCTER):
-                dot = window.get_at((x+i,y-MOVE))
-                if dot[0] > 0:
-                    return True
-                if dot[1] > 0:
-                    return True
-                if dot[2] > 0:
-                    return True
-            return False
-
-        def bottom(x,y):
-            try:
-                for i in range(CHARCTER):
-                    dot = window.get_at((x+i,y+CHARCTER+MOVE))
-                    if dot[0] > 0:
-                        return True
-                    if dot[1] > 0:
-                        return True
-                    if dot[2] > 0:
-                        return True
-            except:
-                pass  
-
-            return False
 
     # render charcter
     def render_character(self, emo = Emotion.HAPPY): # default face is happy :)
         global dir
         global falling
-
+        x = self.x
+        y = self.y
         pygame.draw.rect(window, COLOR, [ x ,y  , CHARCTER , CHARCTER ], 0 ) # [ ]
         self.eyes.left.x = x+int(CHARCTER/2)- int(CHARCTER / 5)
         self.eyes.left.y = y+int(CHARCTER/2)-int(CHARCTER / 5)
@@ -176,13 +178,13 @@ class BlockyBlock:
         if emo == Emotion.SAD:
             pygame.draw.arc(window, BLACK,  (x+(x+int(CHARCTER / 10)),y+(x+int(CHARCTER / 2)) , CHARCTER-int(CHARCTER / 5), CHARCTER-int(CHARCTER / 5)), math.pi/4,3* math.pi / 4 , int(CHARCTER / 10)) # :(
 
-        elif not falling:
+        elif not self.falling:
             pygame.draw.arc(window, BLACK,  (x+int(CHARCTER / 10),y , CHARCTER-int(CHARCTER / 5), CHARCTER-int(CHARCTER / 5)), 5*math.pi/4,7* math.pi / 4 , int(CHARCTER / 10)) # :)
         else:
             pygame.draw.arc(window, BLACK,  (x+int(CHARCTER / 2.5),y+int(CHARCTER / 1.8) , int(CHARCTER / 3.5),  int(CHARCTER / 3.5)), 0,2* math.pi  , int(CHARCTER / 7)) # :O
 
     def clear_shadow(self):
-        pygame.draw.rect(window, BLACK, [ x ,y  , CHARCTER , CHARCTER ], 0 )
+        pygame.draw.rect(window, BLACK, [ self.x, self.y, CHARCTER , CHARCTER ], 0 )
 
     def shot(self):
         global dir
@@ -241,7 +243,7 @@ while not game_over:
     blocky.eyes.winking()
 
 
-    if falling:
+    if blocky.falling:
         pygame.time.delay(2)
     else:
         pygame.time.delay(4)
@@ -251,39 +253,39 @@ while not game_over:
     if keys[pygame.K_LEFT]:
         blocky.clear_shadow()
         dir =Direction.LEFT
-        if x - MOVE >= 0:
-             me= window.get_at((x-1,y+ CHARCTER))
-             if not blocky.is_filled_pixel.left(x,y):
-                x-= MOVE
-             elif not blocky.is_filled_pixel.left(x-MOVE+1,y-(MOVE*5)):
-               x-= MOVE
-               y-=MOVE
+        if blocky.x - MOVE >= 0:
+             me= window.get_at((blocky.x-1, blocky.y+ CHARCTER))
+             if not is_filled_pixel.left(blocky.x, blocky.y):
+                blocky.x-= MOVE
+             elif not is_filled_pixel.left(blocky.x-MOVE+1, blocky.y-(MOVE*5)):
+               blocky.x-= MOVE
+               blocky.y-= MOVE
 
     
     if keys[pygame.K_RIGHT]:
         blocky.clear_shadow()
-        dir =Direction.RIGHT
-        if x + CHARCTER + MOVE <= WIDTH:
-             me= window.get_at((x+1+ CHARCTER,y+CHARCTER))
-             if not blocky.is_filled_pixel.right(x,y):
-                x+= MOVE
-             elif not blocky.is_filled_pixel.right(x+ MOVE+1,y-(MOVE*5)):
-               x+= MOVE
-               y-= MOVE
+        dir = Direction.RIGHT
+        if blocky.x + CHARCTER + MOVE <= WIDTH:
+             me= window.get_at((blocky.x+1+ CHARCTER,blocky.y+CHARCTER))
+             if not is_filled_pixel.right(blocky.x, blocky.y):
+                blocky.x+= MOVE
+             elif not is_filled_pixel.right(blocky.x + MOVE+1, blocky.y - (MOVE*5)):
+               blocky.x+= MOVE
+               blocky.y-= MOVE
 
 
 
-    if jumping:
+    if blocky.jumping:
         blocky.clear_shadow()
-        if rising:
-            rise+=1
-            if not blocky.is_filled_pixel.top(x,y-1):
-                y-=1
+        if blocky.rising:
+            blocky.rise+=1
+            if not is_filled_pixel.top(blocky.x, blocky.y-1):
+                blocky.y-=1
             else:
-                jumping = False
-            if rise > JUMP:
-                rising = False
-                jumping= False
+                blocky.jumping = False
+            if blocky.rise > JUMP:
+                blocky.rising = False
+                blocky.jumping= False
 
 
     for event in pygame.event.get():
@@ -308,13 +310,13 @@ while not game_over:
             blocky.clear_shadow()
             pygame.display.update()
             if event.key == pygame.K_SPACE or event.key == pygame.K_UP:
-                if jumping or falling:
+                if blocky.jumping or blocky.falling:
                     break
                 blocky.clear_shadow()
-                jumping = True
-                rising = True
+                blocky.jumping = True
+                blocky.rising = True
                 play_audio("jump.wav")
-                rise=0
+                blocky.rise=0
             
             if event.key == pygame.K_RETURN:
                 blocky.shot()
@@ -353,14 +355,14 @@ while not game_over:
     
 
 
-    if not blocky.is_filled_pixel.bottom(x,y) and not jumping:
+    if not is_filled_pixel.bottom(blocky.x, blocky.y) and not blocky.jumping:
         blocky.clear_shadow()
-        y+=1
-        falling = True
-        fall_played = True
+        blocky.y+=1
+        blocky.falling = True
+        blocky.fall_played = True
     else:
-        falling = False
-        if fall_played:
+        blocky.falling = False
+        if blocky.fall_played:
             play_audio("fall.wav")
-            fall_played = False
+            blocky.fall_played = False
 
