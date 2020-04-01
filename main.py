@@ -24,6 +24,8 @@ def play_audio(soundname):
 game_over = False
 window = pygame.display.set_mode((WIDTH, HEIGHT))
 clicked = False # mouse button down to starting to draw
+paint_color = (0,255,0)
+
 
 class Point:
     def __init__(self, x=0,y=0):
@@ -109,23 +111,24 @@ class Is_filled_pixel:
         return False
 
 class BlockyBlock:
-    title = "Blocky Block"
-    eyes = Eyes()
-    x= int(CHARCTER)*5
-    y= CHARCTER
-    jumping = False
-    rising = False
-    falling = False
-    fall_played = True
-    fall = 0
-    rise= 0
-    direction = Direction.FRONT
+    def __init__(self, character_name, color):
+        self.name = character_name
+        self.color = color
+        self.eyes = Eyes()
+        self.x= int(CHARCTER)*5
+        self.y= CHARCTER
+        self.jumping = False
+        self.rising = False
+        self.falling = False
+        self.fall_played = True
+        self.fall = 0
+        self.rise= 0
+        self.direction = Direction.FRONT
 
-    # render charcter
-    def render_character(self, emo = Emotion.HAPPY): # default face is happy :)
+    def render_character(self, emo = Emotion.HAPPY):
         x = self.x
         y = self.y
-        pygame.draw.rect(window, COLOR, [ x ,y  , CHARCTER , CHARCTER ], 0 ) # [ ]
+        pygame.draw.rect(window, self.color, [ x ,y  , CHARCTER , CHARCTER ], 0 ) # [ ]
         self.eyes.left.x = x+int(CHARCTER/2)- int(CHARCTER / 5)
         self.eyes.left.y = y+int(CHARCTER/2)-int(CHARCTER / 5)
 
@@ -159,10 +162,9 @@ class BlockyBlock:
             pygame.draw.arc(window, BLACK,  (x+int(CHARCTER / 2.5),y+int(CHARCTER / 1.8) , int(CHARCTER / 3.5),  int(CHARCTER / 3.5)), 0,2* math.pi  , int(CHARCTER / 7)) # :O
 
     def clear_shadow(self):
-        pygame.draw.rect(window, BLACK, [ self.x, self.y, CHARCTER , CHARCTER ], 0 )
+        pygame.draw.rect(window, BLACK, [ self.x, self.y, CHARCTER , CHARCTER ], 0)
 
     def shot(self):
-        global dir
         global WIDTH
         self.render_character(Emotion.SAD)
 
@@ -198,14 +200,14 @@ def draw_object(pygame, window,WIDTH, HEIGHT):
 
 # Initiate pygame
 pygame.init()
-pygame.display.set_caption(BlockyBlock.title)
+pygame.display.set_caption("Welcome to Blockyblock game | by Peyman")
 pygame.display.update()
 
 def print_current_color(): 
-    pygame.draw.rect(window, OBJECT_COLOR, [0,0,30,10],0)
+    pygame.draw.rect(window, paint_color, [0,0,30,10],0)
 
 PrintHelpOnConsole()
-blocky = BlockyBlock() # make a blocky character
+blocky = BlockyBlock("redi block", YELLOW) # make a blocky character
 # Main Game Loop
 while not game_over:    
     draw_object(pygame, window, WIDTH, HEIGHT)
@@ -226,7 +228,7 @@ while not game_over:
 
     if keys[pygame.K_LEFT]:
         blocky.clear_shadow()
-        dir =Direction.LEFT
+        blocky.direction = Direction.LEFT
         if blocky.x - MOVE >= 0:
              me= window.get_at((blocky.x-1, blocky.y+ CHARCTER))
              if not Is_filled_pixel.left(blocky.x, blocky.y):
@@ -238,7 +240,7 @@ while not game_over:
     
     if keys[pygame.K_RIGHT]:
         blocky.clear_shadow()
-        dir = Direction.RIGHT
+        blocky.direction = Direction.RIGHT
         if blocky.x + CHARCTER + MOVE <= WIDTH:
              me= window.get_at((blocky.x+1+ CHARCTER,blocky.y+CHARCTER))
              if not Is_filled_pixel.right(blocky.x, blocky.y):
@@ -271,7 +273,7 @@ while not game_over:
         try:
             if clicked:
                 x2,y2 = event.pos
-                pygame.draw.rect(window, OBJECT_COLOR, [x2,y2,20,20],0)
+                pygame.draw.rect(window, paint_color, [x2,y2,20,20],0)
                 pygame.display.update()
 
         except:
@@ -298,29 +300,29 @@ while not game_over:
             
 
             if event.key == pygame.K_RSHIFT:
-                OBJECT_COLOR = (random.randrange(1,255),random.randrange(1,255),random.randrange(1,255))
+                paint_color = (random.randrange(1,255),random.randrange(1,255),random.randrange(1,255))
     
             if event.key == pygame.K_b:
-                OBJECT_COLOR = (0,0,0)
+                paint_color = (0,0,0)
                 
             if event.key == pygame.K_r:
-                OBJECT_COLOR = (255,0,0)
+                paint_color = (255,0,0)
                 
             if event.key == pygame.K_g:
-                OBJECT_COLOR = (0,255,0)
+                paint_color = (0,255,0)
                 
             if event.key == pygame.K_y:
-                OBJECT_COLOR = (255,255,0)
+                paint_color = (255,255,0)
                 
             if event.key == pygame.K_KP_PLUS or  event.key ==pygame.K_PLUS or event.key == pygame.K_l:
                 if CHARCTER <400:
-                    y-=10
+                    blocky.y-=10
                     CHARCTER+=10
                     JUMP = int(CHARCTER * 1.8)
                     
             if event.key == pygame.K_MINUS or  event.key ==pygame.K_KP_MINUS:
                 if CHARCTER > 10:
-                    y+=10
+                    blocky.y+=10
                     CHARCTER-=10
                     JUMP = int(CHARCTER * 1.8)
                 
