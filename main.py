@@ -124,6 +124,7 @@ class BlockyBlock:
         self.fall = 0
         self.rise= 0
         self.direction = Direction.FRONT
+        self.render_character()
 
     def render_character(self, emo = Emotion.HAPPY):
         x = self.x
@@ -173,6 +174,7 @@ class BlockyBlock:
              elif not Is_filled_pixel.left(blocky.x-MOVE+1, blocky.y-(MOVE*5)):
                blocky.x-= MOVE
                blocky.y-= MOVE
+        self.render_character()
 
     def turn_right(self):
         blocky.clear_shadow()
@@ -183,6 +185,7 @@ class BlockyBlock:
              elif not Is_filled_pixel.right(blocky.x + MOVE+1, blocky.y - (MOVE*5)):
                blocky.x+= MOVE
                blocky.y-= MOVE
+        self.render_character()
 
     def jump(self):
         blocky.clear_shadow()
@@ -195,6 +198,21 @@ class BlockyBlock:
             if blocky.rise > JUMP:
                 blocky.rising = False
                 blocky.jumping= False
+        self.render_character()
+
+    def alive(self):
+        self.eyes.winking()
+        if not Is_filled_pixel.bottom(blocky.x, blocky.y) and not blocky.jumping:
+            blocky.clear_shadow()
+            blocky.y+=1
+            blocky.falling = True
+            blocky.fall_played = True
+        else:
+            blocky.falling = False
+            if blocky.fall_played:
+                play_audio("fall.wav")
+                blocky.fall_played = False
+        self.render_character()
 
     def shot(self):
         global WIDTH
@@ -240,33 +258,17 @@ def print_current_color():
 
 PrintHelpOnConsole()
 blocky = BlockyBlock("redi block", YELLOW) # make a blocky character
+peyman = BlockyBlock("peymani block", RED) # make a blocky character
+peyman.x = 100
 # Main Game Loop
 while not game_over:    
+    
     draw_object(pygame, window, WIDTH, HEIGHT)
     print_current_color()
     surface = pygame.Surface((WIDTH,HEIGHT))
     
-    blocky.render_character()
+    blocky.alive()
 
-    pygame.display.update()
-    me= window.get_at((0,0))
-    blocky.eyes.winking()
-
-    if blocky.falling:
-        pygame.time.delay(2)
-    else:
-        pygame.time.delay(4)
-
-    if not Is_filled_pixel.bottom(blocky.x, blocky.y) and not blocky.jumping:
-        blocky.clear_shadow()
-        blocky.y+=1
-        blocky.falling = True
-        blocky.fall_played = True
-    else:
-        blocky.falling = False
-        if blocky.fall_played:
-            play_audio("fall.wav")
-            blocky.fall_played = False
     keys = pygame.key.get_pressed()  #checking pressed keys
 
     if keys[pygame.K_LEFT]:
@@ -314,8 +316,6 @@ while not game_over:
             if event.key == pygame.K_c:
                 pygame.draw.rect(window, BLACK, [0,0,WIDTH, HEIGHT],0)
 
-            
-
             if event.key == pygame.K_RSHIFT:
                 paint_color = (random.randrange(1,255),random.randrange(1,255),random.randrange(1,255))
                 blocky.color = paint_color
@@ -343,4 +343,7 @@ while not game_over:
                     blocky.y+=10
                     CHARCTER-=10
                     JUMP = int(CHARCTER * 1.8)
+    pygame.display.update()
+    pygame.time.delay(2)
+    # end of main loop
                 
