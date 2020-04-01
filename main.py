@@ -56,6 +56,13 @@ window = pygame.display.set_mode((WIDTH, HEIGHT))
 x=int(CHARCTER)*5
 y= CHARCTER
 
+
+class Point:
+    def __init__(self, x=0,y=0):
+        self.x = x
+        self.y = y
+
+
 class BlockyBlock:
     title = "Blocky Block"
     # eyes
