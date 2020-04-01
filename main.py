@@ -61,15 +61,39 @@ class Point:
     def __init__(self, x=0,y=0):
         self.x = x
         self.y = y
+    def set(self, x,y):
+        self.x = x
+        self.y = y
+    def get(self):
+        return [self.x, self.y]
+    def get2(self):
+        return (self.x, self.y)
 
+class Eyes:
+    left = Point()
+    right = Point()
+    def move(self, x):
+        self.left.x +=x
+        self.right.x +=x
+    # winking eyes        
+    wink = False # last wink status
+    do_winking = 0 # eye winking when blocky is idle
+    target = 20
+    keep = 0
+    def winking(self):
+        self.do_winking +=1 
+        if self.do_winking % self.target == 0:
+            self.do_winking = 0
+            self.wink = True
+            self.keep = 30
+    
+        if self.wink:
+            self.keep -=1
 
 class BlockyBlock:
     title = "Blocky Block"
-    # eyes
-    eye1_x=0
-    eye1_y=0
-    eye2_x=0
-    eye2_y=0
+    eyes = Eyes()
+
     class is_filled_pixel:
         def left(x,y):
             for i in range(CHARCTER):
@@ -119,51 +143,34 @@ class BlockyBlock:
 
             return False
 
-    # winking eyes        
-    wink = False # last wink status
-    winking = 0 # eye winking when blocky is idle
-    target = 20
-    keep = 0
-    def wink_eyes(self):
-        self.winking +=1 
-        if self.winking % self.target == 0:
-            self.winking = 0
-            self.wink = True
-            self.keep = 30
-    
-        if self.wink:
-            self.keep -=1
-
-
     # render charcter
     def render_character(self, emo = Emotion.HAPPY): # default face is happy :)
         global dir
         global falling
 
         pygame.draw.rect(window, COLOR, [ x ,y  , CHARCTER , CHARCTER ], 0 ) # [ ]
+        self.eyes.left.x = x+int(CHARCTER/2)- int(CHARCTER / 5)
+        self.eyes.left.y = y+int(CHARCTER/2)-int(CHARCTER / 5)
 
-        eye1_x = x+int(CHARCTER/2)- int(CHARCTER / 5)
-        eye1_y = y+int(CHARCTER/2)-int(CHARCTER / 5)
-
-        eye2_x = x+int(CHARCTER/2)+int(CHARCTER / 5)
-        eye2_y= y+int(CHARCTER/2)-int(CHARCTER / 5)
+        self.eyes.right.x = x+int(CHARCTER/2)+int(CHARCTER / 5)
+        self.eyes.right.y = y+int(CHARCTER/2)-int(CHARCTER / 5)
 
         if dir == Direction.RIGHT:
-            eye1_x+=int(CHARCTER / 10)
-            eye2_x+=int(CHARCTER / 10)
-            eye1_y+=1
-        elif dir == Direction.LEFT:
-            eye1_x-=int(CHARCTER / 10)
-            eye2_x-=int(CHARCTER / 10)
-            eye2_y+=1
+            self.eyes.move(int(CHARCTER / 10))
+            self.eyes.left.y +=1
 
-        if  self.keep > 5:
-            pygame.draw.circle(window, BLACK,[eye1_x,eye1_y],int(CHARCTER / 15),0) #[.]
-            pygame.draw.circle(window, BLACK,[eye2_x,eye1_y],int(CHARCTER / 15),0) # [..]
-            self.target = random.randrange(100,1000)
+        elif dir == Direction.LEFT:
+            self.eyes.move(-int(CHARCTER / 10))
+            self.eyes.right.y +=1
+
+
+        if  self.eyes.keep > 5:
+            pygame.draw.circle(window, BLACK, self.eyes.left.get(), int(CHARCTER / 15),0) #[.]
+            pygame.draw.circle(window, BLACK, self.eyes.right.get(),int(CHARCTER / 15),0) # [..]
+            self.eyes.target = random.randrange(100,1000) # random period for winking
         else:       
-            pygame.draw.circle(window, BLACK,[eye1_x,eye1_y],int(CHARCTER / 10),0) #[.]
-            pygame.draw.circle(window, BLACK,[eye2_x,eye2_y],int(CHARCTER / 10),0) # [..]
+            pygame.draw.circle(window, BLACK,self.eyes.left.get(),int(CHARCTER / 10),0) #[.]
+            pygame.draw.circle(window, BLACK,self.eyes.right.get(),int(CHARCTER / 10),0) # [..]
         
     
         if emo == Emotion.SAD:
@@ -173,11 +180,6 @@ class BlockyBlock:
             pygame.draw.arc(window, BLACK,  (x+int(CHARCTER / 10),y , CHARCTER-int(CHARCTER / 5), CHARCTER-int(CHARCTER / 5)), 5*math.pi/4,7* math.pi / 4 , int(CHARCTER / 10)) # :)
         else:
             pygame.draw.arc(window, BLACK,  (x+int(CHARCTER / 2.5),y+int(CHARCTER / 1.8) , int(CHARCTER / 3.5),  int(CHARCTER / 3.5)), 0,2* math.pi  , int(CHARCTER / 7)) # :O
-        
-        self.eye1_x = eye1_x
-        self.eye1_y = eye1_y
-        self.eye2_x = eye2_x
-        self.eye2_y = eye2_y
 
     def clear_shadow(self):
         pygame.draw.rect(window, BLACK, [ x ,y  , CHARCTER , CHARCTER ], 0 )
@@ -187,27 +189,29 @@ class BlockyBlock:
         global WIDTH
         self.render_character(Emotion.SAD)
 
-        tempx = self.eye1_x
-        tempy = self.eye1_y
-        tempxx = self.eye2_x
-        tempyy = self.eye2_y
+        eyes2 = Eyes()
+        eyes2.left = self.eyes.left
+        eyes2.right = self.eyes.right
         
+        # draw laser
         if dir == Direction.RIGHT or  dir == Direction.FRONT:
-            pygame.draw.line(window, LASER, ( tempx,tempy), (WIDTH,tempy),int(CHARCTER/10))
-            pygame.draw.line(window, LASER2, ( tempxx,tempyy), (WIDTH,tempy),int(CHARCTER/10))
+            pygame.draw.line(window, LASER, eyes2.left.get2(), (WIDTH,eyes2.left.y),int(CHARCTER/10))
+            pygame.draw.line(window, LASER2, eyes2.right.get2(), (WIDTH,eyes2.left.y),int(CHARCTER/10))
         else:
-            pygame.draw.line(window, LASER, ( tempx,tempy), (0,tempy),int(CHARCTER/10))
-            pygame.draw.line(window, LASER2, ( tempxx,tempy), (0,tempy),int(CHARCTER/10))
+            pygame.draw.line(window, LASER, eyes2.left.get2(), (0,eyes2.left.y),int(CHARCTER/10))
+            pygame.draw.line(window, LASER2, eyes2.right.get2(), (0,eyes2.left.y),int(CHARCTER/10))
 
         play_audio("laser.wav")
 
         pygame.display.update()
         pygame.time.delay(50)
         self.render_character(Emotion.SAD)
+
+        # clean laser
         if dir == Direction.RIGHT or  dir == Direction.FRONT:
-            pygame.draw.line(window, BLACK, (tempx+1,tempy-int(CHARCTER/5)), (WIDTH,tempy-int(CHARCTER/5)),int(CHARCTER/2))
+            pygame.draw.line(window, BLACK, (eyes2.left.x +1,eyes2.left.y-int(CHARCTER/5)), (WIDTH,eyes2.left.y-int(CHARCTER/5)),int(CHARCTER/2))
         else:
-            pygame.draw.line(window, BLACK, (tempx+1,tempy-int(CHARCTER/5)), (0,tempy-int(CHARCTER/5)),int(CHARCTER/2))
+            pygame.draw.line(window, BLACK, (eyes2.right.x+1,eyes2.right.y-int(CHARCTER/5)), (0,eyes2.right.y-int(CHARCTER/5)),int(CHARCTER/2))
 
         pygame.display.update()
 
@@ -234,7 +238,7 @@ while not game_over:
     me= window.get_at((0,0))
 
 
-    blocky.wink_eyes()
+    blocky.eyes.winking()
 
 
     if falling:
