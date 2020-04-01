@@ -47,13 +47,13 @@ class Eyes:
         self.right.x +=x
     # winking eyes        
     wink = False # last wink status
-    do_winking = 0 # eye winking when blocky is idle
-    target = 20
+    wink_idle = 0 # eye winking when blocky is idle
+    wink_period = 20
     keep = 0
     def winking(self):
-        self.do_winking +=1 
-        if self.do_winking % self.target == 0:
-            self.do_winking = 0
+        self.wink_idle +=1 
+        if self.wink_idle % self.wink_period == 0:
+            self.wink_idle = 0
             self.wink = True
             self.keep = 30
     
@@ -147,7 +147,7 @@ class BlockyBlock:
         if  self.eyes.keep > 5:
             pygame.draw.circle(window, BLACK, self.eyes.left.get(), int(CHARCTER / 15),0) #[.]
             pygame.draw.circle(window, BLACK, self.eyes.right.get(),int(CHARCTER / 15),0) # [..]
-            self.eyes.target = random.randrange(100,1000) # random period for winking
+            self.eyes.wink_period = random.randrange(100,1000) # random period for winking
         else:       
             pygame.draw.circle(window, BLACK,self.eyes.left.get(),int(CHARCTER / 10),0) #[.]
             pygame.draw.circle(window, BLACK,self.eyes.right.get(),int(CHARCTER / 10),0) # [..]
@@ -163,6 +163,38 @@ class BlockyBlock:
 
     def clear_shadow(self):
         pygame.draw.rect(window, BLACK, [ self.x, self.y, CHARCTER , CHARCTER ], 0)
+
+    def turn_left(self):
+        blocky.clear_shadow()
+        blocky.direction = Direction.LEFT
+        if blocky.x - MOVE >= 0:
+             if not Is_filled_pixel.left(blocky.x, blocky.y):
+                blocky.x-= MOVE
+             elif not Is_filled_pixel.left(blocky.x-MOVE+1, blocky.y-(MOVE*5)):
+               blocky.x-= MOVE
+               blocky.y-= MOVE
+
+    def turn_right(self):
+        blocky.clear_shadow()
+        blocky.direction = Direction.RIGHT
+        if blocky.x + CHARCTER + MOVE <= WIDTH:
+             if not Is_filled_pixel.right(blocky.x, blocky.y):
+                blocky.x+= MOVE
+             elif not Is_filled_pixel.right(blocky.x + MOVE+1, blocky.y - (MOVE*5)):
+               blocky.x+= MOVE
+               blocky.y-= MOVE
+
+    def jump(self):
+        blocky.clear_shadow()
+        if blocky.rising:
+            blocky.rise+=1
+            if not Is_filled_pixel.top(blocky.x, blocky.y-1):
+                blocky.y-=1
+            else:
+                blocky.jumping = False
+            if blocky.rise > JUMP:
+                blocky.rising = False
+                blocky.jumping= False
 
     def shot(self):
         global WIDTH
@@ -219,47 +251,33 @@ while not game_over:
     pygame.display.update()
     me= window.get_at((0,0))
     blocky.eyes.winking()
+
     if blocky.falling:
         pygame.time.delay(2)
     else:
         pygame.time.delay(4)
 
+    if not Is_filled_pixel.bottom(blocky.x, blocky.y) and not blocky.jumping:
+        blocky.clear_shadow()
+        blocky.y+=1
+        blocky.falling = True
+        blocky.fall_played = True
+    else:
+        blocky.falling = False
+        if blocky.fall_played:
+            play_audio("fall.wav")
+            blocky.fall_played = False
     keys = pygame.key.get_pressed()  #checking pressed keys
 
     if keys[pygame.K_LEFT]:
-        blocky.clear_shadow()
-        blocky.direction = Direction.LEFT
-        if blocky.x - MOVE >= 0:
-             me= window.get_at((blocky.x-1, blocky.y+ CHARCTER))
-             if not Is_filled_pixel.left(blocky.x, blocky.y):
-                blocky.x-= MOVE
-             elif not Is_filled_pixel.left(blocky.x-MOVE+1, blocky.y-(MOVE*5)):
-               blocky.x-= MOVE
-               blocky.y-= MOVE
+        blocky.turn_left()
 
     
     if keys[pygame.K_RIGHT]:
-        blocky.clear_shadow()
-        blocky.direction = Direction.RIGHT
-        if blocky.x + CHARCTER + MOVE <= WIDTH:
-             me= window.get_at((blocky.x+1+ CHARCTER,blocky.y+CHARCTER))
-             if not Is_filled_pixel.right(blocky.x, blocky.y):
-                blocky.x+= MOVE
-             elif not Is_filled_pixel.right(blocky.x + MOVE+1, blocky.y - (MOVE*5)):
-               blocky.x+= MOVE
-               blocky.y-= MOVE
+        blocky.turn_right()
 
     if blocky.jumping:
-        blocky.clear_shadow()
-        if blocky.rising:
-            blocky.rise+=1
-            if not Is_filled_pixel.top(blocky.x, blocky.y-1):
-                blocky.y-=1
-            else:
-                blocky.jumping = False
-            if blocky.rise > JUMP:
-                blocky.rising = False
-                blocky.jumping= False
+        blocky.jump()
 
 
     for event in pygame.event.get():
@@ -281,7 +299,6 @@ while not game_over:
 
         if event.type == pygame.KEYDOWN:
             blocky.clear_shadow()
-            blocky.clear_shadow()
             pygame.display.update()
             if event.key == pygame.K_SPACE or event.key == pygame.K_UP:
                 if blocky.jumping or blocky.falling:
@@ -301,6 +318,7 @@ while not game_over:
 
             if event.key == pygame.K_RSHIFT:
                 paint_color = (random.randrange(1,255),random.randrange(1,255),random.randrange(1,255))
+                blocky.color = paint_color
     
             if event.key == pygame.K_b:
                 paint_color = (0,0,0)
@@ -326,17 +344,3 @@ while not game_over:
                     CHARCTER-=10
                     JUMP = int(CHARCTER * 1.8)
                 
-    
-
-
-    if not Is_filled_pixel.bottom(blocky.x, blocky.y) and not blocky.jumping:
-        blocky.clear_shadow()
-        blocky.y+=1
-        blocky.falling = True
-        blocky.fall_played = True
-    else:
-        blocky.falling = False
-        if blocky.fall_played:
-            play_audio("fall.wav")
-            blocky.fall_played = False
-
