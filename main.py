@@ -2,47 +2,29 @@
 import pygame
 import math
 import random
-from enum import Enum
-import playground as pg
 from howToPlay import *
+from game_contants import *
 
 
-class Direction(Enum):
-    LEFT = '👈',
-    FRONT = '🐥',
+class Direction:
+    LEFT = '👈'
+    FRONT = '🐥'
     RIGHT = '👉'
 
-class Emotion(Enum):
-    SAD = '😞',
+class Emotion:
+    SAD = '😞'
     WOW = '😲'
-    HAPPY = '😊',
+    HAPPY = '😊'
 
 def play_audio(soundname):
     pygame.mixer.music.load("sounds/"+soundname)
     pygame.mixer.music.play(0)
 
 
-# Game's Constant
-WIDTH = 1200
-HEIGHT = 600
-CHARCTER = 50
-MOVE = 1
-
-# Game's Colors Constant
-COLOR = (255,0,0)
-BLACK = (0,0,0)
-WHITE = (255,255,255)
-LASER = (255, 102, 0)
-LASER2 = (255, 80, 80)
-OBJECT_COLOR = (0,255,0)
-
-# Setup Parameters
-JUMP = int(CHARCTER * 2.1)
 dir = Direction.FRONT
 
 
 # Initilize Variables
-
 game_over = False
 window = pygame.display.set_mode((WIDTH, HEIGHT))
 clicked = False # mouse button down to starting to draw
@@ -217,6 +199,9 @@ class BlockyBlock:
 
         pygame.display.update()
 
+def draw_object(pygame, window,WIDTH, HEIGHT):
+    pygame.draw.rect(window, OBJECT4, [ WIDTH - WIDTH / 2 ,HEIGHT-70 , 170 , 70 ], 0 )
+    pygame.draw.rect(window, OBJECT4, [ 5 ,5, WIDTH-5 , HEIGHT-5 ], 15 ) # GAME BOARD
 
 # Initiate pygame
 pygame.init()
