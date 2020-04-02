@@ -3,10 +3,9 @@ from libraries import *
 window = pygame.display.set_mode((WIDTH, HEIGHT))
 
 class BlockyBlock:
-    counter = 0
+    players = list()
     def __init__(self, character_name, color, x=0, y=0):
-        BlockyBlock.counter +=1
-        self.id = BlockyBlock.counter
+        self.id = BlockyBlock.players.__len__()
         self.name = character_name
         self.color = color
         self.eyes = Eyes()
@@ -24,15 +23,17 @@ class BlockyBlock:
         if x == 0:
             self.x = int(CHARCTER) * 5
         if y == 0:
-            self.y = int(CHARCTER) * 2
+            self.y = int(CHARCTER)
+
+        BlockyBlock.players.append(self)
         self.render_character()
 
-    def event_manager(keys, players):
-        for player in players:
-            player.handle_event(keys, players)
+    def event_manager(keys):
+        for player in BlockyBlock.players:
+            player.handle_event(keys)
 
-    def action_manager(key, players):
-        for player in players:
+    def action_manager(key):
+        for player in BlockyBlock.players:
             player.action(key)
 
 
@@ -151,7 +152,7 @@ class BlockyBlock:
             self.shot()
 
 
-    def handle_event(self, keys, players):
+    def handle_event(self, keys):
         self.eyes.winking()
         if not Is_filled_pixel.bottom(self.x, self.y) and not self.jumping:
             self.clear_shadow()
@@ -166,11 +167,11 @@ class BlockyBlock:
 
         if(keys[self.key_left]):
             self.turn_left()
-            self.pushing_left(players)
+            self.pushing_left()
 
         elif(keys[self.key_right]):
             self.turn_right()
-            self.pushing_right(players)
+            self.pushing_right()
 
         if self.jumping:
             self.clear_shadow()
@@ -186,16 +187,16 @@ class BlockyBlock:
         
         self.render_character()
 
-    def pushing_left(self, players): # pushing other players to left
-        for player in players:
+    def pushing_left(self): # pushing other players to left
+        for player in BlockyBlock.players:
             if player.id == self.id:
                 continue
             if (self.x == player.x+ CHARCTER ) or (self.x  == player.x+ CHARCTER +1):
                 if (self.y - CHARCTER <= player.y-CHARCTER and self.y > player.y-CHARCTER) or ( self.y - CHARCTER > player.y - CHARCTER and self.y - CHARCTER < player.y ):
                     player.turn_left()
     
-    def pushing_right(self, players): # pushing other players to left
-        for player in players:
+    def pushing_right(self): # pushing other players to left
+        for player in BlockyBlock.players:
             if player.id == self.id:
                 continue
             if (self.x + CHARCTER == player.x) or (self.x + CHARCTER +1 == player.x):
