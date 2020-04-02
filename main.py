@@ -25,8 +25,8 @@ def main():
     blocky_red.assign_keystrock(pygame.K_a, pygame.K_d, pygame.K_s,pygame.K_w)
     blocky_red.set_x(100)
 
-    players.append(blocky_red)
     players.append(blocky_yellow)
+    players.append(blocky_red)
 
 
     pygame.display.update()
@@ -36,22 +36,10 @@ def main():
         draw_object(pygame, window, WIDTH, HEIGHT)
         print_current_color(paint_color)
         keys = pygame.key.get_pressed()  #checking pressed keys
-
         
-        for p in players:
-            p.alive(keys)
+        for player in players:
+            player.alive(keys, players)
         
-
-        # if keys[pygame.K_RIGHT]:
-        #     if (blocky.x + CHARCTER == player2.x) or (blocky.x + CHARCTER +1 == player2.x):
-        #         if (blocky.y - CHARCTER <= player2.y-CHARCTER and blocky.y > player2.y-CHARCTER) or ( blocky.y - CHARCTER > player2.y - CHARCTER and blocky.y - CHARCTER < player2.y ):
-        #             player2.turn_right()
-                        
-        # if keys[pygame.K_LEFT]:
-        #     if (blocky.x == player2.x+ CHARCTER ) or (blocky.x  == player2.x+ CHARCTER +1):
-        #         if (blocky.y - CHARCTER <= player2.y-CHARCTER and blocky.y > player2.y-CHARCTER) or ( blocky.y - CHARCTER > player2.y - CHARCTER and blocky.y - CHARCTER < player2.y ):
-        #             player2.turn_left()
-
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 game_over= True
