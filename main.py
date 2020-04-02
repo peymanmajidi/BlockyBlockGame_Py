@@ -10,27 +10,37 @@ def print_current_color(paint_color):
     pygame.draw.rect(window, paint_color, [0,0,30,10],0)
 
 def main():
-    clicked = False # mouse button down to starting to draw
-    paint_color = (0,255,0)
     pygame.init()
-    pygame.display.set_caption("Welcome to Blockyblock game | by Peyman")
     pygame.display.update()
-    PrintHelpOnConsole()
+    pygame.display.set_caption("Welcome to Blockyblock game | by Peyman")
+    paint_color = (0,255,0)
+    clicked = False # mouse button down to starting to draw
+
+    players = list()
 
     # make a blocky character
     blocky = BlockyBlock("yellowish blocki", YELLOW) 
     player2 = BlockyBlock("redish blocki", RED)
     player2.assign_keystrock(pygame.K_a, pygame.K_d, pygame.K_s,pygame.K_w)
     player2.x = 100
-    
+    hello = BlockyBlock("hello", WHITE)
+    hello.x = 400
+
+    players.append(blocky)
+    players.append(player2)
+    players.append(hello)    
+
+    PrintHelpOnConsole()
     game_over = False
     while not game_over: # Main Game Loop   
         draw_object(pygame, window, WIDTH, HEIGHT)
         print_current_color(paint_color)
         keys = pygame.key.get_pressed()  #checking pressed keys
 
-        blocky.alive(keys)
-        player2.alive(keys)
+        
+        for p in players:
+            p.alive(keys)
+        
 
         if keys[pygame.K_RIGHT]:
             print(f"peyman.x: {player2.x} blocky.x {blocky.x}\r",end = '')
@@ -61,8 +71,8 @@ def main():
             if event.type == pygame.KEYDOWN:
                 pygame.display.update()
 
-                blocky.event(event.key)
-                player2.event(event.key)
+                for p in players:
+                    p.event(event.key)
 
                 if event.key == pygame.K_c:
                     pygame.draw.rect(window, BLACK, [0,0,WIDTH, HEIGHT],0)
