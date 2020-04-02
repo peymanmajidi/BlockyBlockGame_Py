@@ -3,12 +3,13 @@ from libraries import *
 window = pygame.display.set_mode((WIDTH, HEIGHT))
 
 class BlockyBlock:
-    def __init__(self, character_name, color):
+    index = 0
+    def __init__(self, character_name, color, x=0, y=0):
         self.name = character_name
         self.color = color
         self.eyes = Eyes()
-        self.x= int(CHARCTER)*5
-        self.y= CHARCTER
+        self.x = x
+        self.y = y
         self.jumping = False
         self.rising = False
         self.falling = False
@@ -18,6 +19,10 @@ class BlockyBlock:
         self.direction = Direction.FRONT
         self.assign_keystrock(left=pygame.K_LEFT, right=pygame.K_RIGHT,
                          shot=pygame.K_RETURN, jump=pygame.K_SPACE)
+        if x == 0:
+            self.x = int(CHARCTER) * 5
+        if y == 0:
+            self.y = int(CHARCTER) * 2
         self.render_character()
     
     def assign_keystrock(self, left, right, shot, jump):
@@ -26,6 +31,19 @@ class BlockyBlock:
         self.key_shot = shot
         self.key_jump = jump
 
+    def set_x(self, x):
+        if x + CHARCTER >= WIDTH:
+            x = WIDTH - CHARCTER - 1
+        if x < 3:
+            x = 3
+        self.x = x
+
+    def set_y(self, y):
+        if y + CHARCTER >= HEIGHT:
+            y = HEIGHT - CHARCTER - 1
+        if y < 3:
+            y = 3
+        self.y = y
 
 
     def render_character(self, emo = Emotion.HAPPY):
@@ -92,10 +110,10 @@ class BlockyBlock:
     def zoom_in(self):
         global CHARCTER
         global JUMP
-        if CHARCTER <400:
-                    self.y-=10
-                    CHARCTER+=10
-                    JUMP = int(CHARCTER * 1.8)
+        if CHARCTER < 400:
+            self.y-=10
+            CHARCTER+=10
+            JUMP = int(CHARCTER * 1.8)
     
     def zoom_out(self):
         global CHARCTER
