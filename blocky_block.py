@@ -26,7 +26,17 @@ class BlockyBlock:
         if y == 0:
             self.y = int(CHARCTER) * 2
         self.render_character()
-    
+
+    def event_manager(keys, players):
+        for player in players:
+            player.handle_event(keys, players)
+
+    def action_manager(key, players):
+        for player in players:
+            player.action(key)
+
+
+
     def assign_keystrock(self, left, right, shot, jump):
         self.key_left = left
         self.key_right = right
@@ -134,14 +144,14 @@ class BlockyBlock:
         play_audio("jump.wav")
         self.rise=0
 
-    def event(self, key):
+    def action(self, key):
         if key == self.key_jump:
             self.do_jump()
         elif key == self.key_shot:
             self.shot()
 
 
-    def alive(self, keys, players):
+    def handle_event(self, keys, players):
         self.eyes.winking()
         if not Is_filled_pixel.bottom(self.x, self.y) and not self.jumping:
             self.clear_shadow()

@@ -25,6 +25,7 @@ def main():
     blocky_red.assign_keystrock(pygame.K_a, pygame.K_d, pygame.K_s,pygame.K_w)
     blocky_red.set_x(100)
 
+    #setup twoplayers
     players.append(blocky_yellow)
     players.append(blocky_red)
 
@@ -37,8 +38,7 @@ def main():
         print_current_color(paint_color)
         keys = pygame.key.get_pressed()  #checking pressed keys
         
-        for player in players:
-            player.alive(keys, players)
+        BlockyBlock.event_manager(keys, players)
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -55,10 +55,8 @@ def main():
             if event.type == pygame.KEYDOWN:
                 pygame.display.update()
 
-                for p in players:
-                    p.event(event.key)
+                BlockyBlock.action_manager(event.key, players)
                     
-
                 if event.key == pygame.K_c:
                     pygame.draw.rect(window, BLACK, [0,0,WIDTH, HEIGHT],0)
 
