@@ -28,7 +28,11 @@ class Point:
     def get2(self):
         return (self.x, self.y)
 
-# How to Play
+
+def random_color_generator():
+    return (random.randrange(1,255),random.randrange(1,255),random.randrange(1,255))
+
+
 def PrintHelpOnConsole():
     print("""■ Welcome to Blocky Blocky (B.b)
 It is a fight between mouse cursor and Blocky Block !
