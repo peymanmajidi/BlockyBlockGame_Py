@@ -7,12 +7,6 @@ In this game you can draw on screen by mouse and move the 'blocky' via keyboard'
 
 Please download the source code and make fantastic forks 🍴
 
-## Updated
-2020 update
-
-Now support two player!
-
-
 by pygame
 
 ![Shot](screenshot.png)
@@ -39,6 +33,18 @@ Pygame, the library is cross-platform and designed to make it easy to write mult
 
 
 ![Gif Preview](GamePreview.gif)
+
+
+
+
+## Updated
+Support multiplayer
+Generate new blocky - object oriented blockiblock :)
+![Multi Preview](multi.png)
+
+
+
+
 
 <span style="color:red">Happy Codding 🍓</span>
 
