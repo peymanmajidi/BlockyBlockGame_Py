@@ -141,7 +141,7 @@ class BlockyBlock:
             self.shot()
 
 
-    def alive(self, keys):
+    def alive(self, keys, players):
         self.eyes.winking()
         if not Is_filled_pixel.bottom(self.x, self.y) and not self.jumping:
             self.clear_shadow()
@@ -156,8 +156,11 @@ class BlockyBlock:
 
         if(keys[self.key_left]):
             self.turn_left()
+            self.pushing_left(players)
+
         elif(keys[self.key_right]):
             self.turn_right()
+            self.pushing_right(players)
 
         if self.jumping:
             self.clear_shadow()
@@ -170,7 +173,24 @@ class BlockyBlock:
             if self.rise > JUMP:
                 self.rising = False
                 self.jumping= False
+        
         self.render_character()
+
+    def pushing_left(self, players): # pushing other players to left
+        for player in players:
+            if player.id == self.id:
+                continue
+            if (self.x == player.x+ CHARCTER ) or (self.x  == player.x+ CHARCTER +1):
+                if (self.y - CHARCTER <= player.y-CHARCTER and self.y > player.y-CHARCTER) or ( self.y - CHARCTER > player.y - CHARCTER and self.y - CHARCTER < player.y ):
+                    player.turn_left()
+    
+    def pushing_right(self, players): # pushing other players to left
+        for player in players:
+            if player.id == self.id:
+                continue
+            if (self.x + CHARCTER == player.x) or (self.x + CHARCTER +1 == player.x):
+                if (self.y - CHARCTER <= player.y-CHARCTER and self.y > player.y-CHARCTER) or ( self.y - CHARCTER > player.y - CHARCTER and self.y - CHARCTER < player.y ):
+                    player.turn_right()
 
     def shot(self):
         global WIDTH
