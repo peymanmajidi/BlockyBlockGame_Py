@@ -3,8 +3,10 @@ from libraries import *
 window = pygame.display.set_mode((WIDTH, HEIGHT))
 
 class BlockyBlock:
-    index = 0
+    counter = 0
     def __init__(self, character_name, color, x=0, y=0):
+        BlockyBlock.counter +=1
+        self.id = BlockyBlock.counter
         self.name = character_name
         self.color = color
         self.eyes = Eyes()
