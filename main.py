@@ -86,7 +86,7 @@ def main():
                 #         player.zoom_out()
         
         pygame.display.update()
-        pygame.time.delay(1) # refresh rate
+        pygame.time.delay(REFRESH) # refresh rate
         # end of main loop
 
 if __name__ == "__main__":

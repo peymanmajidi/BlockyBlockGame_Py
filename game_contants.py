@@ -2,7 +2,7 @@
 # Playground Consts
 WIDTH = 1200
 HEIGHT = 600
-CHARCTER = 50
+CHARCTER = 60
 MOVE = 1
 
 # Colors Consts
@@ -22,4 +22,4 @@ OBJECT4 = (255,255,255)
 
 # Parameters
 JUMP = int(CHARCTER * 2.1)
-
+REFRESH = 1
