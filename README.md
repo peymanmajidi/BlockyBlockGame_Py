@@ -7,6 +7,12 @@ In this game you can draw on screen by mouse and move the 'blocky' via keyboard'
 
 Please download the source code and make fantastic forks 🍴
 
+## Updated
+2020 update
+
+Now support two player!
+
+
 by pygame
 
 ![Shot](screenshot.png)
