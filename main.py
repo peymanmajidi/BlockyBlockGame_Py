@@ -36,18 +36,11 @@ def main():
     clicked = False # mouse button down to starting to draw
     pygame.display.update()
 
-    players = list()
-
     blocky_yellow = BlockyBlock("yellowish blocki", YELLOW)
     blocky_red = BlockyBlock("redish blocki", RED)
     #customize keystrock
     blocky_red.assign_keystrock(pygame.K_a, pygame.K_d, pygame.K_s,pygame.K_w)
     blocky_red.set_x(100)
-
-    #setup twoplayers
-    players.append(blocky_yellow)
-    players.append(blocky_red)
-
 
     pygame.display.update()
     PrintHelpOnConsole()
@@ -56,7 +49,7 @@ def main():
         draw_object(pygame, window, WIDTH, HEIGHT)
         keys = pygame.key.get_pressed()  #checking pressed keys
         
-        BlockyBlock.event_manager(keys, players)
+        BlockyBlock.event_manager(keys)
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -73,20 +66,24 @@ def main():
             if event.type == pygame.KEYDOWN:
                 pygame.display.update()
 
-                BlockyBlock.action_manager(event.key, players)
+                BlockyBlock.action_manager(event.key)
+
+                if event.key == pygame.K_TAB:
+                    player = BlockyBlock("Blockiii", random_color_generator())
+                    player.assign_keystrock(pygame.K_a, pygame.K_d, pygame.K_s,pygame.K_w)
 
                 change_paint_color(event.key)
                     
                 if event.key == pygame.K_c:
                     pygame.draw.rect(window, BLACK, [0,0,WIDTH, HEIGHT],0)
                     
-                if event.key == pygame.K_KP_PLUS or  event.key ==pygame.K_PLUS or event.key == pygame.K_l:
-                    for player in players:
-                        player.zoom_in()
+                # if event.key == pygame.K_KP_PLUS or  event.key ==pygame.K_PLUS or event.key == pygame.K_l:
+                #     for player in players:
+                #         player.zoom_in()
                         
-                if event.key == pygame.K_MINUS or  event.key ==pygame.K_KP_MINUS:
-                    for player in players:
-                        player.zoom_out()
+                # if event.key == pygame.K_MINUS or  event.key ==pygame.K_KP_MINUS:
+                #     for player in players:
+                #         player.zoom_out()
         
         pygame.display.update()
         pygame.time.delay(1) # refresh rate
