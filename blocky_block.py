@@ -107,6 +107,7 @@ class BlockyBlock:
              elif not Is_filled_pixel.left(self.x-MOVE+1, self.y-(MOVE*5)):
                self.x-= MOVE
                self.y-= MOVE
+        self.pushing_left()
         self.render_character()
 
     def turn_right(self):
@@ -118,6 +119,7 @@ class BlockyBlock:
              elif not Is_filled_pixel.right(self.x + MOVE+1, self.y - (MOVE*5)):
                self.x+= MOVE
                self.y-= MOVE
+        self.pushing_right()
         self.render_character()
 
     def zoom_in(self):
@@ -167,11 +169,11 @@ class BlockyBlock:
 
         if(keys[self.key_left]):
             self.turn_left()
-            self.pushing_left()
+            
 
         elif(keys[self.key_right]):
             self.turn_right()
-            self.pushing_right()
+           
 
         if self.jumping:
             self.clear_shadow()
