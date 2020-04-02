@@ -6,10 +6,29 @@ def draw_object(pygame, window,WIDTH, HEIGHT):
     pygame.draw.rect(window, OBJECT4, [ WIDTH - WIDTH / 2 ,HEIGHT-70 , 170 , 70 ], 0 )
     pygame.draw.rect(window, OBJECT4, [ 5 ,5, WIDTH-5 , HEIGHT-5 ], 15 ) # GAME BOARD
 
-def print_current_color(paint_color): 
+def change_paint_color(key):
+    global paint_color
+    if key == pygame.K_RSHIFT:
+        paint_color = random_color_generator()
+
+    if key == pygame.K_b:
+        paint_color = (0,0,0)
+        
+    if key == pygame.K_r:
+        paint_color = (255,0,0)
+        
+    if key== pygame.K_g:
+        paint_color = (0,255,0)
+        
+    if key == pygame.K_y:
+        paint_color = (255,255,0)
+    
     pygame.draw.rect(window, paint_color, [0,0,30,10],0)
 
+
+
 def main():
+    global paint_color
     pygame.init()
     pygame.display.update()
     pygame.display.set_caption("Welcome to Blockyblock game | by Peyman")
@@ -35,7 +54,6 @@ def main():
     game_over = False
     while not game_over: # Main Game Loop   
         draw_object(pygame, window, WIDTH, HEIGHT)
-        print_current_color(paint_color)
         keys = pygame.key.get_pressed()  #checking pressed keys
         
         BlockyBlock.event_manager(keys, players)
@@ -56,24 +74,11 @@ def main():
                 pygame.display.update()
 
                 BlockyBlock.action_manager(event.key, players)
+
+                change_paint_color(event.key)
                     
                 if event.key == pygame.K_c:
                     pygame.draw.rect(window, BLACK, [0,0,WIDTH, HEIGHT],0)
-
-                if event.key == pygame.K_RSHIFT:
-                    paint_color = random_color_generator()
-        
-                if event.key == pygame.K_b:
-                    paint_color = (0,0,0)
-                    
-                if event.key == pygame.K_r:
-                    paint_color = (255,0,0)
-                    
-                if event.key == pygame.K_g:
-                    paint_color = (0,255,0)
-                    
-                if event.key == pygame.K_y:
-                    paint_color = (255,255,0)
                     
                 if event.key == pygame.K_KP_PLUS or  event.key ==pygame.K_PLUS or event.key == pygame.K_l:
                     for player in players:
