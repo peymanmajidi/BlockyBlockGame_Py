@@ -61,8 +61,14 @@ def main():
             if event.type == pygame.QUIT:
                 game_over= True
 
-            if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.type == pygame.MOUSEBUTTONDOWN: # mouse click event
+                x,y = event.pos
                 clicked = True
+                for player in BlockyBlock.players:
+                    if (x >= player.x and x <= (player.x + CHARCTER)) and (y <= (player.y + CHARCTER) and y >= player.y):
+                        player.select()
+                        clicked = False
+                        break
             if event.type == pygame.MOUSEBUTTONUP:
                 clicked = False
             try:
