@@ -55,7 +55,7 @@ def main():
         draw_object(pygame, window, WIDTH, HEIGHT)
         keys = pygame.key.get_pressed()  #checking pressed keys
         
-        BlockyBlock.event_manager(keys)
+        BlockyBlock.event_listener(keys)
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

@@ -31,9 +31,9 @@ class BlockyBlock:
         self.render_character()
 
     # static methods:
-    def event_manager(keys):
+    def event_listener(keys):
         for player in BlockyBlock.players:
-            player.handle_event(keys)
+            player.event_handler(keys)
 
     def action_manager(key):
         for player in BlockyBlock.players:
@@ -170,7 +170,7 @@ class BlockyBlock:
             self.shot()
 
 
-    def handle_event(self, keys):
+    def event_handler(self, keys):
         self.eyes.winking()
         if not Is_filled_pixel.bottom(self.x, self.y) and not self.jumping:
             self.clear_shadow()
