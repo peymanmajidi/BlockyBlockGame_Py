@@ -43,9 +43,9 @@ class BlockyBlock:
         for player in BlockyBlock.players:
             if (x >= player.x and x <= (player.x + CHARCTER)) and (y <= (player.y + CHARCTER) and y >= player.y):
                 list_of_selected = list(filter(lambda b: b.selected == True, BlockyBlock.players))
-                for player in list_of_selected:
-                    player.color = player.primecolor
-                    player.selected = False
+                for selected in list_of_selected:
+                    selected.color = selected.primecolor
+                    selected.selected = False
                 player.selected = True
                 player.color = WHITE
                 player.render_character()
