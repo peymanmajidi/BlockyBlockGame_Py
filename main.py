@@ -6,6 +6,11 @@ def draw_object(pygame, window,WIDTH, HEIGHT):
     pygame.draw.rect(window, OBJECT4, [ WIDTH - WIDTH / 2 ,HEIGHT-70 , 170 , 70 ], 0 )
     pygame.draw.rect(window, OBJECT4, [ 5 ,5, WIDTH-5 , HEIGHT-5 ], 15 ) # GAME BOARD
 
+
+def print_current_color(paint_color): 
+    pygame.draw.rect(window, paint_color, [0,0,30,30],0)
+
+
 def change_paint_color(key):
     global paint_color
     if key == pygame.K_RSHIFT:
@@ -23,8 +28,7 @@ def change_paint_color(key):
     if key == pygame.K_y:
         paint_color = (255,255,0)
     
-    pygame.draw.rect(window, paint_color, [0,0,30,10],0)
-
+    print_current_color(paint_color)
 
 
 def main():
@@ -42,8 +46,10 @@ def main():
     blocky_red.assign_keystrock(pygame.K_a, pygame.K_d, pygame.K_s,pygame.K_w)
     blocky_red.set_x(100)
 
-    pygame.display.update()
     PrintHelpOnConsole()
+    print_current_color(paint_color)
+    pygame.display.update()
+
     game_over = False
     while not game_over: # Main Game Loop   
         draw_object(pygame, window, WIDTH, HEIGHT)
@@ -54,10 +60,14 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 game_over= True
+
             if event.type == pygame.MOUSEBUTTONDOWN:
-                clicked = not clicked
+                clicked = True
+            if event.type == pygame.MOUSEBUTTONUP:
+                clicked = False
             try:
                 if clicked:
+
                     x2,y2 = event.pos
                     pygame.draw.rect(window, paint_color, [x2,y2,20,20],0)
                     pygame.display.update()
