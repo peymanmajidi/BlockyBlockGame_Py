@@ -8,6 +8,7 @@ class BlockyBlock:
         self.id = BlockyBlock.players.__len__()
         self.name = character_name
         self.color = color
+        self.primecolor = color
         self.eyes = Eyes()
         self.x = x
         self.y = y
@@ -17,6 +18,7 @@ class BlockyBlock:
         self.fall_played = True
         self.fall = 0
         self.rise= 0
+        self.selected = False
         self.direction = Direction.FRONT
         self.assign_keystrock(left=pygame.K_LEFT, right=pygame.K_RIGHT,
                          shot=pygame.K_RETURN, jump=pygame.K_SPACE)
@@ -28,6 +30,7 @@ class BlockyBlock:
         BlockyBlock.players.append(self)
         self.render_character()
 
+    # static methods:
     def event_manager(keys):
         for player in BlockyBlock.players:
             player.handle_event(keys)
@@ -36,7 +39,20 @@ class BlockyBlock:
         for player in BlockyBlock.players:
             player.action(key)
 
+    def select(x, y):
+        for player in BlockyBlock.players:
+            if (x >= player.x and x <= (player.x + CHARCTER)) and (y <= (player.y + CHARCTER) and y >= player.y):
+                list_of_selected = list(filter(lambda b: b.selected == True, BlockyBlock.players))
+                for player in list_of_selected:
+                    player.color = player.primecolor
+                    player.selected = False
+                player.selected = True
+                player.color = WHITE
+                player.render_character()
+                return True
+        return False
 
+    # nonstatic methods:
 
     def assign_keystrock(self, left, right, shot, jump):
         self.key_left = left
