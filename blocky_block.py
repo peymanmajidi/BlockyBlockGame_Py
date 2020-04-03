@@ -53,6 +53,7 @@ class BlockyBlock:
         list_of_selected = list(filter(lambda b: b.selected == True, BlockyBlock.players))
         for selected in list_of_selected:
             selected.color = selected.primecolor
+            selected.assign_keystrock(SECONDARY_INPUT)
             selected.selected = False # deselect all
         self.selected = True
         self.color = WHITE
@@ -242,7 +243,7 @@ class BlockyBlock:
         play_audio("laser.wav")
 
         pygame.display.update()
-        pygame.time.delay(50)
+        pygame.time.delay(40)
         self.render_character(Emotion.SAD)
 
         # clean laser
@@ -252,8 +253,6 @@ class BlockyBlock:
             pygame.draw.line(window, BLACK, (eyes2.right.x+1,eyes2.right.y-int(CHARCTER/5)), (0,eyes2.right.y-int(CHARCTER/5)),int(CHARCTER/2))
 
         pygame.display.update()
-
-
 
 class Eyes:
     left = Point()

@@ -41,8 +41,6 @@ def main():
     clicked = False # mouse button down to starting to draw
     pygame.display.update()
 
-
-
     player1 = BlockyBlock("player1", YELLOW)
     player1.assign_keystrock(STANDARD_INPUT)
     player1.select_me()
@@ -90,6 +88,7 @@ def main():
 
                 if event.key == pygame.K_TAB:
                     player = BlockyBlock("Blockiii", random_color_generator())
+                    player.assign_keystrock(SECONDARY_INPUT)
 
                 change_paint_color(event.key)
                     
