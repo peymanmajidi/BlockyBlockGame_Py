@@ -1,6 +1,7 @@
 # Library imports
 from libraries import *
 from blocky_block import BlockyBlock, window
+from game_contants import *
 
 def draw_object(pygame, window,WIDTH, HEIGHT):
     pygame.draw.rect(window, OBJECT4, [ WIDTH - WIDTH / 2 ,HEIGHT-70 , 170 , 70 ], 0 )
@@ -40,11 +41,15 @@ def main():
     clicked = False # mouse button down to starting to draw
     pygame.display.update()
 
-    blocky_yellow = BlockyBlock("yellowish blocki", YELLOW)
-    blocky_red = BlockyBlock("redish blocki", RED)
-    #customize keystrock
-    blocky_red.assign_keystrock(pygame.K_a, pygame.K_d, pygame.K_s,pygame.K_w)
-    blocky_red.set_x(100)
+
+
+    player1 = BlockyBlock("player1", YELLOW)
+    player1.assign_keystrock(STANDARD_INPUT)
+    player1.select_me()
+
+    player2 = BlockyBlock("player2", RED)
+    player2.assign_keystrock(SECONDARY_INPUT)
+    player2.set_x(100)
 
     PrintHelpOnConsole()
     print_current_color(paint_color)
@@ -85,7 +90,6 @@ def main():
 
                 if event.key == pygame.K_TAB:
                     player = BlockyBlock("Blockiii", random_color_generator())
-                    player.assign_keystrock(pygame.K_a, pygame.K_d, pygame.K_s,pygame.K_w)
 
                 change_paint_color(event.key)
                     

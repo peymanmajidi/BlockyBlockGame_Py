@@ -1,4 +1,5 @@
 from libraries import *
+from game_contants import *
 
 window = pygame.display.set_mode((WIDTH, HEIGHT))
 
@@ -20,8 +21,7 @@ class BlockyBlock:
         self.rise= 0
         self.selected = False
         self.direction = Direction.FRONT
-        self.assign_keystrock(left=pygame.K_LEFT, right=pygame.K_RIGHT,
-                         shot=pygame.K_RETURN, jump=pygame.K_SPACE)
+        self.input = Input()
         if x == 0:
             self.x = int(CHARCTER) * 5
         if y == 0:
@@ -42,23 +42,25 @@ class BlockyBlock:
     def select(x, y):
         for player in BlockyBlock.players:
             if (x >= player.x and x <= (player.x + CHARCTER)) and (y <= (player.y + CHARCTER) and y >= player.y):
-                list_of_selected = list(filter(lambda b: b.selected == True, BlockyBlock.players))
-                for selected in list_of_selected:
-                    selected.color = selected.primecolor
-                    selected.selected = False
-                player.selected = True
+                player.select_me()
                 player.color = WHITE
                 player.render_character()
                 return True
         return False
 
     # nonstatic methods:
+    def select_me(self):
+        list_of_selected = list(filter(lambda b: b.selected == True, BlockyBlock.players))
+        for selected in list_of_selected:
+            selected.color = selected.primecolor
+            selected.selected = False # deselect all
+        self.selected = True
+        self.color = WHITE
+        self.assign_keystrock(STANDARD_INPUT)
+        self.render_character()
 
-    def assign_keystrock(self, left, right, shot, jump):
-        self.key_left = left
-        self.key_right = right
-        self.key_shot = shot
-        self.key_jump = jump
+    def assign_keystrock(self, input):
+        self.input = input
 
     def set_x(self, x):
         if x + CHARCTER >= WIDTH:
@@ -164,9 +166,9 @@ class BlockyBlock:
         self.rise=0
 
     def action(self, key):
-        if key == self.key_jump:
+        if key == self.input.jump:
             self.do_jump()
-        elif key == self.key_shot:
+        elif key == self.input.shot:
             self.shot()
 
 
@@ -183,11 +185,11 @@ class BlockyBlock:
                 play_audio("fall.wav")
                 self.fall_played = False
 
-        if(keys[self.key_left]):
+        if(keys[self.input.left]):
             self.turn_left()
             
 
-        elif(keys[self.key_right]):
+        elif(keys[self.input.right]):
             self.turn_right()
            
 
@@ -322,3 +324,5 @@ class Is_filled_pixel:
             pass  
 
         return False
+
+

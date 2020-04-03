@@ -1,5 +1,4 @@
 import pygame, random, math
-from game_contants import *
 
 class Direction:
     LEFT = '👈'
@@ -14,6 +13,13 @@ class Emotion:
 def play_audio(soundname):
     pygame.mixer.music.load("sounds/"+soundname)
     pygame.mixer.music.play(0)
+
+class Input:
+    def __init__(self, left=pygame.K_LEFT, right=pygame.K_RIGHT, shot=pygame.K_RETURN, jump=pygame.K_SPACE):
+        self.left = left
+        self.right = right
+        self.jump = jump
+        self.shot = shot
 
 
 class Point:
