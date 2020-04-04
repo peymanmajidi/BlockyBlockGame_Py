@@ -5,7 +5,7 @@ window = pygame.display.set_mode((WIDTH, HEIGHT))
 
 class BlockyBlock:
     players = list()
-    def __init__(self, character_name, color, x=0, y=0):
+    def __init__(self, character_name, color, x=0, y=0, emotion = Emotion.HAPPY):
         self.id = BlockyBlock.players.__len__()
         self.name = character_name
         self.color = color
@@ -13,6 +13,7 @@ class BlockyBlock:
         self.eyes = Eyes()
         self.x = x
         self.y = y
+        self.emotion = emotion
         self.jumping = False
         self.rising = False
         self.falling = False
@@ -78,9 +79,11 @@ class BlockyBlock:
         self.y = y
 
 
-    def render_character(self, emo = Emotion.HAPPY):
+    def render_character(self, emo = Emotion.NOT_SET):
         x = self.x
         y = self.y
+        if emo == Emotion.NOT_SET:
+            emo = self.emotion
         pygame.draw.rect(window, self.color, [ x ,y  , CHARCTER , CHARCTER ], 0 ) # [ ]
         self.eyes.left.x = x+int(CHARCTER/2)- int(CHARCTER / 5)
         self.eyes.left.y = y+int(CHARCTER/2)-int(CHARCTER / 5)
@@ -106,14 +109,18 @@ class BlockyBlock:
             pygame.draw.circle(window, BLACK,self.eyes.right.get(),int(CHARCTER / 10),0) # [..]
         
     
-        if emo == Emotion.SAD:
-            pygame.draw.arc(window, BLACK,  (x+(x+int(CHARCTER / 10)),y+(x+int(CHARCTER / 2)) , CHARCTER-int(CHARCTER / 5), CHARCTER-int(CHARCTER / 5)), math.pi/4,3* math.pi / 4 , int(CHARCTER / 10)) # :(
+        if emo == Emotion.SAD: # :(
+            pygame.draw.arc(window, BLACK, (x+( int(CHARCTER/7)),y+int(CHARCTER/1.7) , CHARCTER-int(CHARCTER / 5), CHARCTER-int(CHARCTER / 5)), math.pi/4,3* math.pi / 4 , int(CHARCTER / 10))
+        elif emo == Emotion.HAPPY: # :)
+            pygame.draw.arc(window, BLACK, (x+int(CHARCTER / 10),y , CHARCTER-int(CHARCTER / 5), CHARCTER-int(CHARCTER / 5)), 5*math.pi/4,7* math.pi / 4 , int(CHARCTER / 10))
+        elif emo == Emotion.NORMAL: # :|
+            pygame.draw.line(window, BLACK, (x + int(CHARCTER/5),y+ int(CHARCTER/3 * 2)),(x+ CHARCTER - int(CHARCTER/5),y+ int(CHARCTER/3 * 2)))
+            pygame.draw.line(window, BLACK, (x + int(CHARCTER/5),y+ int(CHARCTER/3 * 2)+1),(x+ CHARCTER - int(CHARCTER/5),y+ int(CHARCTER/3 * 2)+1))
+            pygame.draw.line(window, BLACK, (x + int(CHARCTER/5),y+ int(CHARCTER/3 * 2)+2),(x+ CHARCTER - int(CHARCTER/5),y+ int(CHARCTER/3 * 2)+2))
+        elif emo == Emotion.WOW or not self.falling: # :o
+            pygame.draw.arc(window, BLACK, (x+int(CHARCTER / 2.5),y+int(CHARCTER / 1.8) , int(CHARCTER / 3.5),  int(CHARCTER / 3.5)), 0,2* math.pi  , int(CHARCTER / 7))
 
-        elif not self.falling:
-            pygame.draw.arc(window, BLACK,  (x+int(CHARCTER / 10),y , CHARCTER-int(CHARCTER / 5), CHARCTER-int(CHARCTER / 5)), 5*math.pi/4,7* math.pi / 4 , int(CHARCTER / 10)) # :)
-        else:
-            pygame.draw.arc(window, BLACK,  (x+int(CHARCTER / 2.5),y+int(CHARCTER / 1.8) , int(CHARCTER / 3.5),  int(CHARCTER / 3.5)), 0,2* math.pi  , int(CHARCTER / 7)) # :O
-
+            
     def clear_shadow(self):
         pygame.draw.rect(window, BLACK, [ self.x, self.y, CHARCTER , CHARCTER ], 0)
 
