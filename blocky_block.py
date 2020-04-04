@@ -23,7 +23,7 @@ class BlockyBlock:
         self.alive = True
         self.selected = False
         self.direction = Direction.FRONT
-        self.input = Input()
+        self.input = Input(SECONDARY_INPUT)
         if x == 0:
             self.x = int(CHARCTER) * 5
         if y == 0:
@@ -46,10 +46,15 @@ class BlockyBlock:
             if (x >= player.x and x <= (player.x + CHARCTER)) and (y <= (player.y + CHARCTER) and y >= player.y):
                 if player.alive:
                     player.select_me()
-                    player.color = WHITE
-                    player.render_character()
                 return True
         return False
+    
+    def render_all():
+        for player in BlockyBlock.players:
+            player.render_character()
+
+
+
 
     # nonstatic methods:
     def select_me(self):
@@ -61,6 +66,7 @@ class BlockyBlock:
             selected.assign_keystrock(SECONDARY_INPUT)
             selected.emotion = Emotion.NORMAL
             selected.selected = False # deselect all
+            selected.render_character()
         self.selected = True
         self.color = WHITE
         self.emotion = Emotion.HAPPY
@@ -194,6 +200,7 @@ class BlockyBlock:
         self.rising = True
         play_audio("jump.wav")
         self.rise=0
+        self.render_character()
 
     def action(self, key):
         if key == self.input.jump:
@@ -202,13 +209,14 @@ class BlockyBlock:
             self.shot()
 
 
-    def event_handler(self, keys):
+    def event_handler(self, keys): # run every miliseconds
         self.eyes.winking()
         if not Is_filled_pixel.bottom(self.x, self.y) and not self.jumping:
             self.clear_shadow()
             self.y+=1
             self.falling = True
             self.fall_played = True
+            self.render_character()
         else:
             self.falling = False
             if self.fall_played:
@@ -234,8 +242,9 @@ class BlockyBlock:
             if self.rise > JUMP:
                 self.rising = False
                 self.jumping= False
+            self.render_character()
         
-        self.render_character()
+
 
     def pushing_left(self): # pushing other players to left
         x1 = self.x - CHARCTER - 1
@@ -268,57 +277,56 @@ class BlockyBlock:
         self.color = DEAD
         self.emotion = Emotion.DEAD
         self.assign_keystrock(NONE_INPUT)
+        self.render_character()
 
 
     def shot(self):
-        global WIDTH
-        self.render_character(Emotion.SAD)
-
-        eyes2 = Eyes()
-        eyes2.left = self.eyes.left
-        eyes2.right = self.eyes.right
-        
         # draw laser
         if self.direction == Direction.RIGHT or  self.direction == Direction.FRONT:
-            pygame.draw.line(window, LASER, eyes2.left.get2(), (WIDTH,eyes2.left.y),int(CHARCTER/10))
-            pygame.draw.line(window, LASER2, eyes2.right.get2(), (WIDTH,eyes2.left.y),int(CHARCTER/10))
+            pygame.draw.line(window, LASER, self.eyes.left.get2(), (WIDTH,self.eyes.left.y),int(CHARCTER/10))
+            pygame.draw.line(window, LASER2, self.eyes.right.get2(), (WIDTH,self.eyes.left.y),int(CHARCTER/10))
         else:
-            pygame.draw.line(window, LASER, eyes2.left.get2(), (0,eyes2.left.y),int(CHARCTER/10))
-            pygame.draw.line(window, LASER2, eyes2.right.get2(), (0,eyes2.left.y),int(CHARCTER/10))
+            pygame.draw.line(window, LASER, self.eyes.left.get2(), (0,self.eyes.left.y),int(CHARCTER/10))
+            pygame.draw.line(window, LASER2, self.eyes.right.get2(), (0,self.eyes.left.y),int(CHARCTER/10))
 
         play_audio("laser.wav")
 
+        self.render_character(Emotion.SAD)
         pygame.display.update()
         pygame.time.delay(40)
-        self.render_character(Emotion.SAD)
 
         # clean laser
         if self.direction == Direction.RIGHT or  self.direction == Direction.FRONT:
-            pygame.draw.line(window, BLACK, (eyes2.left.x +1,eyes2.left.y-int(CHARCTER/5)), (WIDTH,eyes2.left.y-int(CHARCTER/5)),int(CHARCTER/2))
+            pygame.draw.line(window, BLACK, (self.eyes.left.x +1,self.eyes.left.y-int(CHARCTER/5)), (WIDTH,self.eyes.left.y-int(CHARCTER/5)),int(CHARCTER/2))
         else:
-            pygame.draw.line(window, BLACK, (eyes2.right.x+1,eyes2.right.y-int(CHARCTER/5)), (0,eyes2.right.y-int(CHARCTER/5)),int(CHARCTER/2))
+            pygame.draw.line(window, BLACK, (self.eyes.right.x+1,self.eyes.right.y-int(CHARCTER/5)), (0,self.eyes.right.y-int(CHARCTER/5)),int(CHARCTER/2))
 
-        # killing
+        # killing other players
         if self.direction == Direction.RIGHT:
             x=self.eyes.left.x
             y=self.eyes.left.y
             list_of_blocky = list(filter(lambda p: p.id!= self.id and x < p.x and (y>=p.y and y<= p.y+CHARCTER) ,BlockyBlock.players))
             for p in list_of_blocky:
                 p.kill_me()
+
         else:
             x=self.eyes.right.x
             y=self.eyes.right.y
             list_of_blocky = list(filter(lambda p:p.id!= self.id and x> p.x and (y>=p.y and y<= p.y+CHARCTER) ,BlockyBlock.players))
             for p in list_of_blocky:
                 p.kill_me()
-
-
         
-        pygame.display.update()
+        
+        BlockyBlock.render_all()
+
+
+
+
 
 class Eyes:
-    left = Point()
-    right = Point()
+    def __init__(self):
+        self.left = Point()
+        self.right = Point()
     def move(self, x):
         self.left.x +=x
         self.right.x +=x
