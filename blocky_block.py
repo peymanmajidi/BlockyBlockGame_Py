@@ -33,6 +33,7 @@ class BlockyBlock:
         self.render_character()
 
     # static methods:
+    numbers_of_kills = 0
     def event_listener(keys):
         for player in BlockyBlock.players:
             player.event_handler(keys)
@@ -52,9 +53,6 @@ class BlockyBlock:
     def render_all():
         for player in BlockyBlock.players:
             player.render_character()
-
-
-
 
     # nonstatic methods:
     def select_me(self):
@@ -277,6 +275,9 @@ class BlockyBlock:
         self.color = DEAD
         self.emotion = Emotion.DEAD
         self.assign_keystrock(NONE_INPUT)
+        BlockyBlock.numbers_of_kills+=1
+        title = GAME_TITLE + " | kills: " + BlockyBlock.numbers_of_kills.__str__()
+        pygame.display.set_caption(title)
         self.render_character()
 
 

@@ -1,5 +1,8 @@
 from libraries import  pygame, Input
 
+# Application
+GAME_TITLE = "Welcome to Blockyblock game by Peyman Majidi"
+
 # Inputs
 STANDARD_INPUT = Input(left=pygame.K_LEFT, right=pygame.K_RIGHT, shot=pygame.K_RETURN, jump=pygame.K_SPACE)
 SECONDARY_INPUT = Input(left=pygame.K_a, right=pygame.K_d, shot=pygame.K_s, jump=pygame.K_w)

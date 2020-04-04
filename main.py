@@ -36,7 +36,7 @@ def main():
     global paint_color
     pygame.init()
     pygame.display.update()
-    pygame.display.set_caption("Welcome to Blockyblock game | by Peyman")
+    pygame.display.set_caption(GAME_TITLE)
     paint_color = (0,255,0)
     clicked = False # mouse button down to starting to draw
     pygame.display.update()
