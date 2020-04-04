@@ -209,15 +209,25 @@ class BlockyBlock:
         self.render_character()
 
     def pushing_left(self): # pushing other players to left
-        for player in BlockyBlock.players:
+        x1 = self.x - CHARCTER - 1
+        x2 = self.x + (2*CHARCTER) + 1
+        y1 = self.y - CHARCTER - 1
+        y2 = self.y + (2*CHARCTER) + 1
+        players_arround = list(filter(lambda p: x1 <= p.x and x2 >= p.x + CHARCTER and y1 <= p.y and y2 >= p.y + CHARCTER, BlockyBlock.players) )
+        for player in players_arround:
             if player.id == self.id:
                 continue
             if (self.x == player.x+ CHARCTER ) or (self.x  == player.x+ CHARCTER +1):
                 if (self.y - CHARCTER <= player.y-CHARCTER and self.y > player.y-CHARCTER) or ( self.y - CHARCTER > player.y - CHARCTER and self.y - CHARCTER < player.y ):
                     player.turn_left()
     
-    def pushing_right(self): # pushing other players to left
-        for player in BlockyBlock.players:
+    def pushing_right(self): # pushing other players to right
+        x1 = self.x - CHARCTER - 1
+        x2 = self.x + (2*CHARCTER) + 1
+        y1 = self.y - CHARCTER - 1
+        y2 = self.y + (2*CHARCTER) + 1
+        players_arround = list(filter(lambda p: x1 <= p.x and x2 >= p.x + CHARCTER and y1 <= p.y and y2 >= p.y + CHARCTER, BlockyBlock.players) )
+        for player in players_arround:
             if player.id == self.id:
                 continue
             if (self.x + CHARCTER == player.x) or (self.x + CHARCTER +1 == player.x):
