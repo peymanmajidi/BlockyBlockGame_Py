@@ -20,6 +20,7 @@ class BlockyBlock:
         self.fall_played = True
         self.fall = 0
         self.rise= 0
+        self.alive = True
         self.selected = False
         self.direction = Direction.FRONT
         self.input = Input()
@@ -42,6 +43,8 @@ class BlockyBlock:
 
     def select(x, y):
         for player in BlockyBlock.players:
+            if player.alive == False:
+                continue
             if (x >= player.x and x <= (player.x + CHARCTER)) and (y <= (player.y + CHARCTER) and y >= player.y):
                 player.select_me()
                 player.color = WHITE
@@ -51,7 +54,9 @@ class BlockyBlock:
 
     # nonstatic methods:
     def select_me(self):
-        list_of_selected = list(filter(lambda b: b.selected == True, BlockyBlock.players))
+        if self.alive == False:
+            return
+        list_of_selected = list(filter(lambda b: b.selected == True and b.alive == True, BlockyBlock.players))
         for selected in list_of_selected:
             selected.color = selected.primecolor
             selected.assign_keystrock(SECONDARY_INPUT)
@@ -99,28 +104,44 @@ class BlockyBlock:
             self.eyes.move(-int(CHARCTER / 10))
             self.eyes.right.y +=1
 
+        if self.alive:
+            if  self.eyes.keep > 5: # winking
+                pygame.draw.circle(window, BLACK, self.eyes.left.get(), int(CHARCTER / 15),0)
+                pygame.draw.circle(window, BLACK, self.eyes.right.get(),int(CHARCTER / 15),0) 
+                self.eyes.wink_period = random.randrange(100,1000) # random period for winking
+            else:  # normal
+                pygame.draw.circle(window, BLACK,self.eyes.left.get(),int(CHARCTER / 10),0)
+                pygame.draw.circle(window, BLACK,self.eyes.right.get(),int(CHARCTER / 10),0) 
+        else: # renser eyes when blocky is dead X:
+            pygame.draw.line(window, BLACK, (x + int(CHARCTER/10)+5,y+ int(CHARCTER/8)+2),(x + int(CHARCTER/3)+5,y+ int(CHARCTER/3)+5))
+            pygame.draw.line(window, BLACK, (x + int(CHARCTER/10)+5,y+ int(CHARCTER/8)+2+1),(x + int(CHARCTER/3)+5,y+ int(CHARCTER/3)+5+1))
+            pygame.draw.line(window, BLACK, (x + int(CHARCTER/10)+5,y+ int(CHARCTER/8)+2+2),(x + int(CHARCTER/3)+5,y+ int(CHARCTER/3)+5+2))
+            pygame.draw.line(window, BLACK, (x + int(CHARCTER/3)+5,y+ int(CHARCTER/8)+2),(x + int(CHARCTER/10)+5,y+ int(CHARCTER/3)+5))
+            pygame.draw.line(window, BLACK, (x + int(CHARCTER/3)+5,y+ int(CHARCTER/8)+2+1),(x + int(CHARCTER/10)+5,y+ int(CHARCTER/3)+5+1))
+            pygame.draw.line(window, BLACK, (x + int(CHARCTER/3)+5,y+ int(CHARCTER/8)+2+2),(x + int(CHARCTER/10)+5,y+ int(CHARCTER/3)+5+2))
 
-        if  self.eyes.keep > 5:
-            pygame.draw.circle(window, BLACK, self.eyes.left.get(), int(CHARCTER / 15),0) #[.]
-            pygame.draw.circle(window, BLACK, self.eyes.right.get(),int(CHARCTER / 15),0) # [..]
-            self.eyes.wink_period = random.randrange(100,1000) # random period for winking
-        else:       
-            pygame.draw.circle(window, BLACK,self.eyes.left.get(),int(CHARCTER / 10),0) #[.]
-            pygame.draw.circle(window, BLACK,self.eyes.right.get(),int(CHARCTER / 10),0) # [..]
+            pygame.draw.line(window, BLACK, (x + int(CHARCTER/10) + int(CHARCTER/2),y+ int(CHARCTER/8)+2),(x + int(CHARCTER/3)+ int(CHARCTER/2),y+ int(CHARCTER/3)+5))
+            pygame.draw.line(window, BLACK, (x + int(CHARCTER/10) + int(CHARCTER/2),y+ int(CHARCTER/8)+2+1),(x + int(CHARCTER/3)+ int(CHARCTER/2),y+ int(CHARCTER/3)+5+1))
+            pygame.draw.line(window, BLACK, (x + int(CHARCTER/10) + int(CHARCTER/2),y+ int(CHARCTER/8)+2+2),(x + int(CHARCTER/3)+ int(CHARCTER/2),y+ int(CHARCTER/3)+5+2))
+            pygame.draw.line(window, BLACK, (x + int(CHARCTER/3)+ int(CHARCTER/2),y+ int(CHARCTER/8)+2),(x + int(CHARCTER/10)+ int(CHARCTER/2),y+ int(CHARCTER/3)+5))
+            pygame.draw.line(window, BLACK, (x + int(CHARCTER/3)+ int(CHARCTER/2),y+ int(CHARCTER/8)+2+1),(x + int(CHARCTER/10)+ int(CHARCTER/2),y+ int(CHARCTER/3)+5+1))
+            pygame.draw.line(window, BLACK, (x + int(CHARCTER/3)+ int(CHARCTER/2),y+ int(CHARCTER/8)+2+2),(x + int(CHARCTER/10)+ int(CHARCTER/2),y+ int(CHARCTER/3)+5+2))
         
     
         if emo == Emotion.SAD: # :(
             pygame.draw.arc(window, BLACK, (x+( int(CHARCTER/7)),y+int(CHARCTER/1.7) , CHARCTER-int(CHARCTER / 5), CHARCTER-int(CHARCTER / 5)), math.pi/4,3* math.pi / 4 , int(CHARCTER / 10))
         elif emo == Emotion.HAPPY: # :)
             pygame.draw.arc(window, BLACK, (x+int(CHARCTER / 10),y , CHARCTER-int(CHARCTER / 5), CHARCTER-int(CHARCTER / 5)), 5*math.pi/4,7* math.pi / 4 , int(CHARCTER / 10))
-        elif emo == Emotion.NORMAL: # :|
+        elif emo == Emotion.NORMAL or emo == Emotion.DEAD: # :|
             pygame.draw.line(window, BLACK, (x + int(CHARCTER/5),y+ int(CHARCTER/3 * 2)),(x+ CHARCTER - int(CHARCTER/5),y+ int(CHARCTER/3 * 2)))
             pygame.draw.line(window, BLACK, (x + int(CHARCTER/5),y+ int(CHARCTER/3 * 2)+1),(x+ CHARCTER - int(CHARCTER/5),y+ int(CHARCTER/3 * 2)+1))
             pygame.draw.line(window, BLACK, (x + int(CHARCTER/5),y+ int(CHARCTER/3 * 2)+2),(x+ CHARCTER - int(CHARCTER/5),y+ int(CHARCTER/3 * 2)+2))
+            pygame.draw.line(window, BLACK, (x + int(CHARCTER/5),y+ int(CHARCTER/3 * 2)+3),(x+ CHARCTER - int(CHARCTER/5),y+ int(CHARCTER/3 * 2)+3))
+            pygame.draw.line(window, BLACK, (x + int(CHARCTER/5),y+ int(CHARCTER/3 * 2)+4),(x+ CHARCTER - int(CHARCTER/5),y+ int(CHARCTER/3 * 2)+4))
         elif emo == Emotion.WOW or not self.falling: # :o
             pygame.draw.arc(window, BLACK, (x+int(CHARCTER / 2.5),y+int(CHARCTER / 1.8) , int(CHARCTER / 3.5),  int(CHARCTER / 3.5)), 0,2* math.pi  , int(CHARCTER / 7))
 
-            
+
     def clear_shadow(self):
         pygame.draw.rect(window, BLACK, [ self.x, self.y, CHARCTER , CHARCTER ], 0)
 
@@ -240,6 +261,13 @@ class BlockyBlock:
             if (self.x + CHARCTER == player.x) or (self.x + CHARCTER +1 == player.x):
                 if (self.y - CHARCTER <= player.y-CHARCTER and self.y > player.y-CHARCTER) or ( self.y - CHARCTER > player.y - CHARCTER and self.y - CHARCTER < player.y ):
                     player.turn_right()
+
+    def kill_me(self):
+        self.alive = False
+        self.color = DEAD
+        self.emotion = Emotion.DEAD
+        self.assign_keystrock(NONE_INPUT)
+
 
     def shot(self):
         global WIDTH
