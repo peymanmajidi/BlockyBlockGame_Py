@@ -281,13 +281,36 @@ class BlockyBlock:
 
 
     def shot(self):
+        
+        # killing other players
+        if self.direction == Direction.RIGHT:
+            laser_x = WIDTH
+            x=self.eyes.left.x
+            y=self.eyes.left.y
+            list_of_blocky = list(filter(lambda p: p.id!= self.id and x < p.x and (y>=p.y and y<= p.y+CHARCTER) ,BlockyBlock.players))
+            list_of_blocky.sort(key= lambda p: p.x, reverse= False)
+            for p in list_of_blocky:
+                p.kill_me()
+                laser_x = p.x
+                break
+        else:
+            laser_x = 0
+            x=self.eyes.right.x
+            y=self.eyes.right.y
+            list_of_blocky = list(filter(lambda p:p.id!= self.id and x> p.x and (y>=p.y and y<= p.y+CHARCTER) ,BlockyBlock.players))
+            list_of_blocky.sort(key= lambda p: p.x, reverse= True)
+            for p in list_of_blocky:
+                p.kill_me()
+                laser_x = p.x + CHARCTER
+                break
+
         # draw laser
         if self.direction == Direction.RIGHT or  self.direction == Direction.FRONT:
-            pygame.draw.line(window, LASER, self.eyes.left.get2(), (WIDTH,self.eyes.left.y),int(CHARCTER/10))
-            pygame.draw.line(window, LASER2, self.eyes.right.get2(), (WIDTH,self.eyes.left.y),int(CHARCTER/10))
+            pygame.draw.line(window, LASER, self.eyes.left.get2(), (laser_x,self.eyes.left.y),int(CHARCTER/10))
+            pygame.draw.line(window, LASER2, self.eyes.right.get2(), (laser_x,self.eyes.left.y),int(CHARCTER/10))
         else:
-            pygame.draw.line(window, LASER, self.eyes.left.get2(), (0,self.eyes.left.y),int(CHARCTER/10))
-            pygame.draw.line(window, LASER2, self.eyes.right.get2(), (0,self.eyes.left.y),int(CHARCTER/10))
+            pygame.draw.line(window, LASER, self.eyes.left.get2(), (laser_x,self.eyes.left.y),int(CHARCTER/10))
+            pygame.draw.line(window, LASER2, self.eyes.right.get2(), (laser_x,self.eyes.left.y),int(CHARCTER/10))
 
         play_audio("laser.wav")
 
@@ -301,20 +324,6 @@ class BlockyBlock:
         else:
             pygame.draw.line(window, BLACK, (self.eyes.right.x+1,self.eyes.right.y-int(CHARCTER/5)), (0,self.eyes.right.y-int(CHARCTER/5)),int(CHARCTER/2))
 
-        # killing other players
-        if self.direction == Direction.RIGHT:
-            x=self.eyes.left.x
-            y=self.eyes.left.y
-            list_of_blocky = list(filter(lambda p: p.id!= self.id and x < p.x and (y>=p.y and y<= p.y+CHARCTER) ,BlockyBlock.players))
-            for p in list_of_blocky:
-                p.kill_me()
-
-        else:
-            x=self.eyes.right.x
-            y=self.eyes.right.y
-            list_of_blocky = list(filter(lambda p:p.id!= self.id and x> p.x and (y>=p.y and y<= p.y+CHARCTER) ,BlockyBlock.players))
-            for p in list_of_blocky:
-                p.kill_me()
         
         
         BlockyBlock.render_all()
