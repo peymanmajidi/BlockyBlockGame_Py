@@ -5,7 +5,7 @@ window = pygame.display.set_mode((WIDTH, HEIGHT))
 
 class BlockyBlock:
     players = list()
-    def __init__(self, character_name, color, x=0, y=0, emotion = Emotion.HAPPY):
+    def __init__(self, character_name, color, x=0, y=0, emotion = Emotion.NORMAL):
         self.id = BlockyBlock.players.__len__()
         self.name = character_name
         self.color = color
@@ -43,12 +43,11 @@ class BlockyBlock:
 
     def select(x, y):
         for player in BlockyBlock.players:
-            if player.alive == False:
-                continue
             if (x >= player.x and x <= (player.x + CHARCTER)) and (y <= (player.y + CHARCTER) and y >= player.y):
-                player.select_me()
-                player.color = WHITE
-                player.render_character()
+                if player.alive:
+                    player.select_me()
+                    player.color = WHITE
+                    player.render_character()
                 return True
         return False
 
@@ -63,6 +62,7 @@ class BlockyBlock:
             selected.selected = False # deselect all
         self.selected = True
         self.color = WHITE
+        self.emotion = Emotion.HAPPY
         self.assign_keystrock(STANDARD_INPUT)
         self.render_character()
 
@@ -297,6 +297,21 @@ class BlockyBlock:
         else:
             pygame.draw.line(window, BLACK, (eyes2.right.x+1,eyes2.right.y-int(CHARCTER/5)), (0,eyes2.right.y-int(CHARCTER/5)),int(CHARCTER/2))
 
+        if self.direction == Direction.RIGHT:
+            x=self.eyes.left.x
+            y=self.eyes.left.y
+            list_of_blocky = list(filter(lambda p: p.id!= self.id and x + CHARCTER< p.x and (y>=p.y and y<= p.y+CHARCTER) ,BlockyBlock.players))
+            for p in list_of_blocky:
+                p.kill_me()
+        else:
+            x=self.eyes.right.x
+            y=self.eyes.right.y
+            list_of_blocky = list(filter(lambda p:p.id!= self.id and x> p.x and (y>=p.y and y<= p.y+CHARCTER) ,BlockyBlock.players))
+            for p in list_of_blocky:
+                p.kill_me()
+
+
+        
         pygame.display.update()
 
 class Eyes:

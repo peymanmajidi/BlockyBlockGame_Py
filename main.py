@@ -48,7 +48,7 @@ def main():
     player2 = BlockyBlock("player2", RED)
     player2.assign_keystrock(SECONDARY_INPUT)
     player2.set_x(100)
-    player2.kill_me()
+
 
     PrintHelpOnConsole()
     print_current_color(paint_color)
