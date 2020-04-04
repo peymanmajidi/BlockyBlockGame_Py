@@ -2,13 +2,16 @@ import pygame, random, math
 
 class Direction:
     LEFT = '👈'
-    FRONT = '🐥'
+    FRONT = '😶'
     RIGHT = '👉'
 
 class Emotion:
     SAD = '😞'
     WOW = '😲'
     HAPPY = '😊'
+    DEAD = '🥴'
+    NORMAL = '😐'
+    NOT_SET = '❌'
 
 def play_audio(soundname):
     pygame.mixer.music.load("sounds/"+soundname)
