@@ -59,6 +59,7 @@ class BlockyBlock:
         for selected in list_of_selected:
             selected.color = selected.primecolor
             selected.assign_keystrock(SECONDARY_INPUT)
+            selected.emotion = Emotion.NORMAL
             selected.selected = False # deselect all
         self.selected = True
         self.color = WHITE
@@ -297,10 +298,11 @@ class BlockyBlock:
         else:
             pygame.draw.line(window, BLACK, (eyes2.right.x+1,eyes2.right.y-int(CHARCTER/5)), (0,eyes2.right.y-int(CHARCTER/5)),int(CHARCTER/2))
 
+        # killing
         if self.direction == Direction.RIGHT:
             x=self.eyes.left.x
             y=self.eyes.left.y
-            list_of_blocky = list(filter(lambda p: p.id!= self.id and x + CHARCTER< p.x and (y>=p.y and y<= p.y+CHARCTER) ,BlockyBlock.players))
+            list_of_blocky = list(filter(lambda p: p.id!= self.id and x < p.x and (y>=p.y and y<= p.y+CHARCTER) ,BlockyBlock.players))
             for p in list_of_blocky:
                 p.kill_me()
         else:
