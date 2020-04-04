@@ -88,7 +88,8 @@ def main():
 
                 if event.key == pygame.K_TAB:
                     emotion = Emotion.NORMAL
-                    player = BlockyBlock("Blockiii", random_color_generator(), emotion= emotion)
+                    x = random.randint(10,WIDTH - CHARCTER - 5)
+                    player = BlockyBlock("Blockiii", random_color_generator(),x=x, emotion= emotion)
                     player.assign_keystrock(SECONDARY_INPUT)
 
                 change_paint_color(event.key)
