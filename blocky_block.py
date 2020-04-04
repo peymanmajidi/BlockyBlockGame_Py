@@ -290,8 +290,12 @@ class BlockyBlock:
             list_of_blocky = list(filter(lambda p: p.id!= self.id and x < p.x and (y>=p.y and y<= p.y+CHARCTER) ,BlockyBlock.players))
             list_of_blocky.sort(key= lambda p: p.x, reverse= False)
             for p in list_of_blocky:
-                p.kill_me()
                 laser_x = p.x
+                if p.alive:
+                    p.kill_me()
+                else:
+                    p.clear_shadow()
+                    BlockyBlock.players.remove(p)
                 break
         else:
             laser_x = 0
@@ -300,8 +304,13 @@ class BlockyBlock:
             list_of_blocky = list(filter(lambda p:p.id!= self.id and x> p.x and (y>=p.y and y<= p.y+CHARCTER) ,BlockyBlock.players))
             list_of_blocky.sort(key= lambda p: p.x, reverse= True)
             for p in list_of_blocky:
-                p.kill_me()
                 laser_x = p.x + CHARCTER
+                if p.alive:
+                    p.kill_me()
+                else:
+                    p.clear_shadow()
+                    BlockyBlock.players.remove(p)
+                    
                 break
 
         # draw laser
