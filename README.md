@@ -9,7 +9,7 @@ Please download the source code and make fantastic forks 🍴
 
 by pygame
 
-![Shot](screenshot.png)
+![Shot](original.png)
 
 
 Pygame, the library is cross-platform and designed to make it easy to write multimedia software, such as games, in Python. Pygame requires the Python language and SDL multimedia library. It can also make use of several other popular libraries.
@@ -41,7 +41,8 @@ Pygame, the library is cross-platform and designed to make it easy to write mult
 Support multiplayer
 
 Generate new blocky - object oriented blockiblock :)
-![Multi Preview](multi.png)
+![Multi Preview](multplayer.png)
+![Multi Preview](kill.png)
 
 
 
