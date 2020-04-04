@@ -4,7 +4,7 @@ from blocky_block import BlockyBlock, window
 from game_contants import *
 
 def draw_object(pygame, window,WIDTH, HEIGHT):
-    pygame.draw.rect(window, OBJECT4, [ WIDTH - WIDTH / 2 ,HEIGHT-70 , 170 , 70 ], 0 )
+    # pygame.draw.rect(window, OBJECT4, [ WIDTH - WIDTH / 2 ,HEIGHT-70 , 170 , 70 ], 0 )
     pygame.draw.rect(window, OBJECT4, [ 5 ,5, WIDTH-5 , HEIGHT-5 ], 15 ) # GAME BOARD FRAME
 
 
@@ -87,15 +87,17 @@ def main():
                 BlockyBlock.action_manager(event.key)
 
                 if event.key == pygame.K_TAB:
-                    emotion = Emotion.NORMAL
                     x = random.randint(10,WIDTH - CHARCTER - 5)
+                    emotion = Emotion.SAD
+                    if x % 2 == 0: emotion = Emotion.NORMAL
                     player = BlockyBlock("Blockiii", random_color_generator(),x=x, emotion= emotion)
                     player.assign_keystrock(SECONDARY_INPUT)
 
                 change_paint_color(event.key)
                     
-                if event.key == pygame.K_c:
+                if event.key == pygame.K_c: # clear all drawing
                     pygame.draw.rect(window, BLACK, [0,0,WIDTH, HEIGHT],0)
+                    BlockyBlock.render_all()
                     
                 # if event.key == pygame.K_KP_PLUS or  event.key ==pygame.K_PLUS or event.key == pygame.K_l:
                 #     for player in players:
