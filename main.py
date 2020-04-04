@@ -5,7 +5,7 @@ from game_contants import *
 
 def draw_object(pygame, window,WIDTH, HEIGHT):
     pygame.draw.rect(window, OBJECT4, [ WIDTH - WIDTH / 2 ,HEIGHT-70 , 170 , 70 ], 0 )
-    pygame.draw.rect(window, OBJECT4, [ 5 ,5, WIDTH-5 , HEIGHT-5 ], 15 ) # GAME BOARD
+    pygame.draw.rect(window, OBJECT4, [ 5 ,5, WIDTH-5 , HEIGHT-5 ], 15 ) # GAME BOARD FRAME
 
 
 def print_current_color(paint_color): 
@@ -48,6 +48,7 @@ def main():
     player2 = BlockyBlock("player2", RED)
     player2.assign_keystrock(SECONDARY_INPUT)
     player2.set_x(100)
+    player2.kill_me()
 
     PrintHelpOnConsole()
     print_current_color(paint_color)
@@ -83,11 +84,11 @@ def main():
                 pass         
             if event.type == pygame.KEYDOWN:
                 pygame.display.update()
-
                 BlockyBlock.action_manager(event.key)
 
                 if event.key == pygame.K_TAB:
-                    player = BlockyBlock("Blockiii", random_color_generator())
+                    emotion = Emotion.NORMAL
+                    player = BlockyBlock("Blockiii", random_color_generator(), emotion= emotion)
                     player.assign_keystrock(SECONDARY_INPUT)
 
                 change_paint_color(event.key)
