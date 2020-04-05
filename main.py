@@ -6,25 +6,23 @@ import time
 
 def draw_object(pygame, window,WIDTH, HEIGHT): # GAME BOARD FRAME
     # pygame.draw.rect(window, OBJECT4, [ WIDTH - WIDTH / 2 ,HEIGHT-70 , 170 , 70 ], 0 )
-    pygame.draw.rect(window, OBJECT4, [ 0 ,0, 15 , HEIGHT ], 15 )
-    pygame.draw.rect(window, OBJECT4, [ WIDTH-15 ,0, 15 , HEIGHT ], 15 )
+    # pygame.draw.rect(window, WHITE, [ 5 ,5, WIDTH-5 , HEIGHT-5 ], 15 ) # Full FRAME
+    pygame.draw.rect(window, WHITE, [ 0 ,0, 15 , HEIGHT ], 15 )
+    pygame.draw.rect(window, WHITE, [ WIDTH-15 ,0, 15 , HEIGHT ], 15 )
 
 
-    pygame.draw.rect(window, GREEN, [ int(WIDTH/4) , int(HEIGHT /5) * 4, int(WIDTH/2) , int(HEIGHT/7) ], 10)
+    pygame.draw.rect(window, WHITE, [ 750 , 150, 500, 15  ], 0)
+    pygame.draw.rect(window, WHITE, [ 150 , 200, 300, 15  ], 0)
 
-def auto(blocky):
-    blocky.auto = True
-    if blocky.destroyed or blocky.alive == False:
-        return
-    if blocky.direction == Direction.RIGHT:
-        r = blocky.turn_right()
-        if r == False:
-            blocky.direction = Direction.LEFT
-    else:
-        r = blocky.turn_left()
-        if r == False:
-            blocky.direction = Direction.RIGHT
-    thread.Timer(0.0001, auto, [blocky]).start()
+    pygame.draw.rect(window, WHITE, [ 400 , 400, 300, 15  ], 0)
+
+    pygame.draw.rect(window, WHITE, [ 0 , 550, 300, 15  ], 0)
+
+
+
+
+
+
 
 def game_is_over():
     text_to_screen(window, "GAME_OVER", x= int(WIDTH/2) - 150, y=int(HEIGHT/2)-50 )
@@ -35,6 +33,20 @@ def game_is_over():
 
 def print_current_color(paint_color): 
     pygame.draw.rect(window, paint_color, [0,0,30,30],0)
+
+def generate_blocky():
+    x = random.randint(10,WIDTH - CHARCTER - 5)
+    emotion = Emotion.SAD
+    automatic = True
+    if x % 2 == 0: emotion = Emotion.NORMAL
+    if x %3 ==0: automatic = False
+    player = BlockyBlock("Blockiii", random_color_generator(),x=x, emotion= emotion, automatic= automatic)
+    player.assign_keystrock(SECONDARY_INPUT)
+    if x%3 == 0: player.direction = Direction.RIGHT
+
+def auto_generate_blocky():
+    generate_blocky()
+    thread.Timer(2, auto_generate_blocky).start()
 
 
 def change_paint_color(key):
@@ -70,12 +82,17 @@ def main():
     player1.assign_keystrock(STANDARD_INPUT)
     player1.select_me()
 
-    player2 = BlockyBlock("player2", RED, x=int(WIDTH/2) - 2*CHARCTER )
+    player2 = BlockyBlock("player2", RED, x= 150 )
     player2.assign_keystrock(SECONDARY_INPUT)
+    player2.direction = Direction.RIGHT
+    # auto(player2)
 
     PrintHelpOnConsole()
     print_current_color(paint_color)
     pygame.display.update()
+
+    auto_generate_blocky()
+
 
     game_over = False
     while not game_over: # Main Game Loop   
@@ -90,6 +107,7 @@ def main():
 
             if event.type == pygame.MOUSEBUTTONDOWN: # mouse click event
                 x,y = event.pos
+                print(x,",",y)
                 if BlockyBlock.select(x,y):
                     clicked = False
                 else:
@@ -110,11 +128,7 @@ def main():
                 BlockyBlock.action_manager(event.key)
 
                 if event.key == pygame.K_TAB:
-                    x = random.randint(10,WIDTH - CHARCTER - 5)
-                    emotion = Emotion.SAD
-                    if x % 2 == 0: emotion = Emotion.NORMAL
-                    player = BlockyBlock("Blockiii", random_color_generator(),x=x, emotion= emotion)
-                    player.assign_keystrock(SECONDARY_INPUT)
+                    generate_blocky()
 
                 change_paint_color(event.key)
                     
