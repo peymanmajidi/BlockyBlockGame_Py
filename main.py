@@ -2,11 +2,36 @@
 from libraries import *
 from blocky_block import BlockyBlock, window
 from game_contants import *
+import time
 
-def draw_object(pygame, window,WIDTH, HEIGHT):
+def draw_object(pygame, window,WIDTH, HEIGHT): # GAME BOARD FRAME
     # pygame.draw.rect(window, OBJECT4, [ WIDTH - WIDTH / 2 ,HEIGHT-70 , 170 , 70 ], 0 )
-    pygame.draw.rect(window, OBJECT4, [ 5 ,5, WIDTH-5 , HEIGHT-5 ], 15 ) # GAME BOARD FRAME
+    pygame.draw.rect(window, OBJECT4, [ 0 ,0, 15 , HEIGHT ], 15 )
+    pygame.draw.rect(window, OBJECT4, [ WIDTH-15 ,0, 15 , HEIGHT ], 15 )
 
+
+    pygame.draw.rect(window, GREEN, [ int(WIDTH/4) , int(HEIGHT /5) * 4, int(WIDTH/2) , int(HEIGHT/7) ], 10)
+
+def auto(blocky):
+    blocky.auto = True
+    if blocky.destroyed or blocky.alive == False:
+        return
+    if blocky.direction == Direction.RIGHT:
+        r = blocky.turn_right()
+        if r == False:
+            blocky.direction = Direction.LEFT
+    else:
+        r = blocky.turn_left()
+        if r == False:
+            blocky.direction = Direction.RIGHT
+    thread.Timer(0.0001, auto, [blocky]).start()
+
+def game_is_over():
+    text_to_screen(window, "GAME_OVER", x= int(WIDTH/2) - 150, y=int(HEIGHT/2)-50 )
+    pygame.display.update()
+    play_audio("game_over.mp3")
+    time.sleep(2)
+  
 
 def print_current_color(paint_color): 
     pygame.draw.rect(window, paint_color, [0,0,30,30],0)
@@ -41,14 +66,12 @@ def main():
     clicked = False # mouse button down to starting to draw
     pygame.display.update()
 
-    player1 = BlockyBlock("player1", YELLOW)
+    player1 = BlockyBlock("player1", YELLOW, x= int(WIDTH/2))
     player1.assign_keystrock(STANDARD_INPUT)
     player1.select_me()
 
-    player2 = BlockyBlock("player2", RED)
+    player2 = BlockyBlock("player2", RED, x=int(WIDTH/2) - 2*CHARCTER )
     player2.assign_keystrock(SECONDARY_INPUT)
-    player2.set_x(100)
-
 
     PrintHelpOnConsole()
     print_current_color(paint_color)
@@ -109,7 +132,9 @@ def main():
         
         pygame.display.update()
         pygame.time.delay(REFRESH) # refresh rate
+        game_over = BlockyBlock.game_over
         # end of main loop
+    game_is_over()
 
 if __name__ == "__main__":
     main()
