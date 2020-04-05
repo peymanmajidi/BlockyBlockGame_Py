@@ -17,6 +17,7 @@ MOVE = 1
 # Colors Consts
 BLACK = (0,0,0)
 WHITE = (255,255,255)
+GREEN = (0,255,0)
 LASER = (255, 102, 0)
 LASER2 = (255, 80, 80)
 RED = (255, 0, 0)
@@ -33,3 +34,8 @@ OBJECT4 = (255,255,255)
 # Parameters
 JUMP = int(CHARCTER * 2.1)
 REFRESH = 1
+
+# Fonts
+FONT1 = './fonts/font1.ttf'
+FONT2 = './fonts/font2.ttf'
+FONT3 = './fonts/font3.ttf'
