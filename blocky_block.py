@@ -5,8 +5,9 @@ window = pygame.display.set_mode((WIDTH, HEIGHT))
 
 class BlockyBlock:
     players = list()
-    def __init__(self, character_name, color, x=0, y=0, emotion = Emotion.NORMAL):
+    def __init__(self, character_name, color, x=0, y=0, emotion = Emotion.NORMAL, automatic=False):
         self.id = BlockyBlock.players.__len__()
+        self.input = Input(SECONDARY_INPUT)
         self.name = character_name
         self.color = color
         self.primecolor = color
@@ -23,14 +24,15 @@ class BlockyBlock:
         self.destroyed = False
         self.selected = False
         self.direction = Direction.FRONT
-        self.input = Input(SECONDARY_INPUT)
 
-        self.auto = False
+        self.auto = automatic
 
         self.set_x(x)
         self.set_y(y)
 
         BlockyBlock.players.append(self)
+        if automatic:
+            self.automatic()
         self.render_character()
 
     # static methods:
@@ -60,6 +62,7 @@ class BlockyBlock:
     def select_me(self):
         if self.alive == False:
             return
+        self.auto = False
         list_of_selected = list(filter(lambda b: b.selected == True and b.alive == True, BlockyBlock.players))
         for selected in list_of_selected:
             selected.color = selected.primecolor
@@ -68,7 +71,7 @@ class BlockyBlock:
             selected.selected = False # deselect all
             selected.render_character()
         self.selected = True
-        self.color = WHITE
+        self.color = YELLOW
         self.emotion = Emotion.HAPPY
         self.assign_keystrock(STANDARD_INPUT)
         self.render_character()
@@ -79,7 +82,7 @@ class BlockyBlock:
     def set_x(self, x):
         if x + CHARCTER >= WIDTH:
             x = WIDTH - CHARCTER - 1
-        if x < 1:
+        if x <= 1:
             x = CHARCTER
         self.x = x
 
@@ -87,7 +90,7 @@ class BlockyBlock:
         if y + CHARCTER >= HEIGHT:
             self.destroy()
             return
-        if y < 1:
+        if y <= 1:
             y = CHARCTER
         self.y = y
 
@@ -174,8 +177,7 @@ class BlockyBlock:
                  result = True
                  self.move_x(-MOVE)
                  self.move_y(-MOVE)
-        if result == False:
-            self.pushing_left()
+        self.pushing_left()
         self.render_character()
         return result
 
@@ -191,8 +193,7 @@ class BlockyBlock:
                 self.move_x(MOVE)
                 self.move_y(-MOVE)
                 result = True
-        if result == False:
-            self.pushing_right()
+        self.pushing_right()
         self.render_character()
         return result
 
@@ -240,29 +241,32 @@ class BlockyBlock:
         else:
             self.falling = False
             if self.fall_played:
-                play_audio("fall.wav")
+                if not self.auto:
+                    play_audio("fall.wav")
                 self.fall_played = False
+        try:
+            if(keys[self.input.left]):
+                self.turn_left()
+                
 
-        if(keys[self.input.left]):
-            self.turn_left()
+            elif(keys[self.input.right]):
+                self.turn_right()
             
 
-        elif(keys[self.input.right]):
-            self.turn_right()
-           
-
-        if self.jumping:
-            self.clear_shadow()
-            if self.rising:
-                self.rise+=1
-                if not Is_filled_pixel.top(self.x, self.y-1):
-                    self.move_y(-1)
-                else:
-                    self.jumping = False
-            if self.rise > JUMP:
-                self.rising = False
-                self.jumping= False
-            self.render_character()
+            if self.jumping:
+                self.clear_shadow()
+                if self.rising:
+                    self.rise+=1
+                    if not Is_filled_pixel.top(self.x, self.y-1):
+                        self.move_y(-1)
+                    else:
+                        self.jumping = False
+                if self.rise > JUMP:
+                    self.rising = False
+                    self.jumping= False
+                self.render_character()
+        except:
+            pass
         
 
     def pushing_left(self): # pushing other players to left
@@ -312,7 +316,9 @@ class BlockyBlock:
 
 
     def shot(self):
-        
+        auto = self.auto
+        self.auto = False
+
         # killing other players
         if self.direction == Direction.RIGHT:
             laser_x = WIDTH
@@ -363,15 +369,30 @@ class BlockyBlock:
             pygame.draw.line(window, BLACK, (self.eyes.right.x+1,self.eyes.right.y-int(CHARCTER/5)), (0,self.eyes.right.y-int(CHARCTER/5)),int(CHARCTER/2))
 
         
-        
+        self.auto = auto
+        if auto:
+            self.automatic()
         BlockyBlock.render_all()
 
 
-
-
-
-
-
+    def automatic(self):
+        if self.auto == False:
+            return
+        if self.selected:
+            self.auto = False
+            return
+        if self.destroyed or self.alive == False:
+            return
+        if not self.falling:
+            if self.direction == Direction.RIGHT:
+                r = self.turn_right()
+                if r == False:
+                    self.direction = Direction.LEFT
+            else:
+                r = self.turn_left()
+                if r == False:
+                    self.direction = Direction.RIGHT
+        thread.Timer(0.0001, self.automatic).start()
 
 
 class Eyes:
