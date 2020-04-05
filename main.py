@@ -10,22 +10,14 @@ def draw_object(pygame, window,WIDTH, HEIGHT): # GAME BOARD FRAME
     pygame.draw.rect(window, WHITE, [ 0 ,0, 15 , HEIGHT ], 15 )
     pygame.draw.rect(window, WHITE, [ WIDTH-15 ,0, 15 , HEIGHT ], 15 )
 
-
     pygame.draw.rect(window, WHITE, [ 750 , 150, 500, 15  ], 0)
     pygame.draw.rect(window, WHITE, [ 150 , 200, 300, 15  ], 0)
-
     pygame.draw.rect(window, WHITE, [ 400 , 400, 300, 15  ], 0)
-
     pygame.draw.rect(window, WHITE, [ 0 , 550, 300, 15  ], 0)
 
 
-
-
-
-
-
 def game_is_over():
-    text_to_screen(window, "GAME_OVER", x= int(WIDTH/2) - 150, y=int(HEIGHT/2)-50 )
+    text_to_screen(window, "GAME_OVER", x= int(WIDTH/2) - 230, y=int(HEIGHT/2)-50 ,size= 85)
     pygame.display.update()
     play_audio("game_over.mp3")
     time.sleep(2)
@@ -35,18 +27,20 @@ def print_current_color(paint_color):
     pygame.draw.rect(window, paint_color, [0,0,30,30],0)
 
 def generate_blocky():
-    x = random.randint(10,WIDTH - CHARCTER - 5)
+    x = random.randint(CHARCTER,WIDTH - CHARCTER - CHARCTER)
     emotion = Emotion.SAD
     automatic = True
-    if x % 2 == 0: emotion = Emotion.NORMAL
-    if x %3 ==0: automatic = False
+    emotion = Emotion.SAD
+    if x %3 ==0:
+        automatic = False
+        emotion = Emotion.NORMAL
     player = BlockyBlock("Blockiii", random_color_generator(),x=x, emotion= emotion, automatic= automatic)
     player.assign_keystrock(SECONDARY_INPUT)
     if x%3 == 0: player.direction = Direction.RIGHT
 
 def auto_generate_blocky():
     generate_blocky()
-    thread.Timer(2, auto_generate_blocky).start()
+    thread.Timer(3, auto_generate_blocky).start()
 
 
 def change_paint_color(key):
