@@ -14,9 +14,7 @@ class Emotion:
     NORMAL = '😐'
     NOT_SET = '❌'
 
-def play_audio(soundname):
-    pygame.mixer.music.load("sounds/"+soundname)
-    pygame.mixer.music.play(0)
+
 
 class Input:
     def __init__(self, left=pygame.K_LEFT, right=pygame.K_RIGHT, shot=pygame.K_RETURN, jump=pygame.K_SPACE):
@@ -39,6 +37,24 @@ class Point:
         return (self.x, self.y)
 
 
+class Character_Size:
+    SuperBig = 100
+    Big = 70
+    Normal = 50
+    Small = 40
+    Tiny = 30
+    def random():
+        r = random.randint(1,80)
+        if r in range(1,30):
+            return Character_Size.Normal
+        if r in range(30,50):
+            return Character_Size.Big
+        if r in range(50,60):
+            return Character_Size.Small
+        if r in range(60, 65):
+            return Character_Size.SuperBig
+        return Character_Size.Normal
+
 def text_to_screen(screen, text, x, y, color = (255,255,255), size = 50, font_type = './fonts/font2.ttf'):
     text = str(text)
     font = pygame.font.Font(font_type, size)
@@ -49,7 +65,9 @@ def text_to_screen(screen, text, x, y, color = (255,255,255), size = 50, font_ty
 def random_color_generator():
     return (random.randrange(1,255),random.randrange(1,255),random.randrange(1,255))
 
-
+def play_audio(soundname):
+    pygame.mixer.music.load("sounds/"+soundname)
+    pygame.mixer.music.play(0)
 
 
 def PrintHelpOnConsole():

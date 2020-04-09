@@ -11,7 +11,6 @@ NONE_INPUT = Input(left=pygame.K_ASTERISK, right=pygame.K_ASTERISK, shot=pygame.
 # Playground Consts
 WIDTH = 1200
 HEIGHT = 600
-CHARCTER = 50
 MOVE = 1
 
 # Colors Consts
@@ -33,7 +32,6 @@ OBJECT3 = (200,90,90)
 OBJECT4 = (255,255,255)
 
 # Parameters
-JUMP = int(CHARCTER * 2.1)
 REFRESH = 1
 
 # Fonts
