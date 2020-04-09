@@ -39,10 +39,11 @@ Pygame, the library is cross-platform and designed to make it easy to write mult
 
 ## Updated
 Support multiplayer
-
-Generate new blocky - object oriented blockiblock :)
-![Multi Preview](multplayer.png)
-![Multi Preview](kill.png)
+Generate new blocky - object oriented version
+As you can see, you can generate unlimited BlockyBlock
+and the "game over" feature added
+![Multi Preview](multiplayer.png)
+![Multi Preview](game_over.png)
 
 
 
