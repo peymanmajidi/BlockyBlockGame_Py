@@ -110,8 +110,8 @@ class Main:
         pygame.draw.rect(window, Main.paint_color, [0,0,30,30],0)
 
     def generate_blocky():
-        x = random.randint(Character_Size.Normal ,WIDTH - Character_Size.Normal  - Character_Size.Normal )
         size = Character_Size.random()
+        x = random.randint(size ,WIDTH - size  )
         emotion = Emotion.SAD
         automatic = True
 
@@ -124,6 +124,7 @@ class Main:
         if x%3 == 0: player.direction = Direction.RIGHT
         if not player.auto:
             player.assign_keystrock(SECONDARY_INPUT)
+        BlockyBlock.render_all()
 
     def auto_generate_blocky():
         Main.generate_blocky()
