@@ -273,12 +273,12 @@ class BlockyBlock:
         x2 = self.x + (2*self.size) + 1
         y1 = self.y - self.size - 1
         y2 = self.y + (2*self.size) + 1
-        players_arround = list(filter(lambda p: x1 <= p.x and x2 >= p.x + self.size and y1 <= p.y and y2 >= p.y + self.size, BlockyBlock.players) )
-        for player in players_arround:
+        # players_arround = list(filter(lambda p: x1 <= p.x and x2 >= p.x + p.size and y1 <= p.y and y2 >= p.y + p.size, BlockyBlock.players) )
+        for player in BlockyBlock.players:
             if player.id == self.id:
                 continue
-            if (self.x == player.x+ self.size ) or (self.x  == player.x+ self.size +1):
-                if (self.y - self.size <= player.y-self.size and self.y > player.y-self.size) or ( self.y - self.size > player.y - self.size and self.y - self.size < player.y ):
+            if (self.x == player.x+ player.size ) or (self.x  == player.x+ player.size +1):
+                if (self.y >= player.y and self.y <= (player.y + player.size)) or (self.y <= player.y and self.y + self.size >= player.y) or (self.y <= player.y and self.y+ self.size >= player.y + player.size) or ( self.y <= player.y and self.y+self.size <= player.size) :
                     player.turn_left()
     
     def pushing_right(self): # pushing other players to right
@@ -286,12 +286,12 @@ class BlockyBlock:
         x2 = self.x + (2*self.size) + 1
         y1 = self.y - self.size - 1
         y2 = self.y + (2*self.size) + 1
-        players_arround = list(filter(lambda p: x1 <= p.x and x2 >= p.x + self.size and y1 <= p.y and y2 >= p.y + self.size, BlockyBlock.players) )
-        for player in players_arround:
+        # players_arround = list(filter(lambda p: x1 <= p.x and x2 >= p.x + p.size and y1 <= p.y and y2 >= p.y + p.size, BlockyBlock.players) )
+        for player in BlockyBlock.players:
             if player.id == self.id:
                 continue
             if (self.x + self.size == player.x) or (self.x + self.size +1 == player.x):
-                if (self.y - self.size <= player.y-self.size and self.y > player.y-self.size) or ( self.y - self.size > player.y - self.size and self.y - self.size < player.y ):
+                if (self.y >= player.y and self.y <= (player.y + player.size)) or (self.y <= player.y and self.y + self.size >= player.y) or (self.y <= player.y and self.y+ self.size >= player.y + player.size) or ( self.y <= player.y and self.y+self.size <= player.size) :
                     player.turn_right()
 
     def kill_me(self):
@@ -323,7 +323,8 @@ class BlockyBlock:
             laser_x = WIDTH
             x=self.eyes.left.x
             y=self.eyes.left.y
-            list_of_blocky = list(filter(lambda p: p.id!= self.id and x < p.x and (y>=p.y and y<= p.y+self.size) ,BlockyBlock.players))
+            list_of_blocky = list(filter(lambda p:p.id!= self.id and 
+                    x< p.x and (y>=p.y and y<= p.y+p.size) ,BlockyBlock.players))
             list_of_blocky.sort(key= lambda p: p.x, reverse= False)
             for p in list_of_blocky:
                 laser_x = p.x
@@ -336,10 +337,11 @@ class BlockyBlock:
             laser_x = 0
             x=self.eyes.right.x
             y=self.eyes.right.y
-            list_of_blocky = list(filter(lambda p:p.id!= self.id and x> p.x and (y>=p.y and y<= p.y+self.size) ,BlockyBlock.players))
+            list_of_blocky = list(filter(lambda p:p.id!= self.id and 
+                    x> p.x and (y>=p.y and y<= p.y+p.size) ,BlockyBlock.players))
             list_of_blocky.sort(key= lambda p: p.x, reverse= True)
             for p in list_of_blocky:
-                laser_x = p.x + self.size
+                laser_x = p.x + p.size
                 if p.alive:
                     p.kill_me()
                 else:
