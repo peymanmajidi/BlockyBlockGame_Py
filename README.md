@@ -12,6 +12,22 @@ by pygame
 ![Shot](original.png)
 
 
+## Intall PyGame
+
+install pygame:
+``` shell
+python -m pip install -U pygame --user
+```
+If it doest wirk you can download pygame and install it manually
+
+Download whl file [from here](https://www.lfd.uci.edu/~gohlke/pythonlibs/#pygame) then install it pip like this:
+``` shell
+pip install pygame‑1.9.2a0‑cp35‑none‑win32.whl
+```
+
+
+[ Read more ... ](https://kidscancode.org/blog/2015/09/pygame_install/)
+
 Pygame, the library is cross-platform and designed to make it easy to write multimedia software, such as games, in Python. Pygame requires the Python language and SDL multimedia library. It can also make use of several other popular libraries.
 
 
@@ -39,9 +55,13 @@ Pygame, the library is cross-platform and designed to make it easy to write mult
 
 ## Updated
 Support multiplayer
+
 Generate new blocky - object oriented version
+
 As you can see, you can generate unlimited BlockyBlock
+
 and the "game over" feature added
+
 ![Multi Preview](multiplayer.png)
 ![Multi Preview](game_over.png)
 
