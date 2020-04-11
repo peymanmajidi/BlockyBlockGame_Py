@@ -38,7 +38,7 @@ class Point:
 
 
 class Character_Size:
-    SuperBig = 100
+    SuperBig = 110
     Big = 70
     Normal = 50
     Small = 40

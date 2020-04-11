@@ -11,11 +11,11 @@ class Main:
         clicked = False # mouse button down to starting to draw
         pygame.display.update()
 
-        player1 = BlockyBlock("player1", YELLOW, x= int(WIDTH/2))
+        player1 = BlockyBlock("player1", YELLOW, x= int(WIDTH/2), size= Character_Size.Normal)
         player1.assign_keystrock(STANDARD_INPUT)
         player1.select_me()
 
-        player2 = BlockyBlock("player2", RED, x= 150 )
+        player2 = BlockyBlock("player2", RED, x= 150, size=Character_Size.SuperBig )
         player2.assign_keystrock(SECONDARY_INPUT)
         player2.direction = Direction.RIGHT
         # auto(player2)
@@ -82,7 +82,7 @@ class Main:
             # end of main loop
         Main.game_is_over()
     def game_is_over():
-        text_to_screen(window, "GAME_OVER", x= int(WIDTH/2) - 230, y=int(HEIGHT/10),size= 85, color= GREEN)
+        text_to_screen(window, "GAME_OVER", x= int(WIDTH/2) - 230, y=int(HEIGHT/10),size= 85, color= WHITE)
         pygame.display.update()
         play_audio("game_over.mp3")
         time.sleep(2)
@@ -90,6 +90,7 @@ class Main:
     def draw_object(pygame, window,WIDTH, HEIGHT): # GAME BOARD FRAME
         # pygame.draw.rect(window, OBJECT4, [ WIDTH - WIDTH / 2 ,HEIGHT-70 , 170 , 70 ], 0 )
         # pygame.draw.rect(window, WHITE, [ 5 ,5, WIDTH-5 , HEIGHT-5 ], 15 ) # Full FRAME
+        
         pygame.draw.rect(window, WHITE, [ 0 ,0, 15 , HEIGHT ], 15 )
 
         pygame.draw.rect(window, WHITE, [ WIDTH-15 ,0, 15 , HEIGHT ], 15 )
@@ -100,10 +101,10 @@ class Main:
         pygame.draw.rect(window, WHITE, [ 0 , 550, 300, 15  ], 0)
         pygame.draw.rect(window, WHITE, [ 700 , 575, 400, 15  ], 0)
 
-        pygame.draw.rect(window, GREEN, [ 36 , 450, 20, 20  ], 0)
-        pygame.draw.rect(window, GREEN, [ 124 , 369, 20, 20  ], 0)
-        pygame.draw.rect(window, GREEN, [ 815 , 474, 20, 20  ], 0)
-        pygame.draw.rect(window, GREEN, [ 550 , 224, 20, 20  ], 0)
+        # pygame.draw.rect(window, GREEN, [ 36 , 450, 20, 20  ], 0)
+        # pygame.draw.rect(window, GREEN, [ 124 , 369, 20, 20  ], 0)
+        # pygame.draw.rect(window, GREEN, [ 815 , 474, 20, 20  ], 0)
+        # pygame.draw.rect(window, GREEN, [ 550 , 224, 20, 20  ], 0)
 
     def draw_by_mouse(): 
         pygame.draw.rect(window, Main.paint_color, [0,0,30,30],0)

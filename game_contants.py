@@ -32,7 +32,7 @@ OBJECT3 = (200,90,90)
 OBJECT4 = (255,255,255)
 
 # Parameters
-REFRESH = 1
+REFRESH = 2
 
 # Fonts
 FONT1 = './fonts/font1.ttf'
