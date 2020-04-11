@@ -95,6 +95,8 @@ class BlockyBlock:
             return
         if y <= 1:
             y = self.size
+            self.rising = False
+            self.jumping= False
         self.y = y
 
     def move_x(self, move=1):
