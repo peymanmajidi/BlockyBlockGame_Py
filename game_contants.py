@@ -35,6 +35,6 @@ OBJECT4 = (255,255,255)
 REFRESH = 2
 
 # Fonts
-FONT1 = './fonts/font1.ttf'
-FONT2 = './fonts/font2.ttf'
-FONT3 = './fonts/font3.ttf'
+FONT1 = 'assets/fonts/font1.ttf'
+FONT2 = 'assets/fonts/font2.ttf'
+FONT3 = 'assets/fonts/font3.ttf'

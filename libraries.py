@@ -57,7 +57,7 @@ class Character_Size:
             return Character_Size.SuperBig
         return Character_Size.Normal
 
-def text_to_screen(screen, text, x, y, color = (255,255,255), size = 50, font_type = './fonts/font2.ttf'):
+def text_to_screen(screen, text, x, y, color = (255,255,255), size = 50, font_type = './assets/fonts/font2.ttf'):
     text = str(text)
     font = pygame.font.Font(font_type, size)
     text = font.render(text, True, color)
@@ -68,7 +68,7 @@ def random_color_generator():
     return (random.randrange(1,255),random.randrange(1,255),random.randrange(1,255))
 
 def play_audio(soundname):
-    pygame.mixer.music.load("sounds/"+soundname)
+    pygame.mixer.music.load("assets/sounds/"+soundname)
     pygame.mixer.music.play(0)
 
 
