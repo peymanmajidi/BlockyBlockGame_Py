@@ -9,7 +9,7 @@ Please download the source code and make fantastic forks 🍴
 
 by pygame
 
-![Shot](original.png)
+![Shot](shots/original.png)
 
 
 ## Intall PyGame
@@ -48,7 +48,7 @@ Pygame, the library is cross-platform and designed to make it easy to write mult
     R: Red brush
 
 
-![Gif Preview](GamePreview.gif)
+![Gif Preview](shots/GamePreview.gif)
 
 
 
@@ -62,8 +62,8 @@ As you can see, you can generate unlimited BlockyBlock
 
 and the "game over" feature added
 
-![Multi Preview](multiplayer.png)
-![Multi Preview](game_over.png)
+![Multi Preview](shots/multiplayer.png)
+![Multi Preview](shots/game_over.png)
 
 
 

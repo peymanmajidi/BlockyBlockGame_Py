@@ -81,6 +81,9 @@ class Main:
             game_over = BlockyBlock.game_over
             # end of main loop
         Main.game_is_over()
+        os._exit(0)
+
+
     def game_is_over():
         text_to_screen(window, "GAME_OVER", x= int(WIDTH/2) - 230, y=int(HEIGHT/10),size= 85, color= WHITE)
         pygame.display.update()

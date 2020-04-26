@@ -9,8 +9,8 @@ SECONDARY_INPUT = Input(left=pygame.K_a, right=pygame.K_d, shot=pygame.K_s, jump
 NONE_INPUT = Input(left=pygame.K_ASTERISK, right=pygame.K_ASTERISK, shot=pygame.K_ASTERISK, jump=pygame.K_ASTERISK)
 
 # Playground Consts
-WIDTH = 1200
-HEIGHT = 600
+WIDTH = 1400
+HEIGHT = 800
 MOVE = 1
 
 # Colors Consts

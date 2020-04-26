@@ -1,5 +1,7 @@
 import pygame, random, math
 import threading as thread
+import os
+
 
 class Direction:
     LEFT = '👈'
