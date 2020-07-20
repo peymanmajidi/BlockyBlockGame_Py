@@ -5,7 +5,7 @@ from contants import *
 
 class BlockyBlock:
     players = list()
-    def __init__(self, screen, character_name, color, x=0, y=0, emotion = Emotion.NORMAL, automatic=False, size = Character_Size.Normal):
+    def __init__(self, screen, character_name="NO NAME", color= YELLOW, x=0, y=0, emotion = Emotion.NORMAL, automatic=False, size = Character_Size.Normal):
         self.id = BlockyBlock.players.__len__()
         self.screen = screen
         self.input = Input(SECONDARY_INPUT)
@@ -79,6 +79,7 @@ class BlockyBlock:
     def render_all():
         for player in BlockyBlock.players:
             player.render_character()
+        return BlockyBlock.game_over
 
     # nonstatic methods:
     def set_as_player1(self):
@@ -105,8 +106,8 @@ class BlockyBlock:
     def set_x(self, x):
         if x + self.size >= WIDTH:
             x = WIDTH - self.size - 1
-        if x <= 1:
-            x = self.size
+        if x <= 3:
+            x = 3
         self.x = x
 
     def set_y(self, y):
