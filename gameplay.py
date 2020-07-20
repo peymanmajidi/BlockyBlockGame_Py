@@ -36,36 +36,18 @@ def change_paint_color(key):
     return paint_color
 
 
-def blocky_generator(screen, second):    
+def blocky_generator(screen, second):
     BlockyBlock.Generate_blocky(screen)
     thread.Timer(second, blocky_generator, [screen, second]).start()
 
 
 
 def arrow_keys(window, events):
-    global clicked, paint_color, game_over
+    global clicked, paint_color
     for event in events.get():
         if event.type == pygame.QUIT:
-            game_over= True
+            os._exit(0)
 
-        if event.type == pygame.KEYDOWN:
-            pygame.display.update()
-            BlockyBlock.action_manager(event.key)
-
-            if event.key == pygame.K_TAB:
-                BlockyBlock.Generate_blocky(window)
-
-            paint_color = change_paint_color(event.key)
-            UI.mouse_color(window, paint_color)
-                
-            if event.key == pygame.K_c: # clear all drawing
-                pygame.draw.rect(window, BLACK, [0,0,WIDTH, HEIGHT],0)
-                BlockyBlock.render_all()
-    game_over = BlockyBlock.game_over
-
-def mouse_click(window, events):
-    global clicked, paint_color, game_over
-    for event in events.get():
         if event.type == pygame.MOUSEBUTTONDOWN: # mouse click event
             x,y = event.pos
             if BlockyBlock.select(x,y, Character_Size.Normal):
@@ -80,6 +62,21 @@ def mouse_click(window, events):
             x2,y2 = event.pos
             pygame.draw.rect(window, paint_color, [x2,y2,20,20],0)
             pygame.display.update()
-        
+
+
+        if event.type == pygame.KEYDOWN:
+            pygame.display.update()
+            BlockyBlock.action_manager(event.key)
+
+            if event.key == pygame.K_TAB:
+                BlockyBlock.Generate_blocky(window)
+
+            if event.key == pygame.K_ESCAPE:
+                os._exit(0)
+
             paint_color = change_paint_color(event.key)
-            UI.mouse_color(window, paint_color)            
+            UI.mouse_color(window, paint_color)
+                
+            if event.key == pygame.K_c: # clear all drawing
+                pygame.draw.rect(window, BLACK, [0,0,WIDTH, HEIGHT],0)
+                BlockyBlock.render_all()
