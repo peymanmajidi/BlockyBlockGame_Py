@@ -8,7 +8,8 @@ class BlockyBlock:
     def __init__(self, screen, character_name="NO NAME", color= YELLOW, x=0, y=0, emotion = Emotion.NORMAL, automatic=False, size = Character_Size.Normal):
         self.id = BlockyBlock.players.__len__()
         self.screen = screen
-        self.input = Input(SECONDARY_INPUT)
+        self.input = Input()
+        self.assign_keystrock(NONE_INPUT)
         self.name = character_name
         self.color = color
         self.primecolor = color
@@ -52,7 +53,7 @@ class BlockyBlock:
         if x %3 ==0:
             automatic = False
             emotion = Emotion.NORMAL
-        player = BlockyBlock(screen, "Blockiii", gameplay.random_color_generator(),x=x, emotion= emotion, automatic= automatic, size=size)
+        player = BlockyBlock(screen, color=gameplay.random_color_generator(),x=x, emotion= emotion, automatic= automatic, size=size)
         player.assign_keystrock(NONE_INPUT)
         if x%3 == 0: player.direction = Direction.RIGHT
         if not player.auto:
