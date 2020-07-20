@@ -37,8 +37,13 @@ def change_paint_color(key):
 
 
 def blocky_generator(screen, second):
+    thread.Timer(second, generate, [screen, second]).start()
+
+
+def generate(screen, second):
     BlockyBlock.Generate_blocky(screen)
-    thread.Timer(second, blocky_generator, [screen, second]).start()
+    thread.Timer(second, generate, [screen, second]).start()
+
 
 
 
