@@ -63,7 +63,7 @@ As you can see, you can generate unlimited BlockyBlock
 and the "game over" feature added
 
 ![Multi Preview](shots/multiplayer.png)
-![Multi Preview](shots/game_over.png)
+![Multi Preview](shots/level01.png)
 
 
 
