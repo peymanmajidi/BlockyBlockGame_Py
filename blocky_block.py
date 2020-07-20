@@ -1,12 +1,13 @@
-from libraries import *
+import pygame, math
+import threading as thread
+import game_tools
 from game_contants import *
-
-window = pygame.display.set_mode((WIDTH, HEIGHT))
 
 class BlockyBlock:
     players = list()
-    def __init__(self, character_name, color, x=0, y=0, emotion = Emotion.NORMAL, automatic=False, size = Character_Size.Normal):
+    def __init__(self, screen, character_name, color, x=0, y=0, emotion = Emotion.NORMAL, automatic=False, size = Character_Size.Normal):
         self.id = BlockyBlock.players.__len__()
+        self.screen = screen
         self.input = Input(SECONDARY_INPUT)
         self.name = character_name
         self.color = color
@@ -41,6 +42,24 @@ class BlockyBlock:
     # static methods:
     numbers_of_kills = 0
     game_over = False
+    def Generate_blocky(screen):
+        size = Character_Size.random()
+        x = random.randint(size ,WIDTH - size  )
+        emotion = Emotion.SAD
+        automatic = True
+
+        emotion = Emotion.SAD
+        if x %3 ==0:
+            automatic = False
+            emotion = Emotion.NORMAL
+        player = BlockyBlock(screen, "Blockiii", game_tools.random_color_generator(),x=x, emotion= emotion, automatic= automatic, size=size)
+        player.assign_keystrock(NONE_INPUT)
+        if x%3 == 0: player.direction = Direction.RIGHT
+        if not player.auto:
+            player.assign_keystrock(SECONDARY_INPUT)
+        BlockyBlock.render_all()
+
+
     def event_listener(keys):
         for player in BlockyBlock.players:
             player.event_handler(keys)
@@ -113,7 +132,7 @@ class BlockyBlock:
         y = self.y
         if emo == Emotion.NOT_SET:
             emo = self.emotion
-        pygame.draw.rect(window, self.color, [ x ,y  , self.size , self.size ], 0 ) # [ ]
+        pygame.draw.rect(self.screen, self.color, [ x ,y  , self.size , self.size ], 0 ) # [ ]
         self.eyes.left.x = x+int(self.size/2)- int(self.size / 5)
         self.eyes.left.y = y+int(self.size/2)-int(self.size / 5)
 
@@ -130,44 +149,44 @@ class BlockyBlock:
 
         if self.alive:
             if  self.eyes.keep > 5: # winking
-                pygame.draw.circle(window, BLACK, self.eyes.left.get(), int(self.size / 15),0)
-                pygame.draw.circle(window, BLACK, self.eyes.right.get(),int(self.size / 15),0) 
+                pygame.draw.circle(self.screen, BLACK, self.eyes.left.get(), int(self.size / 15),0)
+                pygame.draw.circle(self.screen, BLACK, self.eyes.right.get(),int(self.size / 15),0) 
                 self.eyes.wink_period = random.randrange(100,1000) # random period for winking
             else:  # normal
-                pygame.draw.circle(window, BLACK,self.eyes.left.get(),int(self.size / 10),0)
-                pygame.draw.circle(window, BLACK,self.eyes.right.get(),int(self.size / 10),0) 
+                pygame.draw.circle(self.screen, BLACK,self.eyes.left.get(),int(self.size / 10),0)
+                pygame.draw.circle(self.screen, BLACK,self.eyes.right.get(),int(self.size / 10),0) 
         else: # renser eyes when blocky is dead X:
-            pygame.draw.line(window, BLACK, (x + int(self.size/10)+5,y+ int(self.size/8)+2),(x + int(self.size/3)+5,y+ int(self.size/3)+5))
-            pygame.draw.line(window, BLACK, (x + int(self.size/10)+5,y+ int(self.size/8)+2+1),(x + int(self.size/3)+5,y+ int(self.size/3)+5+1))
-            pygame.draw.line(window, BLACK, (x + int(self.size/10)+5,y+ int(self.size/8)+2+2),(x + int(self.size/3)+5,y+ int(self.size/3)+5+2))
-            pygame.draw.line(window, BLACK, (x + int(self.size/3)+5,y+ int(self.size/8)+2),(x + int(self.size/10)+5,y+ int(self.size/3)+5))
-            pygame.draw.line(window, BLACK, (x + int(self.size/3)+5,y+ int(self.size/8)+2+1),(x + int(self.size/10)+5,y+ int(self.size/3)+5+1))
-            pygame.draw.line(window, BLACK, (x + int(self.size/3)+5,y+ int(self.size/8)+2+2),(x + int(self.size/10)+5,y+ int(self.size/3)+5+2))
+            pygame.draw.line(self.screen, BLACK, (x + int(self.size/10)+5,y+ int(self.size/8)+2),(x + int(self.size/3)+5,y+ int(self.size/3)+5))
+            pygame.draw.line(self.screen, BLACK, (x + int(self.size/10)+5,y+ int(self.size/8)+2+1),(x + int(self.size/3)+5,y+ int(self.size/3)+5+1))
+            pygame.draw.line(self.screen, BLACK, (x + int(self.size/10)+5,y+ int(self.size/8)+2+2),(x + int(self.size/3)+5,y+ int(self.size/3)+5+2))
+            pygame.draw.line(self.screen, BLACK, (x + int(self.size/3)+5,y+ int(self.size/8)+2),(x + int(self.size/10)+5,y+ int(self.size/3)+5))
+            pygame.draw.line(self.screen, BLACK, (x + int(self.size/3)+5,y+ int(self.size/8)+2+1),(x + int(self.size/10)+5,y+ int(self.size/3)+5+1))
+            pygame.draw.line(self.screen, BLACK, (x + int(self.size/3)+5,y+ int(self.size/8)+2+2),(x + int(self.size/10)+5,y+ int(self.size/3)+5+2))
 
-            pygame.draw.line(window, BLACK, (x + int(self.size/10) + int(self.size/2),y+ int(self.size/8)+2),(x + int(self.size/3)+ int(self.size/2),y+ int(self.size/3)+5))
-            pygame.draw.line(window, BLACK, (x + int(self.size/10) + int(self.size/2),y+ int(self.size/8)+2+1),(x + int(self.size/3)+ int(self.size/2),y+ int(self.size/3)+5+1))
-            pygame.draw.line(window, BLACK, (x + int(self.size/10) + int(self.size/2),y+ int(self.size/8)+2+2),(x + int(self.size/3)+ int(self.size/2),y+ int(self.size/3)+5+2))
-            pygame.draw.line(window, BLACK, (x + int(self.size/3)+ int(self.size/2),y+ int(self.size/8)+2),(x + int(self.size/10)+ int(self.size/2),y+ int(self.size/3)+5))
-            pygame.draw.line(window, BLACK, (x + int(self.size/3)+ int(self.size/2),y+ int(self.size/8)+2+1),(x + int(self.size/10)+ int(self.size/2),y+ int(self.size/3)+5+1))
-            pygame.draw.line(window, BLACK, (x + int(self.size/3)+ int(self.size/2),y+ int(self.size/8)+2+2),(x + int(self.size/10)+ int(self.size/2),y+ int(self.size/3)+5+2))
+            pygame.draw.line(self.screen, BLACK, (x + int(self.size/10) + int(self.size/2),y+ int(self.size/8)+2),(x + int(self.size/3)+ int(self.size/2),y+ int(self.size/3)+5))
+            pygame.draw.line(self.screen, BLACK, (x + int(self.size/10) + int(self.size/2),y+ int(self.size/8)+2+1),(x + int(self.size/3)+ int(self.size/2),y+ int(self.size/3)+5+1))
+            pygame.draw.line(self.screen, BLACK, (x + int(self.size/10) + int(self.size/2),y+ int(self.size/8)+2+2),(x + int(self.size/3)+ int(self.size/2),y+ int(self.size/3)+5+2))
+            pygame.draw.line(self.screen, BLACK, (x + int(self.size/3)+ int(self.size/2),y+ int(self.size/8)+2),(x + int(self.size/10)+ int(self.size/2),y+ int(self.size/3)+5))
+            pygame.draw.line(self.screen, BLACK, (x + int(self.size/3)+ int(self.size/2),y+ int(self.size/8)+2+1),(x + int(self.size/10)+ int(self.size/2),y+ int(self.size/3)+5+1))
+            pygame.draw.line(self.screen, BLACK, (x + int(self.size/3)+ int(self.size/2),y+ int(self.size/8)+2+2),(x + int(self.size/10)+ int(self.size/2),y+ int(self.size/3)+5+2))
         
     
         if emo == Emotion.SAD: # :(
-            pygame.draw.arc(window, BLACK, (x+( int(self.size/7)),y+int(self.size/1.7) , self.size-int(self.size / 5), self.size-int(self.size / 5)), math.pi/4,3* math.pi / 4 , int(self.size / 10))
+            pygame.draw.arc(self.screen, BLACK, (x+( int(self.size/7)),y+int(self.size/1.7) , self.size-int(self.size / 5), self.size-int(self.size / 5)), math.pi/4,3* math.pi / 4 , int(self.size / 10))
         elif emo == Emotion.HAPPY: # :)
-            pygame.draw.arc(window, BLACK, (x+int(self.size / 10),y , self.size-int(self.size / 5), self.size-int(self.size / 5)), 5*math.pi/4,7* math.pi / 4 , int(self.size / 10))
+            pygame.draw.arc(self.screen, BLACK, (x+int(self.size / 10),y , self.size-int(self.size / 5), self.size-int(self.size / 5)), 5*math.pi/4,7* math.pi / 4 , int(self.size / 10))
         elif emo == Emotion.NORMAL or emo == Emotion.DEAD: # :|
-            pygame.draw.line(window, BLACK, (x + int(self.size/5),y+ int(self.size/3 * 2)),(x+ self.size - int(self.size/5),y+ int(self.size/3 * 2)))
-            pygame.draw.line(window, BLACK, (x + int(self.size/5),y+ int(self.size/3 * 2)+1),(x+ self.size - int(self.size/5),y+ int(self.size/3 * 2)+1))
-            pygame.draw.line(window, BLACK, (x + int(self.size/5),y+ int(self.size/3 * 2)+2),(x+ self.size - int(self.size/5),y+ int(self.size/3 * 2)+2))
-            pygame.draw.line(window, BLACK, (x + int(self.size/5),y+ int(self.size/3 * 2)+3),(x+ self.size - int(self.size/5),y+ int(self.size/3 * 2)+3))
-            pygame.draw.line(window, BLACK, (x + int(self.size/5),y+ int(self.size/3 * 2)+4),(x+ self.size - int(self.size/5),y+ int(self.size/3 * 2)+4))
+            pygame.draw.line(self.screen, BLACK, (x + int(self.size/5),y+ int(self.size/3 * 2)),(x+ self.size - int(self.size/5),y+ int(self.size/3 * 2)))
+            pygame.draw.line(self.screen, BLACK, (x + int(self.size/5),y+ int(self.size/3 * 2)+1),(x+ self.size - int(self.size/5),y+ int(self.size/3 * 2)+1))
+            pygame.draw.line(self.screen, BLACK, (x + int(self.size/5),y+ int(self.size/3 * 2)+2),(x+ self.size - int(self.size/5),y+ int(self.size/3 * 2)+2))
+            pygame.draw.line(self.screen, BLACK, (x + int(self.size/5),y+ int(self.size/3 * 2)+3),(x+ self.size - int(self.size/5),y+ int(self.size/3 * 2)+3))
+            pygame.draw.line(self.screen, BLACK, (x + int(self.size/5),y+ int(self.size/3 * 2)+4),(x+ self.size - int(self.size/5),y+ int(self.size/3 * 2)+4))
         elif emo == Emotion.WOW or not self.falling: # :o
-            pygame.draw.arc(window, BLACK, (x+int(self.size / 2.5),y+int(self.size / 1.8) , int(self.size / 3.5),  int(self.size / 3.5)), 0,2* math.pi  , int(self.size / 7))
+            pygame.draw.arc(self.screen, BLACK, (x+int(self.size / 2.5),y+int(self.size / 1.8) , int(self.size / 3.5),  int(self.size / 3.5)), 0,2* math.pi  , int(self.size / 7))
 
 
     def clear_shadow(self):
-        pygame.draw.rect(window, BLACK, [ self.x, self.y, self.size , self.size ], 0)
+        pygame.draw.rect(self.screen, BLACK, [ self.x, self.y, self.size , self.size ], 0)
 
     def turn_left(self):
         result = False
@@ -175,10 +194,10 @@ class BlockyBlock:
         self.direction = Direction.LEFT
 
         if self.x - MOVE >= 0:
-             if not Is_filled_pixel.left(self.x, self.y, self.size):
+             if not Is_filled_pixel.left(self.screen, self.x, self.y, self.size):
                 result = True
                 self.move_x(-MOVE)
-             elif not Is_filled_pixel.left(self.x-MOVE+1, self.y-(MOVE*5), self.size):
+             elif not Is_filled_pixel.left(self.screen,self.x-MOVE+1, self.y-(MOVE*5), self.size):
                  result = True
                  self.move_x(-MOVE)
                  self.move_y(-MOVE)
@@ -191,10 +210,10 @@ class BlockyBlock:
         self.clear_shadow()
         self.direction = Direction.RIGHT
         if self.x + self.size + MOVE <= WIDTH:
-             if not Is_filled_pixel.right(self.x, self.y, self.size):
+             if not Is_filled_pixel.right(self.screen,self.x, self.y, self.size):
                 self.move_x(MOVE)
                 result = True
-             elif not Is_filled_pixel.right(self.x + MOVE+1, self.y - (MOVE*5), self.size):
+             elif not Is_filled_pixel.right(self.screen,self.x + MOVE+1, self.y - (MOVE*5), self.size):
                 self.move_x(MOVE)
                 self.move_y(-MOVE)
                 result = True
@@ -220,7 +239,7 @@ class BlockyBlock:
         self.clear_shadow()
         self.jumping = True
         self.rising = True
-        play_audio("jump.wav")
+        game_tools.play_audio("jump.wav")
         self.rise=0
         self.render_character()
 
@@ -233,7 +252,7 @@ class BlockyBlock:
 
     def event_handler(self, keys): # run every miliseconds
         self.eyes.winking()
-        if not Is_filled_pixel.bottom(self.x, self.y, self.size) and not self.jumping:
+        if not Is_filled_pixel.bottom(self.screen,self.x, self.y, self.size) and not self.jumping:
             self.clear_shadow()
             self.move_y()
             self.falling = True
@@ -243,7 +262,7 @@ class BlockyBlock:
             self.falling = False
             if self.fall_played:
                 if not self.auto:
-                    play_audio("fall.wav")
+                    game_tools.play_audio("fall.wav")
                 self.fall_played = False
         try:
             if(keys[self.input.left]):
@@ -258,7 +277,7 @@ class BlockyBlock:
                 self.clear_shadow()
                 if self.rising:
                     self.rise+=1
-                    if not Is_filled_pixel.top(self.x, self.y-1, self.size):
+                    if not Is_filled_pixel.top(self.screen,self.x, self.y-1, self.size):
                         self.move_y(-1)
                     else:
                         self.jumping = False
@@ -353,13 +372,13 @@ class BlockyBlock:
 
         # draw laser
         if self.direction == Direction.RIGHT or  self.direction == Direction.FRONT:
-            pygame.draw.line(window, LASER, self.eyes.left.get2(), (laser_x,self.eyes.left.y),int(self.size/10))
-            pygame.draw.line(window, LASER2, self.eyes.right.get2(), (laser_x,self.eyes.left.y),int(self.size/10))
+            pygame.draw.line(self.screen, LASER, self.eyes.left.get2(), (laser_x,self.eyes.left.y),int(self.size/10))
+            pygame.draw.line(self.screen, LASER2, self.eyes.right.get2(), (laser_x,self.eyes.left.y),int(self.size/10))
         else:
-            pygame.draw.line(window, LASER, self.eyes.left.get2(), (laser_x,self.eyes.left.y),int(self.size/10))
-            pygame.draw.line(window, LASER2, self.eyes.right.get2(), (laser_x,self.eyes.left.y),int(self.size/10))
+            pygame.draw.line(self.screen, LASER, self.eyes.left.get2(), (laser_x,self.eyes.left.y),int(self.size/10))
+            pygame.draw.line(self.screen, LASER2, self.eyes.right.get2(), (laser_x,self.eyes.left.y),int(self.size/10))
 
-        play_audio("laser.wav")
+        game_tools.play_audio("laser.wav")
 
         self.render_character(Emotion.SAD)
         pygame.display.update()
@@ -367,9 +386,9 @@ class BlockyBlock:
 
         # clean laser
         if self.direction == Direction.RIGHT or  self.direction == Direction.FRONT:
-            pygame.draw.line(window, BLACK, (self.eyes.left.x +1,self.eyes.left.y-int(self.size/5)), (WIDTH,self.eyes.left.y-int(self.size/5)),int(self.size/2))
+            pygame.draw.line(self.screen, BLACK, (self.eyes.left.x +1,self.eyes.left.y-int(self.size/5)), (WIDTH,self.eyes.left.y-int(self.size/5)),int(self.size/2))
         else:
-            pygame.draw.line(window, BLACK, (self.eyes.right.x+1,self.eyes.right.y-int(self.size/5)), (0,self.eyes.right.y-int(self.size/5)),int(self.size/2))
+            pygame.draw.line(self.screen, BLACK, (self.eyes.right.x+1,self.eyes.right.y-int(self.size/5)), (0,self.eyes.right.y-int(self.size/5)),int(self.size/2))
 
         
         self.auto = auto
@@ -421,9 +440,9 @@ class Eyes:
             self.keep -=1
 
 class Is_filled_pixel:
-    def left(x,y,size):
+    def left(screen, x,y,size):
         for i in range(size):
-            dot = window.get_at((x-MOVE,y+i))
+            dot = screen.get_at((x-MOVE,y+i))
             if dot[0] > 0:
                 return True
             if dot[1] > 0:
@@ -432,9 +451,9 @@ class Is_filled_pixel:
                 return True
         return False
 
-    def right(x,y,size):        
+    def right(screen, x,y,size):        
         for i in range(size):
-            dot = window.get_at((x+MOVE + size,y+i))
+            dot = screen.get_at((x+MOVE + size,y+i))
             if dot[0] > 0:
                 return True
             if dot[1] > 0:
@@ -443,9 +462,9 @@ class Is_filled_pixel:
                 return True
         return False
 
-    def top(x,y,size):     
+    def top(screen, x,y,size):     
         for i in range(size):
-            dot = window.get_at((x+i,y-MOVE))
+            dot = screen.get_at((x+i,y-MOVE))
             if dot[0] > 0:
                 return True
             if dot[1] > 0:
@@ -454,10 +473,10 @@ class Is_filled_pixel:
                 return True
         return False
 
-    def bottom(x,y,size):
+    def bottom(screen, x,y,size):
         try:
             for i in range(size):
-                dot = window.get_at((x+i,y+size+MOVE))
+                dot = screen.get_at((x+i,y+size+MOVE))
                 if dot[0] > 0:
                     return True
                 if dot[1] > 0:
@@ -469,4 +488,17 @@ class Is_filled_pixel:
 
         return False
 
+
+
+class Point:
+    def __init__(self, x=0,y=0):
+        self.x = x
+        self.y = y
+    def set(self, x,y):
+        self.x = x
+        self.y = y
+    def get(self):
+        return [self.x, self.y]
+    def get2(self):
+        return (self.x, self.y)
 

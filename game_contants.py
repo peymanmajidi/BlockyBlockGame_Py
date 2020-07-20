@@ -1,12 +1,51 @@
-from libraries import  pygame, Input
+import pygame, random
+
+class Direction:
+    LEFT = '👈'
+    FRONT = '😶'
+    RIGHT = '👉'
+
+class Emotion:
+    SAD = '😞'
+    WOW = '😲'
+    HAPPY = '😊'
+    DEAD = '🥴'
+    NORMAL = '😐'
+    NOT_SET = '❌'
+
+
+class Input:
+    def __init__(self, left=pygame.K_LEFT, right=pygame.K_RIGHT, shot=pygame.K_RETURN, jump=pygame.K_SPACE):
+        self.left = left
+        self.right = right
+        self.jump = jump
+        self.shot = shot
+
+
+
+class Character_Size:
+    SuperBig = 110
+    Big = 70
+    Normal = 50
+    Small = 40
+    Tiny = 30
+    def random():
+        r = random.randint(1,80)
+        if r in range(1,30):
+            return Character_Size.Normal
+        if r in range(30,50):
+            return Character_Size.Big
+        if r in range(50,60):
+            return Character_Size.Small
+        if r in range(60, 65):
+            return Character_Size.SuperBig
+        return Character_Size.Normal
+
+
 
 # Application
 GAME_TITLE = "Welcome to Blockyblock game by Peyman Majidi"
 
-# Inputs
-STANDARD_INPUT = Input(left=pygame.K_LEFT, right=pygame.K_RIGHT, shot=pygame.K_RETURN, jump=pygame.K_SPACE)
-SECONDARY_INPUT = Input(left=pygame.K_a, right=pygame.K_d, shot=pygame.K_s, jump=pygame.K_w)
-NONE_INPUT = Input(left=pygame.K_ASTERISK, right=pygame.K_ASTERISK, shot=pygame.K_ASTERISK, jump=pygame.K_ASTERISK)
 
 # Playground Consts
 WIDTH = 1400
@@ -38,3 +77,8 @@ REFRESH = 2
 FONT1 = 'assets/fonts/font1.ttf'
 FONT2 = 'assets/fonts/font2.ttf'
 FONT3 = 'assets/fonts/font3.ttf'
+
+# Inputs
+STANDARD_INPUT = Input(left=pygame.K_LEFT, right=pygame.K_RIGHT, shot=pygame.K_RETURN, jump=pygame.K_SPACE)
+SECONDARY_INPUT = Input(left=pygame.K_a, right=pygame.K_d, shot=pygame.K_s, jump=pygame.K_w)
+NONE_INPUT = Input(left=pygame.K_ASTERISK, right=pygame.K_ASTERISK, shot=pygame.K_ASTERISK, jump=pygame.K_ASTERISK)
