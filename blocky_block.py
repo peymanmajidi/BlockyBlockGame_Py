@@ -1,7 +1,7 @@
 import pygame, math
 import threading as thread
-import game_tools
-from game_contants import *
+import gameplay
+from contants import *
 
 class BlockyBlock:
     players = list()
@@ -52,7 +52,7 @@ class BlockyBlock:
         if x %3 ==0:
             automatic = False
             emotion = Emotion.NORMAL
-        player = BlockyBlock(screen, "Blockiii", game_tools.random_color_generator(),x=x, emotion= emotion, automatic= automatic, size=size)
+        player = BlockyBlock(screen, "Blockiii", gameplay.random_color_generator(),x=x, emotion= emotion, automatic= automatic, size=size)
         player.assign_keystrock(NONE_INPUT)
         if x%3 == 0: player.direction = Direction.RIGHT
         if not player.auto:
@@ -60,7 +60,7 @@ class BlockyBlock:
         BlockyBlock.render_all()
 
 
-    def event_listener(keys):
+    def control(keys):
         for player in BlockyBlock.players:
             player.event_handler(keys)
 
@@ -239,7 +239,7 @@ class BlockyBlock:
         self.clear_shadow()
         self.jumping = True
         self.rising = True
-        game_tools.play_audio("jump.wav")
+        gameplay.play_audio("jump.wav")
         self.rise=0
         self.render_character()
 
@@ -262,7 +262,7 @@ class BlockyBlock:
             self.falling = False
             if self.fall_played:
                 if not self.auto:
-                    game_tools.play_audio("fall.wav")
+                    gameplay.play_audio("fall.wav")
                 self.fall_played = False
         try:
             if(keys[self.input.left]):
@@ -378,7 +378,7 @@ class BlockyBlock:
             pygame.draw.line(self.screen, LASER, self.eyes.left.get2(), (laser_x,self.eyes.left.y),int(self.size/10))
             pygame.draw.line(self.screen, LASER2, self.eyes.right.get2(), (laser_x,self.eyes.left.y),int(self.size/10))
 
-        game_tools.play_audio("laser.wav")
+        gameplay.play_audio("laser.wav")
 
         self.render_character(Emotion.SAD)
         pygame.display.update()

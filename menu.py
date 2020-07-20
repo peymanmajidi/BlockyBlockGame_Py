@@ -1,6 +1,6 @@
 import pygame, time
-from game_contants import *
-import game_tools
+from contants import *
+import gameplay
 
 
 def text_to_screen(screen, text, x, y, color = (255,255,255), size = 50, font_type = './assets/fonts/font2.ttf'):
@@ -12,7 +12,7 @@ def text_to_screen(screen, text, x, y, color = (255,255,255), size = 50, font_ty
 def game_is_over(screen):
     text_to_screen(screen, "GAME_OVER", x= int(WIDTH/2) - 230, y=int(HEIGHT/10),size= 85, color= WHITE)
     pygame.display.update()
-    game_tools.play_audio("game_over.mp3")
+    gameplay.play_audio("game_over.mp3")
     time.sleep(2)
 
 def mouse_color(screen, paint_color):
