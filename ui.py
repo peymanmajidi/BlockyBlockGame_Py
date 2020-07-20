@@ -3,6 +3,7 @@ from contants import *
 import gameplay
 
 
+
 def text(screen, text, x, y, color = (255,255,255), size = 50, font_type = './assets/fonts/font2.ttf'):
     text = str(text)
     font = pygame.font.Font(font_type, size)
@@ -54,7 +55,10 @@ def level_01(screen):
     full_frame(screen, 15)
     pygame.draw.rect(screen, WHITE, [ 0 , 720, 1000, 15  ], 0)    
     pygame.draw.rect(screen, WHITE, [ 500 , 600, 800, 15  ], 0)
-    pygame.draw.rect(screen, WHITE, [ 600 , 200, 200, 200  ], 20)
+    text(screen, "LEVEL 01", 600,200, WHITE, 35)
+    
+
+
 
 
     

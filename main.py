@@ -11,8 +11,13 @@ player1.set_as_player1()
 
 
 
+
 BlockyBlock(screen, x=1000, color = GREEN, size= Character_Size.SuperBig)
 BlockyBlock(screen, x=1150, color = LIGHT_BLUE, size= Character_Size.Big)
+
+
+for i in range(1,10):
+    BlockyBlock(screen, x=800+i*3,y=i*10, color = random_color_generator(), size= Character_Size.Normal)
 
 
 UI.console_help()
