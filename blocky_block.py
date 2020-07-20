@@ -73,7 +73,7 @@ class BlockyBlock:
         for player in BlockyBlock.players:
             if (x >= player.x and x <= (player.x + size)) and (y <= (player.y + size) and y >= player.y):
                 if player.alive:
-                    player.select_me()
+                    player.set_as_player1()
                 return True
         return False
     
