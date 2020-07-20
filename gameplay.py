@@ -1,8 +1,13 @@
-import random, pygame, menu, time, os
+import random, pygame, time, os
 from contants import GREEN
-import menu as Menu
+import ui as UI
 import threading as thread
+from blocky_block import BlockyBlock
+from contants import *
 
+paint_color = GREEN
+clicked = False
+game_over = False
 
 def random_color_generator():
     return (random.randrange(1,255),random.randrange(1,255),random.randrange(1,255))
@@ -31,18 +36,36 @@ def change_paint_color(key):
     return paint_color
 
 
-def auto_generate_blocky(screen, BlockyBlock):    
+def blocky_generator(screen, second):    
     BlockyBlock.Generate_blocky(screen)
-    thread.Timer(3, auto_generate_blocky, [screen, BlockyBlock]).start()
+    thread.Timer(second, blocky_generator, [screen, second]).start()
 
 
 
-def game_loop(window, events, BlockyBlock):
-    game_over = False
+def arrow_keys(window, events):
+    global clicked, paint_color, game_over
     for event in events.get():
         if event.type == pygame.QUIT:
             game_over= True
 
+        if event.type == pygame.KEYDOWN:
+            pygame.display.update()
+            BlockyBlock.action_manager(event.key)
+
+            if event.key == pygame.K_TAB:
+                BlockyBlock.Generate_blocky(window)
+
+            paint_color = change_paint_color(event.key)
+            UI.mouse_color(window, paint_color)
+                
+            if event.key == pygame.K_c: # clear all drawing
+                pygame.draw.rect(window, BLACK, [0,0,WIDTH, HEIGHT],0)
+                BlockyBlock.render_all()
+    game_over = BlockyBlock.game_over
+
+def mouse_click(window, events):
+    global clicked, paint_color, game_over
+    for event in events.get():
         if event.type == pygame.MOUSEBUTTONDOWN: # mouse click event
             x,y = event.pos
             if BlockyBlock.select(x,y, Character_Size.Normal):
@@ -52,24 +75,11 @@ def game_loop(window, events, BlockyBlock):
 
         if event.type == pygame.MOUSEBUTTONUP:
             clicked = False
-        try:
-            if clicked:
-                x2,y2 = event.pos
-                pygame.draw.rect(window, paint_color, [x2,y2,20,20],0)
-                pygame.display.update()
-        except:
-            pass         
-        if event.type == pygame.KEYDOWN:
+
+        if clicked:
+            x2,y2 = event.pos
+            pygame.draw.rect(window, paint_color, [x2,y2,20,20],0)
             pygame.display.update()
-            BlockyBlock.action_manager(event.key)
-
-            if event.key == pygame.K_TAB:
-                BlockyBlock.Generate_blocky(window)
-
+        
             paint_color = change_paint_color(event.key)
-            menu.mouse_color(window, paint_color)
-                
-            if event.key == pygame.K_c: # clear all drawing
-                pygame.draw.rect(window, BLACK, [0,0,WIDTH, HEIGHT],0)
-                BlockyBlock.render_all()
-    return game_over
+            UI.mouse_color(window, paint_color)            

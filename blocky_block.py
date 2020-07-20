@@ -60,7 +60,7 @@ class BlockyBlock:
         BlockyBlock.render_all()
 
 
-    def control(keys):
+    def update(keys):
         for player in BlockyBlock.players:
             player.event_handler(keys)
 
@@ -81,7 +81,7 @@ class BlockyBlock:
             player.render_character()
 
     # nonstatic methods:
-    def select_me(self):
+    def set_as_player1(self):
         if self.alive == False:
             return
         self.auto = False
@@ -100,6 +100,7 @@ class BlockyBlock:
 
     def assign_keystrock(self, input):
         self.input = input
+
 
     def set_x(self, x):
         if x + self.size >= WIDTH:
