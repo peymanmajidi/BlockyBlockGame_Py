@@ -12,12 +12,12 @@ player1.set_as_player1()
 
 
 
-BlockyBlock(screen, x=1000, color = GREEN, size= Character_Size.SuperBig, automatic= True)
-BlockyBlock(screen, x=1150, color = LIGHT_BLUE, size= Character_Size.Big)
+BlockyBlock(screen, x=950, color = GREEN, size= Character_Size.SuperBig)
+BlockyBlock(screen, x=1200, color = LIGHT_BLUE, size= Character_Size.SuperTiny, automatic= True)
 
 
 for i in range(1,20):
-    BlockyBlock(screen, x=900+i*3,y=i*10, color = random_color_generator(), size= Character_Size.Tiny)
+    BlockyBlock(screen, x=900-i+ random.randint(-10,10) ,y=i*10, color = random_color_generator(), size= Character_Size.Tiny)
 
 
 UI.console_help()
@@ -33,7 +33,7 @@ while not game_over:
     arrow_keys(screen, pygame.event)
                 
     pygame.display.update()
-    pygame.time.delay(REFRESH)
+    pygame.time.wait(REFRESH)
     game_over = BlockyBlock.render_all()
 
 
