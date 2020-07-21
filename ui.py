@@ -48,8 +48,24 @@ def level_01(screen):
 
     pygame.draw.line(screen, WHITE, (1100,480), (WIDTH,480),10)
 
-    pygame.draw.line(screen, WHITE, (0,690), (250,720),10)
+
     pygame.draw.line(screen, WHITE, (250,720), (1000,720),10)
+
+
+    pygame.draw.line(screen, GREEN, (90,140), (250,145),10)
+    pygame.draw.line(screen, GREEN, (200,240), (360,230),15)
+    pygame.draw.line(screen, GREEN, (50,335), (250,330),18)
+    pygame.draw.line(screen, GREEN, (150,430), (350, 425),22)
+    pygame.draw.line(screen, GREEN, (90,515), (480, 525),15)
+
+    pygame.draw.line(screen, WHITE, (890,1), (950,1),50)
+
+    x = 10
+    y = 90
+
+    pygame.draw.polygon(screen, RED, ((0 +x, 10+y), (0+x, 20+y), (20+x, 20+y), (20+x, 30+y), (30+x, 15+y), (20+x, 0+y), (20+x, 10+y)))
+
+
     text(screen, "LEVEL 01", 600,200, WHITE, 35)
 
     
