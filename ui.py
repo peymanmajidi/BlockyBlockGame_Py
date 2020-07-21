@@ -41,21 +41,17 @@ Press [tab] to generate new blocky
 def full_frame(screen, thickness):
     pygame.draw.rect(screen, WHITE, [ 0 ,0, WIDTH , HEIGHT+thickness ], thickness ) # Full FRAME
 
-def level_design(screen): 
-
-    pygame.draw.rect(screen, WHITE, [ 0 ,0, 15 , HEIGHT ], 15 )
-    pygame.draw.rect(screen, WHITE, [ WIDTH-15 ,0, 15 , HEIGHT ], 15 )
-    pygame.draw.rect(screen, WHITE, [ 750 , 250, 500, 15  ], 0)
-    pygame.draw.rect(screen, WHITE, [ 150 , 300, 300, 15  ], 0)
-    pygame.draw.rect(screen, WHITE, [ 400 , 450, 300, 15  ], 0)
-    pygame.draw.rect(screen, WHITE, [ 0 , 550, 300, 15  ], 0)
-    pygame.draw.rect(screen, WHITE, [ 700 , 575, 400, 15  ], 0)
-
 def level_01(screen):
     full_frame(screen, 15)
-    pygame.draw.rect(screen, WHITE, [ 0 , 720, 1000, 15  ], 0)    
-    pygame.draw.rect(screen, WHITE, [ 500 , 600, 800, 15  ], 0)
+
+    pygame.draw.line(screen, WHITE, (500,630), (WIDTH-500,630),10)
+
+    pygame.draw.line(screen, WHITE, (1100,480), (WIDTH,480),10)
+
+    pygame.draw.line(screen, WHITE, (0,690), (250,720),10)
+    pygame.draw.line(screen, WHITE, (250,720), (1000,720),10)
     text(screen, "LEVEL 01", 600,200, WHITE, 35)
+
     
 
 
