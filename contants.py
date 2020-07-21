@@ -24,7 +24,7 @@ class Input:
 
 
 class Character_Size:
-    SuperBig = 200
+    SuperBig = 170
     Big = 70
     Normal = 50
     Small = 40
