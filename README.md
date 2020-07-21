@@ -32,6 +32,7 @@ Pygame, the library is cross-platform and designed to make it easy to write mult
 
 
 
+
 ## How to Play
     ■ Welcome to Blocky Blocky (B.b)
     It is a fight between mouse cursor and Blocky Block !
@@ -47,6 +48,13 @@ Pygame, the library is cross-platform and designed to make it easy to write mult
     G: Green brush
     R: Red brush
 
+
+## How To Generate New Blocky
+``` python
+player1 = BlockyBlock(screen, "player1", x=10, y=10, color = YELLOW, size= Character_Size.Normal)
+player1.assign_keystrock(STANDARD_INPUT)
+player1.set_as_player1()
+```
 
 ![Gif Preview](shots/GamePreview.gif)
 
