@@ -16,7 +16,7 @@ class BlockyBlock:
         self.eyes = Eyes()
         
         self.size = size
-        self.jump_rate = int(self.size * 2.1)
+        self.jump_rate = int(self.size * 2.2)
         
         self.emotion = emotion
         self.jumping = False
@@ -385,7 +385,7 @@ class BlockyBlock:
 
         self.render_character(Emotion.SAD)
         pygame.display.update()
-        pygame.time.delay(40)
+        pygame.time.wait(30)
 
         # clean laser
         if self.direction == Direction.RIGHT or  self.direction == Direction.FRONT:

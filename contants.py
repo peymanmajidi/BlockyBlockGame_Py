@@ -24,21 +24,22 @@ class Input:
 
 
 class Character_Size:
-    SuperBig = 110
+    SuperBig = 200
     Big = 70
     Normal = 50
     Small = 40
     Tiny = 30
+    SuperTiny = 20
     def random():
         r = random.randint(1,80)
         if r in range(1,30):
-            return Character_Size.Normal
+            return Character_Size.SuperTiny
         if r in range(30,50):
-            return Character_Size.Big
+            return Character_Size.Tiny
         if r in range(50,60):
-            return Character_Size.Small
+            return Character_Size.Normal
         if r in range(60, 65):
-            return Character_Size.SuperBig
+            return Character_Size.Big
         return Character_Size.Normal
 
 
@@ -72,7 +73,7 @@ OBJECT3 = (200,90,90)
 OBJECT4 = (255,255,255)
 
 # Parameters
-REFRESH = 2
+REFRESH = 1
 
 # Fonts
 FONT1 = 'assets/fonts/font1.ttf'
