@@ -34,6 +34,7 @@ class BlockyBlock:
 
         self.set_x(x)
         self.set_y(y)
+        self.falling_height = self.y
 
         BlockyBlock.players.append(self)
         if automatic:
@@ -45,7 +46,7 @@ class BlockyBlock:
     game_over = False
     def Generate_blocky(screen):
         size = Character_Size.random()
-        x = random.randint(size ,WIDTH - size  )
+        x = random.randint(size ,WIDTH - size)
         emotion = Emotion.SAD
         automatic = True
 
@@ -53,7 +54,7 @@ class BlockyBlock:
         if x %3 ==0:
             automatic = False
             emotion = Emotion.NORMAL
-        player = BlockyBlock(screen, color=gameplay.random_color_generator(),x=x, emotion= emotion, automatic= automatic, size=size)
+        player = BlockyBlock(screen, color=gameplay.random_color_generator(),x=x,y=1, emotion= emotion, automatic= automatic, size=size)
         player.assign_keystrock(NONE_INPUT)
         if x%3 == 0: player.direction = Direction.RIGHT
         if not player.auto:
@@ -63,7 +64,7 @@ class BlockyBlock:
 
     def update(keys):
         for player in BlockyBlock.players:
-            player.event_handler(keys)
+            player.proccess(keys)
 
     def action_manager(key):
         for player in BlockyBlock.players:
@@ -253,20 +254,30 @@ class BlockyBlock:
             self.shot()
 
 
-    def event_handler(self, keys): # run every miliseconds
+    def proccess(self, keys): # run every miliseconds
         self.eyes.winking()
         if not Is_filled_pixel.bottom(self.screen,self.x, self.y, self.size) and not self.jumping:
             self.clear_shadow()
-            self.move_y()
+            if self.falling == False:
+                self.falling_height = self.y
             self.falling = True
             self.fall_played = True
-            self.render_character()
+            
+            self.move_y()
+            self.render_character(emo= Emotion.WOW)
         else:
             self.falling = False
+
             if self.fall_played:
                 if not self.auto:
-                    gameplay.play_audio("fall.wav")
+                    gameplay.play_audio("fall.wav")     
+                else:
+                    if (self.y - self.falling_height) > 20: # hight fall
+                        self.direction = Direction.LEFT if self.direction == Direction.RIGHT else Direction.RIGHT
+                        self.render_character(Emotion.DEAD)
+
                 self.fall_played = False
+            self.falling_height = 0
         try:
             if(keys[self.input.left]):
                 self.turn_left()
