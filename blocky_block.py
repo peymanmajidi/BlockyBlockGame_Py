@@ -46,7 +46,7 @@ class BlockyBlock:
     game_over = False
     def Generate_blocky(screen):
         size = Character_Size.random()
-        x = random.randint(size ,WIDTH - size)
+        x = random.randint(size ,WIDTH /2)
         emotion = Emotion.SAD
         automatic = True
 
@@ -54,6 +54,8 @@ class BlockyBlock:
         if x %3 ==0:
             automatic = False
             emotion = Emotion.NORMAL
+        if x%20 == 0:
+            x= (WIDTH //2)+ (WIDTH //3)
         player = BlockyBlock(screen, color=gameplay.random_color_generator(),x=x,y=1, emotion= emotion, automatic= automatic, size=size)
         player.assign_keystrock(NONE_INPUT)
         if x%3 == 0: player.direction = Direction.RIGHT
@@ -70,11 +72,25 @@ class BlockyBlock:
         for player in BlockyBlock.players:
             player.action(key)
 
-    def select(x, y, size):
+    def select(x, y):
         for player in BlockyBlock.players:
-            if (x >= player.x and x <= (player.x + size)) and (y <= (player.y + size) and y >= player.y):
-                if player.alive:
-                    player.set_as_player1()
+            if (x >= player.x and x <= (player.x + player.size)) and (y <= (player.y + player.size) and y >= player.y):
+                if player.alive==False:
+                    player.destroy()
+                    return True
+                if player.selected:
+                    if player.direction == Direction.FRONT:
+                        player.direction = Direction.RIGHT
+                    player.shot()
+                    return True
+                if player.auto == False:
+                    player.auto = True
+                    player.automatic()
+                    player.do_jump()
+                else:
+                    player.auto = False
+                    player.automatic()
+
                 return True
         return False
     

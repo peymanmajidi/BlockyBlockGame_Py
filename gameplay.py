@@ -55,7 +55,8 @@ def arrow_keys(window, events):
 
         if event.type == pygame.MOUSEBUTTONDOWN: # mouse click event
             x,y = event.pos
-            if BlockyBlock.select(x,y, Character_Size.Normal):
+            print(x,y)
+            if BlockyBlock.select(x,y):
                 clicked = False
             else:
                 clicked = True
