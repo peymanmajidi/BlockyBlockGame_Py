@@ -1,8 +1,8 @@
 # BlockyBlockGame
 
-I've just start coding and I found out python + pygame is so fun. 
-It started by turning on a pixel on screen screen, then I made a character and tried to make it alive.
-This is BlockyBlock.
+I've just started coding and I found out python + pygame is so fun.   
+It started by turning on a pixel on screen screen, then I made a character and tried to make it alive.  
+This is BlockyBlock.  
 Please download the source and make fantastic forks 🍴
 
 ## How to Install PyGame
