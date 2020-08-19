@@ -64,9 +64,13 @@ def arrow_keys(window, events):
         if event.type == pygame.MOUSEBUTTONUP:
             clicked = False
 
+
         if clicked:
-            x2,y2 = event.pos
-            pygame.draw.rect(window, paint_color, [x2,y2,20,20],0)
+            try:
+                x2,y2 = event.pos
+                pygame.draw.rect(window, paint_color, [x2,y2,20,20],0)
+            except:
+                pass
             pygame.display.update()
 
 
