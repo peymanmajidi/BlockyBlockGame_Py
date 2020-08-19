@@ -66,6 +66,33 @@ YELLOW = (255, 255, 0)
 DEAD = (70, 70, 70)
 
 
+BOX_CURSOR = (            #sized 24x24
+      "XXXXXXXXXXXXXXXXXXXXXXXX",
+      "X                      X",
+      "X                      X",
+      "X                      X",
+      "X                      X",
+      "X                      X",
+      "X                      X",
+      "X                      X",
+      "X                      X",
+      "X                      X",
+      "X          X           X",
+      "X                      X",
+      "X                      X",
+      "X                      X",
+      "X                      X",
+      "X                      X",
+      "X                      X",
+      "X                      X",
+      "X                      X",
+      "X                      X",
+      "XXXXXXXXXXXXXXXXXXXXXXXX",
+      "                        ",
+      "                        ",
+      "                        ")
+
+
 # Objects
 OBJECT1 = (100,50,0)
 OBJECT2 = (0,255,0)

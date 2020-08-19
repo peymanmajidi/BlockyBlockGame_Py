@@ -4,13 +4,14 @@ from contants import *
 pygame.init()
 pygame.display.set_caption(GAME_TITLE)
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
+# Changing the default mouse cursor
+datatuple, masktuple = pygame.cursors.compile( BOX_CURSOR, black='.', white='X', xor='o' )
+pygame.mouse.set_cursor( (24,24), (0,0), datatuple, masktuple )
+
 
 player1 = BlockyBlock(screen, "player1", x=250, y=600, color = YELLOW, size= Character_Size.Normal)
 player1.assign_keystrock(STANDARD_INPUT)
 player1.set_as_player1()
-
-
-
 
 BlockyBlock(screen, x= 1100, color= GREEN, size= Character_Size.SuperBig)
 BlockyBlock(screen, x= 130, color= RED, size= Character_Size.Normal, automatic= True).direction = Direction.LEFT
